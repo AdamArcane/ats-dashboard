@@ -31,6 +31,7 @@ require __DIR__ . '/modules/admin-bar/class-admin-bar-base.php';
 require __DIR__ . '/modules/admin-page/class-admin-page-base.php';
 require __DIR__ . '/modules/widget/class-widget-base.php';
 require __DIR__ . '/modules/branding/class-branding-base-output.php';
+require __DIR__ . '/modules/login-customizer/class-login-customizer-base.php';
 
 // Core classes.
 require __DIR__ . '/class-ats-core-backwards-compatibility.php';

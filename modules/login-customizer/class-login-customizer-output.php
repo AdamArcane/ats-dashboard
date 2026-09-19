@@ -10,7 +10,7 @@ namespace ATSDash\LoginCustomizer;
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use ats\Base\Base_Output;
-use ats\LoginCustomizer\Login_Customizer_Output as Free_Login_Customizer_Output;
+use ats\LoginCustomizer\Login_Customizer_Base_Output as Free_Login_Customizer_Output;
 
 /**
  * Class to setup login customizer output.
@@ -100,6 +100,8 @@ class Login_Customizer_Output extends Base_Output {
 		// ! Deprecated: please use "ats_login_styles".
 		echo apply_filters( 'ats_pro_login_styles', $css );
 		echo '</style>';
+
+		Free_Login_Customizer_Output::get_instance()->print_login_live_styles();
 
 	}
 

@@ -6,6 +6,11 @@ import writeBgSizeStyle from "../../../css-utilities/write-bg-size-style";
 declare var wp: any;
 
 const listenFormPositionFieldChange = () => {
+	const getSetting = (name: string, fallback = "") => {
+		const setting = wp.customize(name);
+		return setting ? setting.get() : fallback;
+	};
+
 	wp.customize("ats_login[form_position]", function (setting) {
 		const formPositionStyleTag = document.querySelector(
 			'[data-listen-value="ats_login[form_position]"]'
@@ -44,17 +49,15 @@ const listenFormPositionFieldChange = () => {
 		) as HTMLStyleElement;
 
 		setting.bind(function (val) {
-			let formBgColor = wp.customize("ats_login[form_bg_color]").get();
-			const formBgImage = wp.customize("ats_login[form_bg_image]").get();
-			const formBgRepeat = wp.customize("ats_login[form_bg_repeat]").get();
-			const formBgPosition = wp.customize("ats_login[form_bg_position]").get();
-			const formBgSize = wp.customize("ats_login[form_bg_size]").get();
-			let boxWidth = wp.customize("ats_login[box_width]").get();
-			let formWidth = wp.customize("ats_login[form_width]").get();
+			let formBgColor = getSetting("ats_login[form_bg_color]");
+			const formBgImage = getSetting("ats_login[form_bg_image]");
+			const formBgRepeat = getSetting("ats_login[form_bg_repeat]");
+			const formBgPosition = getSetting("ats_login[form_bg_position]");
+			const formBgSize = getSetting("ats_login[form_bg_size]");
+			let boxWidth = getSetting("ats_login[box_width]");
+			let formWidth = getSetting("ats_login[form_width]");
 
-			let formHorizontalPadding = wp
-				.customize("ats_login[form_horizontal_padding]")
-				.get();
+			let formHorizontalPadding = getSetting("ats_login[form_horizontal_padding]");
 
 			formBgColor = formBgColor ? formBgColor : "#ffffff";
 			boxWidth = boxWidth ? boxWidth : "40%";

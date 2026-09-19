@@ -8,6 +8,9 @@ import listenFormHorizontalPaddingFieldChange from "./fields/form-layout/form-ho
 import listenFormBorderWidthFieldChange from "./fields/form-layout/form-border-width";
 import listenFormBorderColorFieldChange from "./fields/form-layout/form-border-color";
 import listenFormBorderRadiusFieldChange from "./fields/form-layout/form-border-radius";
+import listenEnableFormShadowFieldChange from "./fields/form-layout/enable-form-shadow";
+import listenFormShadowBlurFieldChange from "./fields/form-layout/form-shadow-blur";
+import listenFormShadowColorFieldChange from "./fields/form-layout/form-shadow-color";
 
 const listenFormLayoutFieldsChange = () => {
 	listenFormPositionFieldChange();
@@ -20,6 +23,9 @@ const listenFormLayoutFieldsChange = () => {
 	listenFormBorderWidthFieldChange();
 	listenFormBorderColorFieldChange();
 	listenFormBorderRadiusFieldChange();
+	listenEnableFormShadowFieldChange();
+	listenFormShadowBlurFieldChange();
+	listenFormShadowColorFieldChange();
 };
 
 export default listenFormLayoutFieldsChange;

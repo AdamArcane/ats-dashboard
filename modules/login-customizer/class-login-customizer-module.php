@@ -9,13 +9,12 @@ namespace ATSDash\LoginCustomizer;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Module;
 use ATSDash\Helpers\Multisite_Helper;
 
 /**
  * Class to setup login customizer module.
  */
-class Login_Customizer_Module extends Base_Module {
+class Login_Customizer_Module extends \ats\LoginCustomizer\Login_Customizer_Base_Module {
 
 	/**
 	 * The class instance.
@@ -58,6 +57,7 @@ class Login_Customizer_Module extends Base_Module {
 	 */
 	public function setup() {
 
+		parent::setup();
 		add_action( 'customize_controls_enqueue_scripts', array( self::get_instance(), 'control_scripts' ) );
 		add_action( 'login_enqueue_scripts', array( self::get_instance(), 'preview_styles' ), 99 );
 		add_action( 'customize_preview_init', array( self::get_instance(), 'preview_scripts' ) );
@@ -76,9 +76,15 @@ class Login_Customizer_Module extends Base_Module {
 	 */
 	public function control_scripts() {
 
-		wp_enqueue_script( 'ats-pro-login-customizer-control', $this->url . '/assets/js/controls.js', array( 'customize-controls' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
+		parent::control_scripts();
+		$asset_version = ATS_DASHBOARD_PLUGIN_VERSION . '.10';
+		wp_enqueue_script( 'ats-pro-login-customizer-control', $this->url . '/assets/js/controls.js', array( 'customize-controls' ), $asset_version, true );
 
-		wp_enqueue_script( 'ats-pro-login-customizer-events', $this->url . '/assets/js/preview.js', array( 'customize-controls' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
+		wp_add_inline_script(
+			'ats-login-customizer-control',
+			'!function(){var e=function(){if(window.atsLoginCustomizer&&atsLoginCustomizer.loginPageUrl&&wp.customize.previewer){wp.customize.previewer.previewUrl.set(atsLoginCustomizer.loginPageUrl);}};wp.customize.bind("ready",e);wp.customize.bind("preview-ready",e);}();',
+			'after'
+		);
 
 	}
 
@@ -87,7 +93,8 @@ class Login_Customizer_Module extends Base_Module {
 	 */
 	public function preview_scripts() {
 
-		wp_enqueue_script( 'ats-pro-login-customizer-preview', $this->url . '/assets/js/preview.js', array( 'customize-preview' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
+		parent::preview_scripts();
+		wp_enqueue_script( 'ats-pro-login-customizer-preview', $this->url . '/assets/js/preview.js', array( 'customize-preview' ), ATS_DASHBOARD_PLUGIN_VERSION . '.10', true );
 
 	}
 

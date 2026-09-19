@@ -1,4 +1,10 @@
 import listenFormLayoutFieldsChange from "./preview/listen-changes/form-layout-fields";
+import listenBgFieldsChange from "./preview/listen-changes/bg-fields";
+import listenLogoFieldsChange from "./preview/listen-changes/logo-fields";
+import listenFormFieldsChange from "./preview/listen-changes/form-fields";
+import listenLabelFieldsChange from "./preview/listen-changes/label-fields";
+import listenButtonFieldsChange from "./preview/listen-changes/button-fields";
+import listenFooterFieldsChange from "./preview/listen-changes/footer-fields";
 
 declare var wp: any;
 
@@ -23,6 +29,15 @@ declare var wp: any;
 	};
 
 	const listenFieldsChange = () => {
+		listenBgFieldsChange({ cssSelector: "#login", keyPrefix: "" });
+		listenLogoFieldsChange();
 		listenFormLayoutFieldsChange();
+		listenFormFieldsChange();
+		listenLabelFieldsChange();
+		listenButtonFieldsChange();
+		listenFooterFieldsChange();
 	};
+
+	listen();
+	window.setTimeout(listen, 250);
 })();

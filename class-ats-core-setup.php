@@ -239,7 +239,6 @@ class Setup {
 		}
 
 		if ( isset( $saved_modules['login_customizer'] ) && 'true' === $saved_modules['login_customizer'] ) {
-			$modules['ats\\LoginCustomizer\\Login_Customizer_Module'] = __DIR__ . '/modules/ats-core-login-customizer/class-login-customizer-module.php';
 		}
 
 		if ( isset( $saved_modules['login_redirect'] ) && 'true' === $saved_modules['login_redirect'] ) {
