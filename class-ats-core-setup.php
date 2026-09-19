@@ -242,7 +242,7 @@ class Setup {
 		}
 
 		if ( isset( $saved_modules['login_redirect'] ) && 'true' === $saved_modules['login_redirect'] ) {
-			$modules['ats\\LoginRedirect\\Login_Redirect_Module'] = __DIR__ . '/modules/ats-core-login-redirect/class-login-redirect-module.php';
+			$modules['ats\\LoginRedirect\\Login_Redirect_Module'] = __DIR__ . '/modules/login-redirect/class-login-redirect-module.php';
 		}
 
 		if ( isset( $saved_modules['admin_menu_editor'] ) && 'true' === $saved_modules['admin_menu_editor'] ) {

@@ -1,6 +1,6 @@
 /**
  * This module is intended to handle the loading redirect settings page.
- * 
+ *
  * Global object used:
  * - atsLoginRedirect
  *
@@ -8,9 +8,9 @@
  * @return {Object}
  */
 (function ($) {
-
-	var $repeater = $('.ats-login-redirect--repeater');
-	var $roleSelector = $('.ats-login-redirect--role-selector');
+	const roleSelectors = document.querySelectorAll(
+		".ats-login-redirect--role-selector"
+	);
 
 	// Run the module.
 	init();
@@ -22,50 +22,143 @@
 	 * Other functions are called / hooked from this function.
 	 */
 	function init() {
-
-		setupTabNav();
-
+		setupRoleSelector();
 	}
 
 	/**
 	 * Setup the role selector that functioning like a repeater.
 	 */
-	function setupTabNav() {
+	function setupRoleSelector() {
+		if (!roleSelectors.length) return;
 
-		$(document).on('click', '.ats-login-redirect--tab-menu-item', switchTab);
+		roleSelectors.forEach(function (roleSelector) {
+			if (!(roleSelector instanceof HTMLSelectElement)) return;
+			const $roleSelector = $(roleSelector);
 
+			$roleSelector.select2({
+				placeholder: roleSelector.dataset.placeholder,
+			});
+
+			$roleSelector.on("select2:select", onRoleSelected);
+		});
+
+		$(document).on(
+			"click",
+			".ats-login-redirect--remove-field",
+			onDeleteButtonClick
+		);
 	}
 
 	/**
-	 * Switch tab on tab menu item click.
+	 * Event handler to run when a role (inside select2) is selected.
+	 *
+	 * @param {Select2.Event<HTMLSelectElement, Select2.DataParams>} e The event object.
+	 * @this {HTMLElement}
 	 */
-	function switchTab() {
+	function onRoleSelected(e) {
+		const data = e.params.data;
+		const defaultValue = data.element.dataset.atsDefaultSlug;
 
-		var heatbox = this.parentNode.parentNode.parentNode;
-		var tabMenus = heatbox.querySelectorAll('.ats-login-redirect--tab-menu-item');
-		var activeTabMenu = this;
+		data.element.disabled = true;
+		data.element.selected = false;
 
-		tabMenus.forEach(function (tabMenu) {
-			if (tabMenu === activeTabMenu) {
-				tabMenu.classList.add('is-active');
-			} else {
-				tabMenu.classList.remove('is-active');
-			}
-		});
+		$(this).trigger("change");
 
-		var tabContents = heatbox.querySelectorAll('.ats-login-redirect--wrapper');
-		var activeTabContent = heatbox.querySelector('.ats-login-redirect--' + this.dataset.atsTab + '-wrapper');
+		const siteType =
+			"subsites" === data.element.parentElement?.dataset.atsSiteType
+				? "subsites_"
+				: "";
 
-		tabContents.forEach(function (tabContent) {
-			if (tabContent === activeTabContent) {
-				tabContent.parentNode.parentNode.style.display = 'table-row';
-			} else {
-				tabContent.parentNode.parentNode.style.display = 'none';
-			}
-		});
+		const markup =
+			'\
+		<div class="ats-login-redirect--repeater-item" data-ats-role-key="' +
+			data.id +
+			'" data-ats-role-name="' +
+			data.text.trim() +
+			'">\
+			<label class="ats-login-redirect--field-label">\
+				' +
+			data.text.trim() +
+			'\
+			</label>\
+			<div class="ats-login-redirect--field-control">\
+				<div class="ats-url-prefix-suffix-field">\
+					<div class="ats-url-prefix-field">\
+						<code>\
+							' +
+			this.dataset.atsFieldPrefix +
+			'\
+						</code>\
+					</div>\
+					<input type="text" name="ats_login_redirect[' +
+			siteType +
+			"login_redirect_slugs][" +
+			data.id +
+			']" value="' +
+			defaultValue +
+			'" placeholder="wp-admin/">\
+					<div class="ats-url-suffix-field">\
+						<button type="button" class="ats-login-redirect--remove-field">\
+							<span class="ats-login-redirect--close-icon"></span>\
+						</button>\
+					</div>\
+				</div>\
+			</div>\
+		</div>\
+		';
 
+		$(this).parent().find(".ats-login-redirect--repeater").append(markup);
+	}
+
+	/**
+	 * Event handler to run when a delete buttotn is clicked.
+	 *
+	 * It will then un-select the connected select2 item
+	 * which will remove the field.
+	 *
+	 * @param {JQuery.ClickEvent} e The event object.
+	 * @this {HTMLElement}
+	 */
+	function onDeleteButtonClick(e) {
+		const wrapper = getClosest(this, 6);
+		const roleKey = getClosest(this, 4)?.dataset.atsRoleKey;
+		const element = wrapper?.querySelector(
+			'.ats-login-redirect--role-selector option[value="' + roleKey + '"]'
+		);
+		if (element instanceof HTMLOptionElement) element.disabled = false;
+
+		const repeaterItem = wrapper?.querySelector(
+			'.ats-login-redirect--repeater-item[data-ats-role-key="' + roleKey + '"]'
+		);
+
+		repeaterItem?.parentElement?.removeChild(repeaterItem);
+
+		$(this).trigger("change");
+	}
+
+	/**
+	 * Get parent element of an element with depth level.
+	 *
+	 * @param {HTMLElement} el The element to get the parent node from.
+	 * @param {number} depth The depth level.
+	 *
+	 * @returns {HTMLElement|null} The parent node.
+	 */
+	function getClosest(el, depth) {
+		if (!depth) {
+			return el.parentElement;
+		}
+
+		/** @type {HTMLElement|null} */
+		let parentEl = el;
+		let i = 1;
+
+		for (; i <= depth; i++) {
+			parentEl = parentEl?.parentElement ?? null;
+		}
+
+		return parentEl;
 	}
 
 	return {};
-
 })(jQuery);

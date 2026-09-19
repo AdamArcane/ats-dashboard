@@ -5,7 +5,7 @@
  * @package ATS_Dashboard
  */
 
-namespace ATSDash\LoginRedirect;
+namespace ats\LoginRedirect;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
@@ -15,6 +15,14 @@ use ats\Base\Base_Module;
  * Class to setup login url module.
  */
 class Login_Redirect_Module extends Base_Module {
+
+	/**
+	 * The class instance.
+	 *
+	 * @var object
+	 */
+	public static $instance;
+
 	/**
 	 * The current module url.
 	 *
@@ -27,7 +35,20 @@ class Login_Redirect_Module extends Base_Module {
 	 */
 	public function __construct() {
 
-		$this->url = ATS_DASHBOARD_PLUGIN_URL . '/modules/login-redirect';
+		$this->url = ATS_DASHBOARD_CORE_URL . '/modules/login-redirect';
+
+	}
+
+	/**
+	 * Get instance of the class.
+	 */
+	public static function get_instance() {
+
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 
 	}
 
@@ -36,35 +57,34 @@ class Login_Redirect_Module extends Base_Module {
 	 */
 	public function setup() {
 
-		// Stop if free version hasn't been updated to have the login url module.
-		if ( ! class_exists( '\ats\LoginRedirect\Login_Redirect_Module' ) ) {
-			return;
-		}
+		/**
+		 * These 4 actions will be removed on multisite if current site is not a blueprint.
+		 */
+		add_action( 'admin_menu', array( self::get_instance(), 'submenu_page' ) );
+		add_action( 'admin_init', array( self::get_instance(), 'add_settings' ) );
+		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_scripts' ) );
 
-		add_action( 'init', array( $this, 'setup_hooks' ) );
+		// The module output.
+		require_once __DIR__ . '/class-login-redirect-output.php';
+		Login_Redirect_Output::init();
 
 	}
 
 	/**
-	 * Setup functions hooking on init.
-	 *
-	 * Currently this module will run for multisite only, so we need to hook it to `init` action hook.
-	 * And we can't use `admin_init` hook here because `ats_login_redirect_title` will run on `admin_init`
-	 * on the free version in 'ats-dashboard/modules/setting/class-setting-module.php' file.
+	 * Add submenu page.
 	 */
-	public function setup_hooks() {
+	public function submenu_page() {
+		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'Login Redirect', 'ats-dashboard' ), __( 'Login Redirect', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_login_redirect', array( $this, 'submenu_page_content' ) );
+	}
 
-		if ( ! apply_filters( 'ats_ms_is_blueprint', false ) ) {
-			return;
-		}
+	/**
+	 * Submenu page content.
+	 */
+	public function submenu_page_content() {
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-		add_filter( 'ats_login_redirect_title', array( $this, 'add_tab_menu' ) );
-		add_action( 'admin_init', array( $this, 'add_settings' ), 20 );
-
-		// Sanitization.
-		add_filter( 'ats_login_redirect_sanitize_settings', array( $this, 'sanitize_pro_fields' ), 10, 2 );
+		$template = require __DIR__ . '/templates/login-redirect-template.php';
+		$template();
 
 	}
 
@@ -93,64 +113,101 @@ class Login_Redirect_Module extends Base_Module {
 	 */
 	public function add_settings() {
 
+		// Register setting.
+		register_setting( 'ats-login-redirect-group', 'ats_login_redirect', array( 'sanitize_callback' => array( $this, 'sanitize_login_redirect_settings' ) ) );
+
+		$login_redirect_title = '<span class="ats-login-redirect--title-text">' . __( 'Redirect After Login', 'ats-dashboard' ) . '</span>';
+		$login_redirect_title = apply_filters( 'ats_login_redirect_title', $login_redirect_title );
+
+		// Login url section.
+		add_settings_section( 'ats-login-url-section', __( 'Change Login URL', 'ats-dashboard' ), '', 'ats-login-url-settings' );
+		add_settings_section( 'ats-login-redirect-section', $login_redirect_title, '', 'ats-login-redirect-settings' );
+
+		// Login url fields.
+		add_settings_field( 'new-login-url', __( 'New Login URL', 'ats-dashboard' ), array( $this, 'new_login_url_field' ), 'ats-login-url-settings', 'ats-login-url-section' );
+		add_settings_field( 'wp-admin-redirect-url', __( 'Redirect Admin Area', 'ats-dashboard' ), array( $this, 'wp_admin_redirect_url_field' ), 'ats-login-url-settings', 'ats-login-url-section' );
+
 		// Login redirect fields.
-		add_settings_field( 'subsites-login-redirect-url', __( 'Select Role(s)', 'ats-dashboard' ), array( $this, 'login_redirect_url_field' ), 'ats-login-redirect-settings', 'ats-login-redirect-section' );
+		add_settings_field( 'login-redirect-url', __( 'Select Role(s)', 'ats-dashboard' ), array( $this, 'login_redirect_url_field' ), 'ats-login-redirect-settings', 'ats-login-redirect-section' );
 
 	}
 
 	/**
-	 * Sanitize PRO fields for login redirect settings.
+	 * Sanitize login redirect settings.
 	 *
-	 * @param array $sanitized The sanitized settings from the free version.
-	 * @param array $input The raw input data.
-	 * @return array The sanitized settings with PRO fields added.
+	 * @param mixed $input The input data to sanitize.
+	 * @return array The sanitized settings array.
 	 */
-	public function sanitize_pro_fields( $sanitized, $input ) {
+	public function sanitize_login_redirect_settings( $input ) {
 
-		if ( isset( $input['subsites_login_redirect_slugs'] ) && is_array( $input['subsites_login_redirect_slugs'] ) ) {
-			$sanitized['subsites_login_redirect_slugs'] = array();
+		if ( ! is_array( $input ) ) {
+			return array();
+		}
 
-			foreach ( $input['subsites_login_redirect_slugs'] as $role_key => $redirect_slug ) {
+		// This is the ideal, but will break compatibility with the pro version.
+		// $sanitized = array();
+
+		/**
+		 * The sanitized data.
+		 *
+		 * ! This is needed for backwards compatibility with the pro version,
+		 * because the pro version doesn't have the filter before version 3.10.5
+		 *
+		 * @var array
+		 */
+		$sanitized = $input;
+
+		if ( isset( $input['login_url_slug'] ) ) {
+			$sanitized['login_url_slug'] = sanitize_text_field( $input['login_url_slug'] );
+		}
+
+		if ( isset( $input['wp_admin_redirect_slug'] ) ) {
+			$sanitized['wp_admin_redirect_slug'] = sanitize_text_field( $input['wp_admin_redirect_slug'] );
+		}
+
+		if ( isset( $input['login_redirect_slugs'] ) && is_array( $input['login_redirect_slugs'] ) ) {
+			$sanitized['login_redirect_slugs'] = array();
+
+			foreach ( $input['login_redirect_slugs'] as $role_key => $redirect_slug ) {
 				$sanitized_role_key = sanitize_key( $role_key );
-				$sanitized['subsites_login_redirect_slugs'][ $sanitized_role_key ] = sanitize_text_field( $redirect_slug );
+				$sanitized['login_redirect_slugs'][ $sanitized_role_key ] = sanitize_text_field( $redirect_slug );
 			}
 		}
+
+		// Allow PRO version or other extensions to add their own sanitization.
+		$sanitized = apply_filters( 'ats_login_redirect_sanitize_settings', $sanitized, $input );
 
 		return $sanitized;
 
 	}
 
 	/**
-	 * Add tabs nav to "Redirect After Login" metabox header.
-	 *
-	 * @param string $title The metabox title.
+	 * New login url field.
 	 */
-	public function add_tab_menu( $title ) {
+	public function new_login_url_field() {
 
-		$tabs_nav = '
-		<span class="ats-login-redirect--tab-menu">
-			<span class="ats-login-redirect--tab-menu-item is-active" data-ats-tab="blueprint">
-				' . __( 'Blueprint', 'ats-dashboard' ) . '
-			</span>
-			<span class="ats-login-redirect--tab-menu-item" data-ats-tab="subsites">
-				' . __( 'Subsites', 'ats-dashboard' ) . '
-			</span>
-		</span>
-		';
-
-		$tabs_nav = $title . $tabs_nav;
-
-		return $tabs_nav;
+		$field = require __DIR__ . '/templates/fields/new-login-url.php';
+		$field();
 
 	}
 
 	/**
-	 * Subsites login redirect url field.
+	 * Redirect old login url field.
+	 */
+	public function wp_admin_redirect_url_field() {
+
+		$field = require __DIR__ . '/templates/fields/wp-admin-redirect-url.php';
+		$field();
+
+	}
+
+	/**
+	 * Login redirect url field.
 	 */
 	public function login_redirect_url_field() {
 
-		$field = require ATS_DASHBOARD_PLUGIN_DIR . '/modules/login-redirect/templates/fields/login-redirect-url.php';
-		$field( 'subsites' );
+		$field = require __DIR__ . '/templates/fields/login-redirect-url.php';
+		$field();
 
 	}
 

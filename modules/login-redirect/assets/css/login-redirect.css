@@ -1,46 +1,105 @@
-.ats-login-redirect-heatbox .form-table tbody tr:first-child {
-	display: table-row;
+/* Prefix-suffix field */
+.ats-url-prefix-suffix-field {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	width: 100%;
 }
 
-.ats-login-redirect-heatbox .form-table tbody tr {
-	display: none;
+.ats-url-prefix-field code,
+.ats-url-suffix-field code {
+	display: inline-flex;
+	align-items: center;
+	padding: 0 7px;
+	height: 30px;
+	border-radius: 3px;
 }
 
-/* Tab menu */
-.ats-login-redirect-heatbox h2 {
-	margin-bottom: 5px;
-	padding: 20px 0 0;
-}
-
-.ats-login-redirect--title-text {
-	padding-left: 20px;
-	padding-right: 20px;
-}
-
-.ats-login-redirect--tab-menu {
-	display: block;
+/* Repeater */
+.ats-login-redirect--repeater {
 	margin-top: 20px;
-	padding: 10px 20px 0;
-	font-size: 14px;
-	border-top: 1px solid #ddd;
 }
 
-.ats-login-redirect--tab-menu .ats-login-redirect--tab-menu-item:last-child {
-	margin-right: 0;
+.ats-login-redirect--repeater-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	width: 100%;
+	border-bottom: 1px solid #dedede;
 }
 
-.ats-login-redirect--tab-menu-item {
+.ats-login-redirect--repeater .ats-login-redirect--repeater-item:last-child {
+	border-bottom-width: 0;
+}
+
+.ats-login-redirect--field-label {
+	width: 20%;
+}
+
+.ats-login-redirect--field-control {
 	position: relative;
-	bottom: -1px;
-	display: inline-block;
-	margin-right: 15px;
-	padding-bottom: 10px;
-	color: #888;
-	border-bottom: 2px solid transparent;
+	width: 80%;
+}
+
+.ats-login-redirect--field-control input {
+	width: 380px;
+}
+
+.ats-login-redirect--remove-field {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	margin-left: 10px;
+	padding: 0;
+	width: 25px;
+	height: 25px;
+	background-color: #eee;
+	border-radius: 50%;
+	border-width: 0;
+	transition: background-color .2s;
+	opacity: 0.7;
 	cursor: pointer;
 }
 
-.ats-login-redirect--tab-menu-item.is-active {
-	color: #333;
-	border-bottom-color: #333;
+.ats-login-redirect--remove-field:hover {
+	background-color: red;
+	opacity: 1;
+}
+
+/* Close icon: https://codepen.io/ndeniche/pen/ljbDL */
+.ats-login-redirect--close-icon {
+	position: relative;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.ats-login-redirect--remove-field:hover .ats-login-redirect--close-icon::before,
+.ats-login-redirect--remove-field:hover .ats-login-redirect--close-icon::after {
+  background-color: #fff;
+	border-radius: 5px;
+}
+
+.ats-login-redirect--close-icon::before,
+.ats-login-redirect--close-icon::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  top: 50%;
+  left: 0;
+  margin-top: -1px;
+  background-color: #333;
+}
+
+.ats-login-redirect--close-icon::before {
+  transform: rotate(45deg);
+}
+
+.ats-login-redirect--close-icon::after {
+  transform: rotate(-45deg);
 }

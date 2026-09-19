@@ -78,7 +78,7 @@ class Login_Redirect_Output extends Base_Output {
 	 */
 	public function __construct() {
 
-		$this->url = ATS_DASHBOARD_CORE_URL . '/modules/ats-core-login-redirect';
+		$this->url = ATS_DASHBOARD_CORE_URL . '/modules/login-redirect';
 
 	}
 
