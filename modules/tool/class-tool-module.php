@@ -5,14 +5,14 @@
  * @package ATS_Dashboard
  */
 
-namespace ATSDash\Tool;
+namespace ats\Tool;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use ats\Base\Base_Module;
 
 /**
- * Class to setup tools module.
+ * Class to setup tool module.
  */
 class Tool_Module extends Base_Module {
 
@@ -35,7 +35,7 @@ class Tool_Module extends Base_Module {
 	 */
 	public function __construct() {
 
-		$this->url = ATS_DASHBOARD_PLUGIN_URL . '/modules/tool';
+		$this->url = ATS_DASHBOARD_CORE_URL . '/modules/tool';
 
 	}
 
@@ -53,70 +53,168 @@ class Tool_Module extends Base_Module {
 	}
 
 	/**
-	 * Setup tools module.
+	 * Setup tool module.
 	 */
 	public function setup() {
 
-		add_action( 'ats_export_fields', array( self::get_instance(), 'add_export_fields' ) );
-		add_filter( 'ats_export', array( self::get_instance(), 'add_export_data' ) );
-
-		add_action( 'ats_import_settings', array( self::get_instance(), 'import_settings' ) );
-		add_action( 'ats_import', array( self::get_instance(), 'import_admin_menu' ) );
-		add_action( 'ats_import', array( self::get_instance(), 'import_admin_bar' ) );
+		/**
+		 * These 4 actions will be removed on multisite if current site is not a blueprint.
+		 */
+		add_action( 'admin_menu', array( self::get_instance(), 'submenu_page' ), 20 );
+		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_scripts' ) );
+		add_action( 'admin_init', array( self::get_instance(), 'add_settings' ) );
+			add_action( 'ats_export_fields', array( self::get_instance(), 'add_export_fields' ) );
+			add_filter( 'ats_export', array( self::get_instance(), 'add_export_data' ) );
+			add_action( 'ats_import_settings', array( self::get_instance(), 'import_settings' ) );
+			add_action( 'ats_import', array( self::get_instance(), 'import_admin_menu' ) );
+			add_action( 'ats_import', array( self::get_instance(), 'import_admin_bar' ) );
 
 	}
 
 	/**
-	 * Add PRO only export fields.
+	 * Add submenu page.
 	 */
-	public function add_export_fields() {
+	public function submenu_page() {
 
-		?>
-
-		<p>
-			<label>
-				<input type="checkbox" name="ats_export_modules[]" class="ats-module-checkbox" value="admin_menu" checked />
-				<?php _e( 'Admin Menu Editor Settings', 'ats-dashboard' ); ?>
-			</label>
-		</p>
-		<p>
-			<label>
-				<input type="checkbox" name="ats_export_modules[]" class="ats-module-checkbox" value="admin_bar" checked />
-				<?php _e( 'Admin Bar Editor Settings', 'ats-dashboard' ); ?>
-			</label>
-		</p>
-
-		<?php
+		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'Tools', 'ats-dashboard' ), __( 'Tools', 'ats-dashboard' ), apply_filters( 'ats_tools_capability', 'manage_options' ), 'ats_tools', array( $this, 'submenu_page_content' ) );
 
 	}
 
 	/**
-	 * Add extra export data.
+	 * Submenu page content.
+	 */
+	public function submenu_page_content() {
+
+		$template = require __DIR__ . '/templates/tools-template.php';
+		$template();
+
+	}
+
+	/**
+	 * Enqueue admin styles.
+	 */
+	public function admin_styles() {
+
+		$enqueue = require __DIR__ . '/inc/css-enqueue.php';
+		$enqueue( $this );
+
+	}
+
+	/**
+	 * Enqueue admin scripts.
+	 */
+	public function admin_scripts() {
+
+		$enqueue = require __DIR__ . '/inc/js-enqueue.php';
+		$enqueue( $this );
+
+	}
+
+	/**
+	 * Add settings.
+	 */
+	public function add_settings() {
+
+		// Settings groups.
+		register_setting( 'ats-export-group', 'ats_export', array( 'sanitize_callback' => array( $this, 'process_export' ) ) );
+		register_setting( 'ats-import-group', 'ats_import', array( 'sanitize_callback' => array( $this, 'process_import' ) ) );
+
+		// Settings sections.
+		add_settings_section( 'ats-export-section', __( 'Export', 'ats-dashboard' ), '', 'ats-dashboard-export' );
+		add_settings_section( 'ats-import-section', __( 'Import', 'ats-dashboard' ), '', 'ats-dashboard-import' );
+
+		// Settings fields.
+		add_settings_field( 'ats-export-field', '', array( $this, 'render_export_field' ), 'ats-dashboard-export', 'ats-export-section', array( 'class' => 'is-gapless has-small-text' ) );
+		add_settings_field( 'ats-import-field', '', array( $this, 'render_import_field' ), 'ats-dashboard-import', 'ats-import-section', array( 'class' => 'is-gapless has-small-text' ) );
+
+	}
+
+	/**
+	 * Render export field.
 	 *
-	 * @param array $data The existing export data.
-	 * @return array The merged export data.
+	 * @param array $args The setting's arguments.
 	 */
-	public function add_export_data( $data ) {
+	public function render_export_field( $args ) {
 
-		$process    = require __DIR__ . '/inc/process-export.php';
-		$extra_data = $process( $this );
-
-		return array_merge( $data, $extra_data );
+		$field = require __DIR__ . '/templates/fields/export-field.php';
+		$field();
 
 	}
 
 	/**
-	 * Import extra settings.
+	 * Render import field.
 	 *
-	 * @param array $data The existing import data.
+	 * @param array $args The setting's arguments.
 	 */
-	public function import_settings( $data ) {
+	public function render_import_field( $args ) {
 
-		$multisite_settings = isset( $data['multisite_settings'] ) ? $data['multisite_settings'] : array();
+		$field = require __DIR__ . '/templates/fields/import-field.php';
+		$field();
 
-		if ( $multisite_settings ) {
+	}
 
-			// Check if multisite is enabled regardless is_plugin_active_for_network status.
+	/**
+	 * Process the export.
+	 */
+	public function process_export() {
+
+		$process = require __DIR__ . '/inc/process-export.php';
+		$process();
+
+	}
+
+	/**
+	 * Process the import.
+	 */
+	public function process_import() {
+
+		$process = require __DIR__ . '/inc/process-import.php';
+		$process();
+
+	}
+
+		/**
+		 * Add Admin Menu and Admin Bar export fields.
+		 */
+		public function add_export_fields() {
+			?>
+			<p>
+				<label>
+					<input type="checkbox" name="ats_export_modules[]" class="ats-module-checkbox" value="admin_menu" checked />
+					<?php esc_html_e( 'Admin Menu Editor Settings', 'ats-dashboard' ); ?>
+				</label>
+			</p>
+			<p>
+				<label>
+					<input type="checkbox" name="ats_export_modules[]" class="ats-module-checkbox" value="admin_bar" checked />
+					<?php esc_html_e( 'Admin Bar Editor Settings', 'ats-dashboard' ); ?>
+				</label>
+			</p>
+			<?php
+		}
+
+		/**
+		 * Add legacy module data to the core export payload.
+		 *
+		 * @param array $data Existing export data.
+		 * @return array Merged export data.
+		 */
+		public function add_export_data( $data ) {
+			$process    = require __DIR__ . '/inc/process-export-legacy.php';
+			$extra_data = $process( $this );
+
+			return array_merge( $data, $extra_data );
+		}
+
+		/**
+		 * Import multisite settings.
+		 *
+		 * @param array $data Imported data.
+		 */
+		public function import_settings( $data ) {
+			$multisite_settings = isset( $data['multisite_settings'] ) ? $data['multisite_settings'] : array();
+
 			if ( is_multisite() && ! empty( $multisite_settings ) ) {
 				foreach ( $multisite_settings as $key => $value ) {
 					update_site_option( $key, $value );
@@ -124,158 +222,82 @@ class Tool_Module extends Base_Module {
 			}
 		}
 
-	}
+		/**
+		 * Import Admin Menu settings.
+		 *
+		 * @param array $data Imported data.
+		 */
+		public function import_admin_menu( $data ) {
+			$admin_menu = isset( $data['admin_menu'] ) ? $data['admin_menu'] : array();
 
-	/**
-	 * Import admin menu.
-	 *
-	 * @param array $data The existing import data.
-	 */
-	public function import_admin_menu( $data ) {
-
-		$admin_menu = isset( $data['admin_menu'] ) ? $data['admin_menu'] : array();
-
-		if ( $admin_menu ) {
-			$admin_menu = $this->replace_admin_menu_urls( $admin_menu, '{ats_site_url}', site_url() );
-
-			update_option( 'ats_admin_menu', $admin_menu );
-
-			add_settings_error(
-				'ats_export',
-				esc_attr( 'ats-import' ),
-				__( 'Admin menu imported', 'ats-dashboard' ),
-				'updated'
-			);
+			if ( $admin_menu ) {
+				update_option( 'ats_admin_menu', $this->replace_admin_menu_urls( $admin_menu, '{ats_site_url}', site_url() ) );
+				add_settings_error( 'ats_export', esc_attr( 'ats-import' ), __( 'Admin menu imported', 'ats-dashboard' ), 'updated' );
+			}
 		}
 
-	}
+		/**
+		 * Import Admin Bar settings.
+		 *
+		 * @param array $data Imported data.
+		 */
+		public function import_admin_bar( $data ) {
+			$admin_bar = isset( $data['admin_bar'] ) ? $data['admin_bar'] : array();
 
-	/**
-	 * Replace admin menu's placeholders with actual values or vice-versa.
-	 *
-	 * @param array  $admin_menu The admin menu array.
-	 * @param string $find The string to replace.
-	 * @param string $replace The replacement string.
-	 *
-	 * @return array The admin menu array with manipulated urls.
-	 */
-	public function replace_admin_menu_urls( $admin_menu, $find, $replace ) {
+			if ( $admin_bar ) {
+				update_option( 'ats_admin_bar', $this->replace_admin_bar_urls( $admin_bar, '{ats_site_url}', site_url() ) );
+				add_settings_error( 'ats_export', esc_attr( 'ats-import' ), __( 'Admin bar imported', 'ats-dashboard' ), 'updated' );
+			}
+		}
 
-		foreach ( $admin_menu as $role => $menu_items ) {
-			if ( ! empty( $menu_items ) && is_array( $menu_items ) ) {
-				foreach ( $menu_items as $menu_item_index => $menu_item ) {
-					$menu_item_url = isset( $menu_item['url'] ) ? $menu_item['url'] : '';
-
-					if ( ! empty( $menu_item_url ) ) {
-						if ( 0 === stripos( $menu_item_url, $find ) ) {
-							$menu_item_url = str_ireplace( $find, $replace, $menu_item_url );
-
-							$admin_menu[ $role ][ $menu_item_index ]['url'] = $menu_item_url;
+		/**
+		 * Replace site URL placeholders in Admin Menu data.
+		 *
+		 * @param array  $admin_menu Menu data.
+		 * @param string $find Value to replace.
+		 * @param string $replace Replacement value.
+		 * @return array Updated menu data.
+		 */
+		public function replace_admin_menu_urls( $admin_menu, $find, $replace ) {
+			foreach ( $admin_menu as $role => $menu_items ) {
+				foreach ( (array) $menu_items as $menu_item_index => $menu_item ) {
+					foreach ( array( 'url', 'url_default' ) as $url_key ) {
+						if ( ! empty( $menu_item[ $url_key ] ) && 0 === stripos( $menu_item[ $url_key ], $find ) ) {
+							$admin_menu[ $role ][ $menu_item_index ][ $url_key ] = str_ireplace( $find, $replace, $menu_item[ $url_key ] );
 						}
 					}
 
-					$menu_item_url_default = isset( $menu_item['url_default'] ) ? $menu_item['url_default'] : '';
-
-					if ( ! empty( $menu_item_url_default ) ) {
-						if ( 0 === stripos( $menu_item_url_default, $find ) ) {
-							$menu_item_url_default = str_ireplace( $find, $replace, $menu_item_url_default );
-
-							$admin_menu[ $role ][ $menu_item_index ]['url_default'] = $menu_item_url_default;
-						}
-					}
-
-					$submenu = isset( $menu_item['submenu'] ) ? $menu_item['submenu'] : array();
-
-					if ( ! empty( $submenu ) ) {
-						foreach ( $submenu as $submenu_index => $submenu_item ) {
-							$submenu_item_url = isset( $submenu_item['url'] ) ? $submenu_item['url'] : '';
-
-							if ( ! empty( $submenu_item_url ) ) {
-								if ( 0 === stripos( $submenu_item_url, $find ) ) {
-									$submenu_item_url = str_ireplace( $find, $replace, $submenu_item_url );
-
-									$admin_menu[ $role ][ $menu_item_index ]['submenu'][ $submenu_index ]['url'] = $submenu_item_url;
-								}
-							}
-
-							$submenu_item_url_default = isset( $submenu_item['url_default'] ) ? $submenu_item['url_default'] : '';
-
-							if ( ! empty( $submenu_item_url_default ) ) {
-								if ( 0 === stripos( $submenu_item_url_default, $find ) ) {
-									$submenu_item_url_default = str_ireplace( $find, $replace, $submenu_item_url_default );
-
-									$admin_menu[ $role ][ $menu_item_index ]['submenu'][ $submenu_index ]['url_default'] = $submenu_item_url_default;
-								}
+					foreach ( (array) ( $menu_item['submenu'] ?? array() ) as $submenu_index => $submenu_item ) {
+						foreach ( array( 'url', 'url_default' ) as $url_key ) {
+							if ( ! empty( $submenu_item[ $url_key ] ) && 0 === stripos( $submenu_item[ $url_key ], $find ) ) {
+								$admin_menu[ $role ][ $menu_item_index ]['submenu'][ $submenu_index ][ $url_key ] = str_ireplace( $find, $replace, $submenu_item[ $url_key ] );
 							}
 						}
 					}
 				}
 			}
+
+			return $admin_menu;
 		}
 
-		return $admin_menu;
-
-	}
-
-	/**
-	 * Import admin bar.
-	 *
-	 * @param array $data The existing import data.
-	 */
-	public function import_admin_bar( $data ) {
-
-		$admin_bar = isset( $data['admin_bar'] ) ? $data['admin_bar'] : array();
-
-		if ( $admin_bar ) {
-			$admin_bar = $this->replace_admin_bar_urls( $admin_bar, '{ats_site_url}', site_url() );
-
-			update_option( 'ats_admin_bar', $admin_bar );
-
-			add_settings_error(
-				'ats_export',
-				esc_attr( 'ats-import' ),
-				__( 'Admin bar imported', 'ats-dashboard' ),
-				'updated'
-			);
-		}
-
-	}
-
-	/**
-	 * Replace admin bar's placeholders with actual values or vice-versa.
-	 *
-	 * @param array  $admin_bar The admin menu array.
-	 * @param string $find The string to replace.
-	 * @param string $replace The replacement string.
-	 *
-	 * @return array The admin bar array with manipulated urls.
-	 */
-	public function replace_admin_bar_urls( $admin_bar, $find, $replace ) {
-
-		foreach ( $admin_bar as $menu_slug => $menu_data ) {
-			$href = isset( $menu_data['href'] ) ? $menu_data['href'] : '';
-
-			if ( ! empty( $href ) ) {
-				if ( 0 === stripos( $href, $find ) ) {
-					$href = str_ireplace( $find, $replace, $href );
-
-					$admin_bar[ $menu_slug ]['href'] = $href;
+		/**
+		 * Replace site URL placeholders in Admin Bar data.
+		 *
+		 * @param array  $admin_bar Admin Bar data.
+		 * @param string $find Value to replace.
+		 * @param string $replace Replacement value.
+		 * @return array Updated Admin Bar data.
+		 */
+		public function replace_admin_bar_urls( $admin_bar, $find, $replace ) {
+			foreach ( $admin_bar as $menu_slug => $menu_data ) {
+				foreach ( array( 'href', 'href_default' ) as $url_key ) {
+					if ( ! empty( $menu_data[ $url_key ] ) && 0 === stripos( $menu_data[ $url_key ], $find ) ) {
+						$admin_bar[ $menu_slug ][ $url_key ] = str_ireplace( $find, $replace, $menu_data[ $url_key ] );
+					}
 				}
 			}
 
-			$href_default = isset( $menu_data['href_default'] ) ? $menu_data['href_default'] : '';
-
-			if ( ! empty( $href_default ) ) {
-				if ( 0 === stripos( $href_default, $find ) ) {
-					$href_default = str_ireplace( $find, $replace, $href_default );
-
-					$admin_bar[ $menu_slug ]['href_default'] = $href_default;
-				}
-			}
+			return $admin_bar;
 		}
-
-		return $admin_bar;
-
-	}
 
 }

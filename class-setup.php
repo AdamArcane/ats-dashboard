@@ -393,7 +393,7 @@ class Setup {
 
 		$modules['ATSDash\\BlockTemplate\\Block_Template_Module'] = __DIR__ . '/modules/block-template/class-block-template-module.php';
 
-		$modules['ATSDash\\Tool\\Tool_Module']       = __DIR__ . '/modules/tool/class-tool-module.php';
+		$modules['ats\\Tool\\Tool_Module']       = __DIR__ . '/modules/tool/class-tool-module.php';
 
 		$ms_helper = new Helpers\Multisite_Helper();
 

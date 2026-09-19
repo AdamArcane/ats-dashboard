@@ -251,7 +251,7 @@ class Setup {
 		if ( isset( $saved_modules['admin_bar_editor'] ) && 'true' === $saved_modules['admin_bar_editor'] ) {
 		}
 
-		$modules['ats\\Tool\\Tool_Module'] = __DIR__ . '/modules/ats-core-tool/class-tool-module.php';
+		$modules['ats\\Tool\\Tool_Module'] = __DIR__ . '/modules/tool/class-tool-module.php';
 
 		$modules = apply_filters( 'ats_modules', $modules );
 
