@@ -228,7 +228,7 @@ class Setup {
 			$modules['ats\\Feature\\Feature_Module'] = __DIR__ . '/modules/feature/class-feature-module.php';
 		}
 
-		$modules['ats\\Setting\\Setting_Module'] = __DIR__ . '/modules/ats-core-setting/class-setting-module.php';
+		$modules['ats\\Setting\\Setting_Module'] = __DIR__ . '/modules/setting/class-setting-module.php';
 
 		$saved_modules = $this->saved_modules();
 

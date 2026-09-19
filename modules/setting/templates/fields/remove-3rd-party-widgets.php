@@ -13,32 +13,42 @@ return function () {
 
 	$widget_helper = new Widget_Helper();
 	$widgets       = $widget_helper->get_3rd_party();
-	$settings      = get_option( 'ats_settings' );
 
 	if ( empty( $widgets ) ) {
-		_e( 'No 3rd Party Widgets available.', 'ats-dashboard' );
+		esc_html_e( 'No 3rd Party Widgets available.', 'ats-dashboard' );
 	}
 	?>
 
-	<div class="setting-fields is-gapless">
+	<div class="setting-fields">
 
 		<?php
+
 		foreach ( $widgets as $id => $widget ) {
 
-			$is_checked = isset( $settings[ $id ] ) ? 1 : 0;
 			?>
 
-			<div class="field setting-field">
-				<label for="ats_settings[<?php echo esc_attr( $id ); ?>]" class="label checkbox-label">
-					<?php echo esc_attr( isset( $widget['title_stripped'] ) ? $widget['title_stripped'] : '' ); ?> (<code><?php echo esc_attr( $id ); ?></code>)
-					<input type="checkbox" name="ats_settings[<?php echo esc_attr( $id ); ?>]" id="ats_settings[<?php echo esc_attr( $id ); ?>]" value="1" <?php checked( $is_checked, 1 ); ?>>
+			<div class="setting-field">
+				<label class="label checkbox-label">
+					<?php echo esc_attr( $widget['title_stripped'] ); ?> (<code><?php echo esc_attr( $id ); ?></code>)
+					<input type="checkbox" disabled>
 					<div class="indicator"></div>
 				</label>
 			</div>
 
 			<?php
 		}
+
 		?>
+
+	</div>
+
+	<div class="ats-pro-settings-page-notice">
+
+		<p><?php esc_html_e( 'This feature is available in ATS Dashboard.', 'ats-dashboard' ); ?></p>
+
+		<a href="https://ats-dashboard.io/pro/?utm_source=plugin&utm_medium=remove_3rd_party_widgets_link&utm_campaign=ats" class="button button-primary" target="_blank">
+			<?php esc_html_e( 'Get ATS Dashboard', 'ats-dashboard' ); ?>
+		</a>
 
 	</div>
 

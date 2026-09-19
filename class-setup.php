@@ -361,7 +361,7 @@ class Setup {
 	public function load_modules( $modules ) {
 
 		$modules['ATSDash\\Widget\\Widget_Module']   = __DIR__ . '/modules/widget/class-widget-module.php';
-		$modules['ATSDash\\Setting\\Setting_Module'] = __DIR__ . '/modules/setting/class-setting-module.php';
+		$modules['ats\\Setting\\Setting_Module'] = __DIR__ . '/modules/setting/class-setting-module.php';
 
 		$saved_modules = $this->saved_modules();
 

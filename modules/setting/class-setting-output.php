@@ -54,7 +54,7 @@ class Setting_Output extends Base_Output {
 	 */
 	public function __construct() {
 
-		$this->url = ATS_DASHBOARD_CORE_URL . '/modules/ats-core-setting';
+		$this->url = ATS_DASHBOARD_CORE_URL . '/modules/setting';
 
 	}
 

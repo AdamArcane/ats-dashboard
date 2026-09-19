@@ -23,14 +23,18 @@ return function ( $role_key ) {
 	$builders = $content_helper->get_active_page_builders();
 
 	$saved_templates = array();
+	$has_saved_templates = false;
 
 	foreach ( $builders as $builder ) {
 		$saved_templates[ $builder ] = $content_helper->get_page_builder_templates( $builder );
+		if ( ! empty( $saved_templates[ $builder ] ) ) {
+			$has_saved_templates = true;
+		}
 	}
 	?>
 
 	<select name="ats_settings[page_builder_template][<?php echo esc_attr( $role_key ); ?>]" id="ats_settings[page_builder_template][<?php echo esc_attr( $role_key ); ?>]" class="widefat">
-		<?php if ( empty( $builders ) || empty( $saved_templates ) ) : ?>
+		<?php if ( empty( $builders ) || ! $has_saved_templates ) : ?>
 			<option value="" selected>
 		<?php else : ?>
 			<option value="">
@@ -39,7 +43,7 @@ return function ( $role_key ) {
 		<?php
 		if ( empty( $builders ) ) {
 			_e( 'No page builder activated.', 'ats-dashboard' );
-		} elseif ( empty( $saved_templates ) ) {
+		} elseif ( ! $has_saved_templates ) {
 			_e( 'No templates available', 'ats-dashboard' );
 		} else {
 			_e( 'Select...', 'ats-dashboard' );
