@@ -1,0 +1,140 @@
+/* Main metabox */
+#ats-main-metabox {
+	background-color: transparent;
+	border: 0;
+	box-shadow: none;
+}
+
+#ats-main-metabox > .inside {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+#ats-main-metabox .hndle,
+#ats-main-metabox .handlediv,
+#ats-main-metabox > .postbox-header {
+	display: none;
+}
+
+/* Metabox fields */
+.ats-metabox-field {
+	margin-bottom: 15px;
+}
+
+.ats-metabox-field:last-child {
+	margin-bottom: 0;
+}
+
+.ats-metabox-field label {
+	display: inline-block;
+	margin-bottom: 5px;
+}
+
+/* Icon preview */
+#ats-main-metabox .icon-preview i {
+	height: 120px;
+	width: 120px;
+	font-size: 36px;
+	line-height: 120px;
+	border-radius: 2px;
+	text-align: center;
+	background: #eee;
+}
+
+/* Input fields */
+#ats-main-metabox input[type="text"],
+#ats-main-metabox input[type="password"],
+#ats-main-metabox input[type="number"],
+#ats-main-metabox input[type="email"],
+#ats-main-metabox input[type="url"],
+#ats-main-metabox textarea,
+#ats-main-metabox select {
+	width: 100%;
+}
+
+/* H2 font-weight fix */
+#ats-main-metabox h2 {
+	font-weight: 600;
+}
+
+/* Conditional display */
+#ats-main-metabox .widget-fields [data-type].is-active {
+	display: block;
+}
+
+#ats-main-metabox .widget-fields [data-type] {
+	display: none;
+}
+
+/* CodeMirror fix */
+#ats-main-metabox .CodeMirror-wrap {
+	border: 1px solid #ddd;
+}
+
+#ats-main-metabox .CodeMirror-sizer {
+	margin-left: 46px !important;
+}
+
+#ats-main-metabox .CodeMirror-linenumbers {
+	width: 29px !important;
+}
+
+/* PRO metabox */
+.ats-pro-metabox-content li {
+	list-style: disc;
+	margin-left: 15px;
+}
+
+/* User role & user access metabox */
+.select2-container {
+	width: 100% !important;
+}
+
+/* Contact form widget */
+.ats-form-widget-log-entry {
+	background: #f1f1f1;
+	padding: 20px;
+	margin-bottom: 10px;
+}
+
+.ats-form-widget-log-entry:last-child {
+	margin-bottom: 0;
+}
+
+.ats-form-widget-success-notice {
+	padding: 10px 20px;
+	background: #27aa39;
+	color: #fff;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.ats-form-widget-error-notice {
+	padding: 10px 20px;
+	background: #ce0a0a;
+	color: #fff;
+	text-align: center;
+	font-weight: 600;
+	margin-bottom: 20px;
+}
+
+#ats-form-widget-custom-recipient {
+	display: none;
+	margin: 10px 0;
+}
+
+.ats-form-widget-log-entry-indicator {
+	height: 8px;
+	width: 8px;
+	border-radius: 100%;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.ats-form-widget-log-entry-indicator.error {
+	background: #ce0a0a;
+}
+
+.ats-form-widget-log-entry-indicator.success {
+	background: #27aa39;
+}

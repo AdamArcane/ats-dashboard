@@ -1,0 +1,66 @@
+.interface-interface-skeleton__header {
+	-webkit-filter: invert(0.9) hue-rotate(185deg);
+	filter: invert(0.9) hue-rotate(185deg);
+}
+
+.interface-interface-skeleton__header .has-icon {
+	-webkit-filter: contrast(2);
+	filter: contrast(2);
+}
+
+.interface-interface-skeleton__sidebar,
+.interface-interface-skeleton__secondary-sidebar,
+.editor-post-publish-panel {
+	-webkit-filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+}
+
+.interface-interface-skeleton__sidebar img,
+.interface-interface-skeleton__secondary-sidebar img,
+.editor-post-publish-panel img {
+	-webkit-filter: invert(1) contrast(1.1) hue-rotate(180deg);
+	filter: invert(1) contrast(1.1) hue-rotate(180deg);
+}
+
+.interface-interface-skeleton__sidebar video,
+.interface-interface-skeleton__secondary-sidebar video,
+.editor-post-publish-panel video {
+	-webkit-filter: invert(1) contrast(1.1) hue-rotate(180deg);
+	filter: invert(1) contrast(1.1) hue-rotate(180deg);
+}
+
+.components-placeholder {
+	-webkit-filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+}
+
+.media-modal-content {
+	-webkit-filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	box-shadow: 10px 10px 10px 10px rgba(255, 255, 255, 0.57);
+}
+
+.components-popover__content {
+	-webkit-filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+}
+
+.editor-styles-wrapper {
+	-webkit-filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+}
+
+.editor-styles-wrapper img {
+	-webkit-filter: invert(1) contrast(1.1) hue-rotate(180deg);
+	filter: invert(1) contrast(1.1) hue-rotate(180deg);
+}
+
+.editor-styles-wrapper {
+	-webkit-filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+}
+
+.editor-styles-wrapper img {
+	-webkit-filter: invert(1) contrast(1.1) hue-rotate(180deg);
+	filter: invert(1) contrast(1.1) hue-rotate(180deg);
+}

@@ -1,0 +1,41 @@
+{
+	"name": "ats-dashboard",
+	"version": "3.11",
+	"description": "Development tooling for ATS Dashboard",
+	"repository": {
+		"type": "git",
+		"url": "git+https://bitbucket.org/mapsteps/ats-dashboard.git"
+	},
+	"keywords": [
+		"ats-dashboard"
+	],
+	"author": "Adam Tommasi",
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://arcanetechct.com/contact"
+	},
+	"homepage": "https://arcanetechct.com",
+	"alias": {
+		"jquery": {
+			"global": "jQuery"
+		},
+		"wp": {
+			"global": "wp"
+		},
+		"@wordpress/blocks": {
+			"global": "wp.blocks"
+		},
+		"atsLoginCustomizer": {
+			"global": "atsLoginCustomizer"
+		}
+	},
+	"devDependencies": {
+		"@types/jquery": "^3.5.34",
+		"@types/wordpress__customize-browser": "^5.5.5",
+		"parcel": "^2.16.4"
+	},
+	"scripts": {
+		"watch-login-customizer": "parcel watch ./modules/login-customizer/src/js/controls.ts ./modules/login-customizer/src/js/preview.ts --dist-dir ./modules/login-customizer/assets/js",
+		"build-login-customizer": "parcel build ./modules/login-customizer/src/js/controls.ts ./modules/login-customizer/src/js/preview.ts --dist-dir ./modules/login-customizer/assets/js"
+	}
+}

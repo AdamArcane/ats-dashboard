@@ -1,0 +1,125 @@
+.wp-admin {
+	background: #1d1d1d;
+}
+
+#wpadminbar {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#adminmenuback {
+	border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#wpbody {
+	-webkit-filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+}
+
+#wpbody img {
+	-webkit-filter: invert(1) contrast(1.1) hue-rotate(180deg);
+	filter: invert(1) contrast(1.1) hue-rotate(180deg);
+}
+
+#wpbody video {
+	-webkit-filter: invert(1) contrast(1.1) hue-rotate(180deg);
+	filter: invert(1) contrast(1.1) hue-rotate(180deg);
+}
+
+#wpbody iframe {
+	-webkit-filter: invert(1) contrast(1.1) hue-rotate(180deg);
+	filter: invert(1) contrast(1.1) hue-rotate(180deg);
+}
+
+#wpbody .theme-overlay .theme-wrap {
+	box-shadow: unset !important;
+	border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+/* #customize-controls {
+	-webkit-filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+}
+
+#customize-controls #customize-footer-actions {
+	width: 100%;
+}
+
+#customize-controls img {
+	-webkit-filter: invert(1) contrast(1.1) hue-rotate(180deg);
+	filter: invert(1) contrast(1.1) hue-rotate(180deg);
+} */
+
+/* .wpbf-customize-control-color .wpbf-color-preview,
+.wpbf-customize-control-color .wpbf-color-swatch,
+.wpbf-customize-control-color .react-colorful__saturation,
+.wpbf-customize-control-color .react-colorful__hue,
+.wpbf-customize-control-color .react-colorful__alpha,
+.wpbf-customize-control-color .wpbf-color-preview-wrapper,
+.customize-control-color .iris-picker-inner {
+	-webkit-filter: none !important;
+	filter: none !important;
+} */
+
+.media-modal-content {
+	-webkit-filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	box-shadow: unset !important;
+	border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+.media-modal-content img {
+	-webkit-filter: invert(1) contrast(1.1) hue-rotate(180deg);
+	filter: invert(1) contrast(1.1) hue-rotate(180deg);
+}
+
+.button.button-primary {
+	color: #000;
+}
+
+.dp__switch .rwmb-switch-slider {
+	box-shadow: rgba(255, 255, 255, 0.3) 1px 2px 3px;
+}
+
+.dp__switch .rwmb-switch-status {
+	background: #caced1;
+}
+
+#ct_views_cpt {
+	-webkit-filter: invert(1) contrast(1.1) hue-rotate(180deg);
+	filter: invert(1) contrast(1.1) hue-rotate(180deg);
+}
+
+.toplevel_page_ct_dashboard_page .oxygen-admin-screen-home-title {
+	-webkit-filter: invert(1) contrast(1.1) hue-rotate(180deg);
+	filter: invert(1) contrast(1.1) hue-rotate(180deg);
+}
+
+.toplevel_page_ct_dashboard_page .oxygen-admin-screen-home-section {
+	box-shadow: none;
+	box-shadow: unset !important;
+	border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+.oxygen_page_ct_export_import .import-export-section,
+.oxygen_page_ct_export_import .import-export-section {
+	box-shadow: none;
+	box-shadow: unset !important;
+	border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+.oxygen_page_oxygen_vsb_settings .oxygen-vsb-settings-container {
+	box-shadow: none;
+	box-shadow: unset !important;
+	border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+.acf-admin-toolbar {
+	-webkit-filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+	filter: invert(0.87) hue-rotate(180deg) saturate(1.6);
+}
+
+.scorg-edit-scripts #wpbody,
+.scorg_css-edit-scripts #wpbody {
+	-webkit-filter: unset;
+	filter: unset;
+}

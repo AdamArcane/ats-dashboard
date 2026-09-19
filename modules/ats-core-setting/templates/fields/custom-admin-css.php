@@ -1,0 +1,22 @@
+<?php
+/**
+ * Custom admin css field.
+ *
+ * @package ATS_Dashboard
+ */
+
+defined( 'ABSPATH' ) || die( "Can't access directly" );
+
+return function () {
+
+	$settings   = get_option( 'ats_settings' );
+	$custom_css = isset( $settings['custom_admin_css'] ) ? $settings['custom_admin_css'] : false;
+
+	?>
+
+	<textarea id="ats-custom-admin-css"
+			  class="widefat textarea ats-custom-css"
+			  name="ats_settings[custom_admin_css]"><?php echo esc_textarea( $custom_css ); ?></textarea>
+
+	<?php
+};

@@ -1,0 +1,70 @@
+/* Icon Picker */
+.dashicon-picker-container {
+	position: absolute;
+	width: 260px;
+	height: 300px;
+	font-size: 14px;
+	background-color: #fff;
+	overflow: hidden;
+	padding: 10px 5px 5px 5px;
+	border: 1px solid #ddd;
+	z-index: 10;
+}
+
+.dashicon-picker-container,
+.dashicon-picker-container span {
+	box-sizing: content-box !important;
+}
+
+.dashicon-picker-container ul {
+	margin: 10px 0;
+	width: 100%;
+}
+
+.dashicon-picker-container ul li {
+	display: inline-block;
+	margin: 5px;
+}
+
+.dashicon-picker-container ul li a {
+	box-shadow: none;
+}
+
+.dashicon-picker-container ul li a span {
+	display: block;
+	color: #373737;
+	width: 40px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	border: 1px solid #dfdfdf;
+	font-size: 20px;
+}
+
+.dashicon-picker-container ul li a span:hover {
+	border-color: #999;
+	background: #efefef;
+}
+
+/* Search */
+.dashicon-picker-control {
+	display: flex;
+	flex-wrap: wrap;
+	height: 32px;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.dashicon-picker-control a {
+	text-decoration: none;
+	text-align: center;
+	width: 10%;
+}
+
+.dashicon-picker--search-wrapper {
+	width: 70%;
+}
+
+.dashicon-picker--search-wrapper input {
+	width: 100%;
+}

@@ -1,0 +1,65 @@
+/* CodeMirror fix */
+.CodeMirror-wrap {
+	border: 1px solid #ddd;
+}
+
+.CodeMirror-sizer {
+	margin-left: 46px !important;
+}
+
+.CodeMirror-linenumbers {
+	width: 29px !important;
+}
+
+/* PRO metabox */
+.ats-pro-metabox-content li {
+	list-style: disc;
+	margin-left: 15px;
+}
+
+/* Metabox fields */
+.ats-metabox-field {
+	margin-bottom: 15px;
+}
+
+.ats-metabox-field:last-child {
+	margin-bottom: 0;
+}
+
+.ats-metabox-field label {
+	display: inline-block;
+	margin-bottom: 5px;
+}
+
+/* Content type metabox */
+#ats-content-type-metabox select {
+	width: 100%;
+	display: block;
+}
+
+.ats-use-html-editor .edit-post-header-toolbar,
+.ats-use-html-editor .edit-post-visual-editor,
+.ats-use-html-editor .edit-post-sidebar__panel-tabs > ul > li:nth-child(2) {
+	display: none;
+}
+
+/* Attributes metabox */
+#ats-menu-metabox input,
+#ats-menu-metabox select {
+	width: 100%;
+	display: block;
+}
+
+#ats-menu-metabox .icon-preview i {
+	width: 80px;
+	height: 80px;
+	line-height: 80px;
+	background: #eee;
+	text-align: center;
+	font-size: 36px;
+}
+
+/* User role access metabox */
+.ats-metabox-field > .select2-container {
+	width: 100% !important;
+}

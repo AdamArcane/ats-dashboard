@@ -1,0 +1,46 @@
+.ats-login-redirect-heatbox .form-table tbody tr:first-child {
+	display: table-row;
+}
+
+.ats-login-redirect-heatbox .form-table tbody tr {
+	display: none;
+}
+
+/* Tab menu */
+.ats-login-redirect-heatbox h2 {
+	margin-bottom: 5px;
+	padding: 20px 0 0;
+}
+
+.ats-login-redirect--title-text {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.ats-login-redirect--tab-menu {
+	display: block;
+	margin-top: 20px;
+	padding: 10px 20px 0;
+	font-size: 14px;
+	border-top: 1px solid #ddd;
+}
+
+.ats-login-redirect--tab-menu .ats-login-redirect--tab-menu-item:last-child {
+	margin-right: 0;
+}
+
+.ats-login-redirect--tab-menu-item {
+	position: relative;
+	bottom: -1px;
+	display: inline-block;
+	margin-right: 15px;
+	padding-bottom: 10px;
+	color: #888;
+	border-bottom: 2px solid transparent;
+	cursor: pointer;
+}
+
+.ats-login-redirect--tab-menu-item.is-active {
+	color: #333;
+	border-bottom-color: #333;
+}

@@ -1,0 +1,327 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-12 16:33+0000\n"
+"PO-Revision-Date: 2020-05-26 22:11+0200\n"
+"Language-Team: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"Last-Translator: Bouzin\n"
+"Language: fr_FR\n"
+
+#. Name of the plugin
+#: inc/ats-dashboard-fields.php:15
+msgid "ATS Dashboard"
+msgstr "ATS Dashboard"
+
+#: inc/ats-dashboard-fields.php:21
+msgid "Position"
+msgstr "Emplacement"
+
+#: inc/ats-dashboard-fields.php:27
+msgid "Priority"
+msgstr "Priorité"
+
+#: inc/ats-dashboard-fields.php:49
+msgid "Default"
+msgstr "Défaut"
+
+#: inc/ats-dashboard-fields.php:54
+msgid "Low"
+msgstr "Basse"
+
+#: inc/ats-dashboard-fields.php:59
+msgid "High"
+msgstr "Important"
+
+#: inc/ats-dashboard-fields.php:79
+msgid "Left column"
+msgstr "Colonne de gauche"
+
+#: inc/ats-dashboard-fields.php:84
+msgid "Right column"
+msgstr "Colonne de droite"
+
+#: inc/ats-dashboard-fields.php:96
+msgid "Icon Widget"
+msgstr "Widget d'icônes"
+
+#: inc/ats-dashboard-settings.php:30
+msgid "WordPress Dashboard Widgets"
+msgstr "Widgets du tableau de bord WordPress"
+
+#: inc/ats-dashboard-settings.php:34
+msgid "Remove all Widgets"
+msgstr "Supprimer tous les widgets"
+
+#: inc/ats-dashboard-settings.php:35
+msgid "Remove individual Widgets"
+msgstr "Supprimer des widgets individuellements"
+
+#: inc/ats-dashboard-settings.php:43
+msgid "All"
+msgstr "Toutes"
+
+#: inc/ats-dashboard-settings.php:51
+msgid "Welcome Panel"
+msgstr "Panneau de bienvenue"
+
+#: inc/ats-dashboard-settings.php:55
+msgid "Incoming Links"
+msgstr "Liens entrants"
+
+#: inc/ats-dashboard-settings.php:59
+msgid "Plugins"
+msgstr "Plugins"
+
+#: inc/ats-dashboard-settings.php:63
+msgid "WordPress News"
+msgstr "Actualités de WordPress"
+
+#: inc/ats-dashboard-settings.php:67
+msgid "Secondary"
+msgstr "Secondaire"
+
+#: inc/ats-dashboard-settings.php:71
+msgid "QuickPress"
+msgstr "Pression rapide"
+
+#: inc/ats-dashboard-settings.php:75
+msgid "Quick Draft"
+msgstr "Brouillon rapide"
+
+#: inc/ats-dashboard-settings.php:79
+msgid "Comments"
+msgstr "Commentaires"
+
+#: inc/ats-dashboard-settings.php:83
+msgid "Right now"
+msgstr "Maintenant"
+
+#: inc/ats-dashboard-settings.php:87
+msgid "Activity"
+msgstr "Maintenant"
+
+#: inc/ats-dashboard-addons-template.php:19
+msgid "Extras Addon"
+msgstr "Module supplémentaire"
+
+#: inc/ats-dashboard-addons-template.php:25
+msgid ""
+"The Extras Addon is an essential extension that adds various options to "
+"ATS Dashboard. Remove 3rd Party Widgets, create Text Widgets, add "
+"Tooltips to your Widgets & more!"
+msgstr ""
+"Le module supplémentaire d'ATS Dashboard est une extension "
+"essentielle qui ajoute diverses options. Supprimez les widgets tiers, "
+"créez des widgets texte, ajoutez des info-bulles à vos widgets et plus "
+"encore !"
+
+#: inc/ats-dashboard-addons-template.php:27
+#: inc/ats-dashboard-addons-template.php:43
+msgid "More Details"
+msgstr "Plus de détails"
+
+#: inc/ats-dashboard-addons-template.php:35
+msgid "Multisite Addon"
+msgstr "Module multisite"
+
+#: inc/ats-dashboard-addons-template.php:41
+msgid ""
+"Take your WordPress network to the next level with the multisite Addon for "
+"ATS Dashboard. Show the same Widgets throughout all sites, reorder "
+"Widgets globally & more!"
+msgstr ""
+"Faites passer votre réseau WordPress au niveau supérieur avec le module "
+"multisite pour ATS Dashboard. Afficher les mêmes widgets sur tous les "
+"sites, réorganiser les widgets dans le monde et plus encore !"
+
+#: inc/ats-dashboard-addons-template.php:51
+msgid "Video Widget Addon"
+msgstr "Module Vidéo pour les Widgets"
+
+#: inc/ats-dashboard-addons-template.php:57
+#: inc/ats-dashboard-addons-template.php:59
+#: inc/ats-dashboard-addons-template.php:73
+#: inc/ats-dashboard-addons-template.php:75
+msgid "Coming Soon!"
+msgstr "Bientôt disponible!"
+
+#: inc/ats-dashboard-addons-template.php:67
+msgid "Branding Addon"
+msgstr "Module de marque blanche"
+
+#: inc/ats-dashboard-cpt.php:23
+msgid "Add Dashboard Widget"
+msgstr "Ajouter un widget de tableau de bord"
+
+#: inc/ats-dashboard-cpt.php:24
+msgid "New Dashboard Widget"
+msgstr "Nouveau widget de tableau de bord"
+
+#: inc/ats-dashboard-cpt.php:25
+msgid "Edit Dashboard Widget"
+msgstr "Modifier le widget du tableau de bord"
+
+#: inc/ats-dashboard-cpt.php:26
+msgid "View Dashboard Widget"
+msgstr "Afficher le widget du tableau de bord"
+
+#: inc/ats-dashboard-cpt.php:27
+msgid "All Widgets"
+msgstr "Tous les widgets"
+
+#: inc/ats-dashboard-cpt.php:28
+msgid "Search Dashboard Widgets"
+msgstr "Rechercher des widgets du tableau de bord"
+
+#: inc/ats-dashboard-cpt.php:29
+msgid "No Dashboard Widgets found."
+msgstr "Aucun widget du tableau de bord trouvé."
+
+#: inc/ats-dashboard-cpt.php:30
+msgid "No Dashboard Widgets in Trash."
+msgstr "Aucun widget du tableau de bord dans la corbeille."
+
+#: inc/ats-dashboard-cpt.php:72
+msgid "Widget Title"
+msgstr "Titre du Widget"
+
+#: inc/ats-dashboard-cpt.php:73
+#: inc/widget/ats-dashboard-icon-widget.php:19
+msgid "Icon"
+msgstr "Icône"
+
+#: inc/ats-dashboard-cpt.php:79
+msgid "Link Target"
+msgstr "Lien cible"
+
+#: inc/ats-dashboard-cpt.php:80
+msgid "Date"
+msgstr "Date"
+
+#: inc/widget/ats-dashboard-icon-widget.php:34
+msgid "Search"
+msgstr "Chercher"
+
+#: inc/widget/ats-dashboard-icon-widget.php:40
+msgid "WordPress Dashicons"
+msgstr "Dashicons WordPress"
+
+#: inc/widget/ats-dashboard-icon-widget.php:48
+msgid "Admin Menu"
+msgstr "Menu Admin"
+
+#: inc/widget/ats-dashboard-icon-widget.php:66
+msgid "Welcome Screen"
+msgstr "Ecran d'accueil"
+
+#: inc/widget/ats-dashboard-icon-widget.php:84
+msgid "Post Formats"
+msgstr "Formats de publication"
+
+#: inc/widget/ats-dashboard-icon-widget.php:102
+msgid "Media"
+msgstr "Médias"
+
+#: inc/widget/ats-dashboard-icon-widget.php:120
+msgid "Image Editing"
+msgstr "L'édition d'image"
+
+#: inc/widget/ats-dashboard-icon-widget.php:138
+msgid "Tiny MCE"
+msgstr "Éditeur de contenu"
+
+#: inc/widget/ats-dashboard-icon-widget.php:156
+msgid "Posts Screen"
+msgstr "Écran des messages"
+
+#: inc/widget/ats-dashboard-icon-widget.php:174
+msgid "Sorting"
+msgstr "Tri"
+
+#: inc/widget/ats-dashboard-icon-widget.php:192
+msgid "Social"
+msgstr "Social"
+
+#: inc/widget/ats-dashboard-icon-widget.php:210
+msgid "WordPress.org specific"
+msgstr "Spécifique à WordPress.org"
+
+#: inc/widget/ats-dashboard-icon-widget.php:228
+msgid "Products"
+msgstr "Produits"
+
+#: inc/widget/ats-dashboard-icon-widget.php:246
+msgid "Taxonomies"
+msgstr "Taxonomies"
+
+#: inc/widget/ats-dashboard-icon-widget.php:264
+msgid "Widgets"
+msgstr "Widgets"
+
+#: inc/widget/ats-dashboard-icon-widget.php:282
+msgid "Notifications"
+msgstr "Notifications"
+
+#: inc/widget/ats-dashboard-icon-widget.php:300
+msgid "Misc"
+msgstr "Divers"
+
+#: inc/widget/ats-dashboard-icon-widget.php:325
+msgid "Font Awesome"
+msgstr "Police Génial"
+
+#: inc/widget/ats-dashboard-icon-widget.php:331
+msgid "Font Awesome Icons"
+msgstr "Icônes impressionnantes"
+
+#: inc/widget/ats-dashboard-icon-widget.php:353
+msgid "Link"
+msgstr "Lien"
+
+#: inc/widget/ats-dashboard-icon-widget.php:369
+msgid "URL"
+msgstr "URL"
+
+#: inc/widget/ats-dashboard-icon-widget.php:370
+msgid ""
+"Absolute URL's (incl. http:// or https://) or relative URL's (./post-new."
+"php) are allowed."
+msgstr ""
+"Les URL absolus (Y compris http: // ou https: //) ou les URL relatifs (./"
+"post-new.php) sont autorisés."
+
+#: inc/widget/ats-dashboard-icon-widget.php:378
+msgid "Target"
+msgstr "Cible"
+
+#: inc/widget/ats-dashboard-icon-widget.php:379
+msgid "Open link in a new tab."
+msgstr "Ouvrir le lien dans un nouvel onglet."
+
+#. Description of the plugin
+msgid ""
+"ATS Dashboard gives you full control over your WordPress Dashboard. "
+"Remove the default Dashboard Widgets and and create your own for a better "
+"user experience."
+msgstr ""
+"ATS Dashboard vous donne un contrôle total sur votre tableau de bord "
+"WordPress. Supprimez les widgets du tableau de bord par défaut et créez le "
+"vôtre pour une meilleure expérience utilisateur."
+
+#. URI of the plugin
+msgid "https://mapsteps.com/en/downloads/"
+msgstr "https://mapsteps.com/en/downloads/"
+
+#. Author of the plugin
+msgid "MapSteps"
+msgstr "MapSteps"
+
+#. Author URI of the plugin
+msgid "https://mapsteps.com/"
+msgstr "https://mapsteps.com/"

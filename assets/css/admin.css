@@ -1,0 +1,232 @@
+.ats-is-hidden {
+	display: none;
+}
+
+/**
+ * --------------------------------------------------
+ * Select2 patch for heatbox and ats metabox inside post editing screen.
+ * --------------------------------------------------
+ */
+.heatbox-admin .select2-results__option,
+.ats-metabox-field .select2-results__option {
+	margin-bottom: 0;
+}
+
+.heatbox-admin > .select2-container .select2-search,
+.ats-metabox-field > .select2-container .select2-search {
+	padding: 6px;
+}
+
+.heatbox-admin > .select2-container .select2-search__field,
+.ats-metabox-field > .select2-container .select2-search__field {
+	margin-left: 0;
+	margin-right: 0;
+	min-height: 20px;
+	line-height: normal;
+}
+
+.heatbox .select2-label,
+.ats-metabox-field .select2-label {
+	display: block;
+}
+
+.heatbox .use-select2 {
+	position: relative;
+	width: 100%;
+}
+
+.heatbox .select2-selection--multiple,
+.ats-metabox-field .select2-selection--multiple {
+	position: relative;
+	display: block;
+	width: 100%;
+	padding-top: 0;
+	padding-bottom: 5px;
+	line-height: 20px;
+}
+
+.heatbox .select2-selection--multiple .select2-selection__rendered,
+.ats-metabox-field .select2-selection--multiple .select2-selection__rendered {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.heatbox .select2-selection--multiple .select2-selection__choice,
+.ats-metabox-field .select2-selection--multiple .select2-selection__choice {
+	display: inline-flex;
+	align-items: center;
+	padding-left: 0;
+	padding-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 0;
+}
+
+.heatbox .select2-selection--multiple .select2-selection__choice__remove,
+.ats-metabox-field
+	.select2-selection--multiple
+	.select2-selection__choice__remove {
+	display: inline-flex;
+	align-items: center;
+	position: relative;
+	margin-right: 5px;
+	height: 20px;
+}
+
+.heatbox .select2-selection--multiple .select2-selection__choice__remove span,
+.ats-metabox-field
+	.select2-selection--multiple
+	.select2-selection__choice__remove
+	span {
+	position: relative;
+	top: -1px;
+}
+
+.heatbox .select2-selection--multiple .select2-selection__choice__display,
+.ats-metabox-field
+	.select2-selection--multiple
+	.select2-selection__choice__display {
+	display: inline-block;
+	padding-left: 4px;
+	line-height: 1;
+}
+
+.heatbox .select2-selection--multiple .select2-search--inline,
+.ats-metabox-field .select2-selection--multiple .select2-search--inline {
+	display: inline;
+}
+
+.heatbox
+	.select2-selection--multiple
+	.select2-search--inline
+	.select2-search__field,
+.ats-metabox-field
+	.select2-selection--multiple
+	.select2-search--inline
+	.select2-search__field {
+	position: relative;
+	display: inline-block;
+	margin-top: 5px;
+	height: 20px;
+	min-height: 20px;
+	line-height: inherit;
+}
+
+/**
+ * Fix custom admin bar menu item icon.
+ */
+.ats-admin-bar-output--menu-link .ab-icon {
+	top: 2px;
+}
+
+/**
+ * Highlight PRO upgrade link.
+ */
+#adminmenu #menu-posts-ats_widgets a[href="https://ats-dashboard.io/pro/"],
+#adminmenu #menu-posts-ats_widgets a[href="edit.php?post_type=ats_widgets&page=ats_plugin_onboarding"] {
+	background: #00a32a;
+	color: #fff;
+}
+
+/**
+ * Notices for metabox.
+ */
+.ats-notice-metabox .heatbox-content p:last-child {
+	margin-bottom: 0;
+}
+
+.ats-notice-metabox.is-success {
+	border-left-width: 4px;
+	border-left-color: #00a32a;
+}
+
+.ats-notice-metabox.is-warning {
+	border-left-width: 4px;
+	border-left-color: #dba617;
+}
+
+.ats-notice-metabox.is-info {
+	border-left-width: 4px;
+	border-left-color: #72aee6;
+}
+
+/**
+ * BFCM Notice.
+ */
+.ats-bfcm-notice {
+	padding: 25px 20px;
+}
+
+.ats-bfcm-notice .notice-body {
+	display: flex;
+}
+
+.ats-bfcm-notice .notice-icon {
+	padding-right: 25px;
+}
+
+.ats-bfcm-notice .notice-icon img {
+	max-width: 55px;
+}
+
+.ats-bfcm-notice .notice-content {
+	width: 100%;
+}
+
+.ats-bfcm-notice .notice-content h2 {
+	margin-top: 0;
+	margin-bottom: 10px;
+	font-weight: 700;
+}
+
+.ats-bfcm-notice .notice-content > p {
+	margin-top: 0;
+	margin-bottom: 10px;
+}
+
+.ats-bfcm-notice .notice-content > p:last-child {
+	margin-bottom: 0;
+}
+
+/**
+ * Upgrade nag.
+ */
+.ats-pro-upgrade-nag {
+	margin-top: 15px;
+	background: #197cff;
+	color: #fff;
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px;
+	font-weight: 700;
+}
+
+.ats-pro-upgrade-nag > * {
+	margin: 0;
+}
+
+.ats-pro-upgrade-nag .button {
+	background: rgba(0, 45, 96, 0.5);
+	padding: 5px 15px !important;
+}
+
+.ats-pro-upgrade-nag .button:hover {
+	background: rgba(0, 45, 96, 0.6);
+}
+
+.ats-pro-admin-bar-notice {
+	border-top: none;
+	margin-top: 0;
+	padding-top: 0;
+}
+
+@media screen and (max-width: 991px) {
+	.ats-pro-upgrade-nag {
+		flex-wrap: wrap;
+	}
+	.ats-pro-upgrade-nag .button {
+		margin-top: 20px;
+		margin-bottom: 0;
+	}
+}

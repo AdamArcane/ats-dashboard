@@ -1,0 +1,292 @@
+/**
+ * ats General Control
+ */
+ul .ats-customize-control:first-child {
+	padding-top: 0;
+}
+
+ul .ats-customize-control:last-child {
+	padding-bottom: 0;
+	border-bottom-width: 0;
+}
+
+.ats-customize-control {
+	box-sizing: border-box;
+	padding-bottom: 15px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ddd;
+}
+
+.ats-customize-control * {
+	box-sizing: border-box;
+}
+
+.ats-customize-control .wp-picker-holder,
+.ats-customize-control .wp-picker-holder * {
+	box-sizing: content-box;
+}
+
+.ats-customize-control .iris-picker-inner {
+	width: 100%;
+}
+
+.ats-customize-control--cols {
+	display: flex;
+	align-items: center;
+}
+
+.ats-customize-control--left-col {
+	padding-right: 13px;
+	width: 75%;
+}
+
+.ats-customize-control--right-col {
+	width: 25%;
+}
+
+/**
+ * ats Range Control
+ */
+.ats-customize-control-header {
+	position: relative;
+}
+
+.ats-customize-control-reset:hover {
+	transform: rotate(-45deg);
+}
+
+.ats-customize-control-range:hover .ats-customize-control-reset {
+	opacity: 1;
+	visibility: visible;
+}
+
+.ats-customize-control-reset {
+	position: absolute;
+	bottom: 5px;
+	right: 0;
+	font-size: 12px;
+	width: 12px;
+	height: 12px;
+	color: #59727c;
+	cursor: pointer;
+	opacity: 0;
+	visibility: hidden;
+	transform: rotate(45deg);
+	transition: all 0.3s ease-in-out;
+}
+
+.ats-customize-control-range .ats-customize-range-field:focus {
+	background-color: #fff;
+}
+
+.ats-customize-control-range .ats-customize-range-field {
+	font-size: 12px;
+	text-align: center;
+	background-color: #f7f7f7;
+	border-color: #bbb;
+	border-radius: 4px;
+	z-index: 2;
+	transition: box-shadow 0.15s;
+}
+
+.ats-customize-control-range
+	.ats-customize-range-field::-webkit-inner-spin-button,
+.ats-customize-control-range
+	.ats-customize-range-field::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.ats-customize-control-range-slider {
+	-webkit-appearance: none;
+	width: 100%;
+	height: 6px;
+	border-radius: 3px;
+	background-color: #bdc3c7;
+	outline: none;
+	padding: 0;
+	margin: 0;
+	position: relative;
+}
+
+.ats-customize-control-range-slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background-color: #f0f0f0;
+	cursor: pointer;
+	border: 1px solid #999;
+	-webkit-transition: background-color, transform 0.15s ease-in-out;
+	transition: background-color, transform 0.15s ease-in-out;
+}
+
+.ats-customize-control-range-slider::-webkit-slider-thumb:hover {
+	background-color: #e7e7e7;
+}
+
+.ats-customize-control-range-slider:active::-webkit-slider-thumb {
+	background-color: #e7e7e7;
+}
+
+.ats-customize-control-range-slider::-moz-range-thumb {
+	width: 16px;
+	height: 16px;
+	border: 0;
+	border-radius: 50%;
+	background-color: #f0f0f0;
+	cursor: pointer;
+	border: 1px solid #999;
+	-moz-transition: background-color, transform 0.15s ease-in-out;
+	transition: background-color, transform 0.15s ease-in-out;
+}
+
+.ats-customize-control-range-slider::-moz-range-thumb:hover {
+	background-color: #e7e7e7;
+}
+
+.ats-customize-control-range-slider:active::-moz-range-thumb {
+	background-color: #e7e7e7;
+}
+
+.ats-customize-control-range-slider:focus::-webkit-slider-thumb {
+	/* in case we need this in the future */
+}
+
+::-moz-range-track {
+	background-color: #bdc3c7;
+	border: 0;
+}
+
+input::-moz-focus-inner,
+input::-moz-focus-outer {
+	border: 0;
+}
+
+/**
+ * ats Color Control
+ */
+.ats-customize-control-color-picker .wp-color-result-text,
+.ats-customize-control-color .wp-color-result-text {
+	/* Set back to WordPress default instead of the dynamically generated inline rule */
+	line-height: 2.54545455 !important;
+}
+
+.ats-customize-control-color-picker .wp-picker-clear,
+.ats-customize-control-color .wp-picker-clear {
+	margin-left: 7px;
+}
+
+/**
+ * ats Login Template Control
+ */
+.ats-customize-control-login-template
+	.ats-customize-control-template:first-child {
+	margin-top: 0;
+}
+
+.ats-customize-control-login-template .ats-customize-control-template {
+	display: block;
+	margin: 10px 0 10px;
+}
+
+.ats-customize-control-login-template .ats-customize-control-template:hover img,
+.ats-customize-control-login-template
+	.ats-customize-control-template:active
+	img,
+.ats-customize-control-login-template
+	.ats-customize-control-template.is-selected
+	img {
+	box-shadow: 0 0 0 2px #3858e9;
+}
+
+.ats-customize-control-login-template .ats-customize-control-template img {
+	display: block;
+	max-width: 100%;
+	border-radius: 2px;
+	border: 1px solid #ddd;
+	cursor: pointer;
+	transition: box-shadow 0.15s;
+}
+
+/**
+ * ats Image Control
+ */
+.ats-customize-control-image.is-empty {
+	border-bottom-width: 0;
+}
+
+/**
+ * Individual Controls Tweak
+ */
+body:not(.ats-pro-active) #customize-control-ats_login-form_position {
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom-width: 0;
+}
+
+/**
+ * Customize Control Footer
+ */
+.wp-full-overlay-footer .devices {
+	display: flex;
+}
+
+.wp-full-overlay-footer .devices button {
+	margin-left: 0;
+}
+
+/**
+ * PRO panel
+ */
+#customize-theme-controls .ats-pro-control-section .accordion-section-title {
+	display: block;
+	font-weight: 600;
+	/*color: #fff;*/
+	font-size: 16px;
+	text-decoration: none;
+	border-left-color: #3ba9d2;
+	border-bottom-color: #3ba9d2;
+	border-top: 1px solid #3ba9d2;
+	color: #3ba9d2;
+}
+
+#customize-theme-controls
+	.ats-pro-control-section:hover
+	.accordion-section-title,
+#customize-theme-controls
+	.ats-pro-control-section
+	.accordion-section-title:focus {
+	color: #0071a1;
+	background-color: #fff;
+	border-color: #3ba9d2;
+}
+
+#customize-theme-controls
+	.ats-pro-control-section
+	.accordion-section-title:focus {
+	box-shadow: none;
+}
+
+.ats-pro-control-section a.accordion-section-title::after {
+	display: none;
+}
+
+.ats-pro-customizer-control-notice {
+	font-style: italic;
+}
+
+/**
+ * Customize control's code editor.
+ */
+#customize-control-ats_login-custom_css .CodeMirror-wrap {
+	height: calc(100vh - 250px);
+}
+
+/**
+ * Customize control's toggle switch.
+ */
+.ats-customize-control--right-col .switch-control {
+	text-align: right;
+}
