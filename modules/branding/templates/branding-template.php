@@ -68,6 +68,12 @@ return function () {
 						<?php
 					}
 					?>
+
+					<p>
+						<button type="button" class="button button-secondary" id="ats-reset-branding-colors">
+							<?php esc_html_e( 'Reset to defaults', 'ats-dashboard' ); ?>
+						</button>
+					</p>
 				</div>
 
 				<?php do_action( 'ats_after_admin_colors_metabox' ); ?>

@@ -59,6 +59,7 @@
 
 	function init() {
 		setupColorPreview();
+		setupColorReset();
 		$(".ats-branding-admin-bar-logo-upload").click(function (e) {
 			e.preventDefault();
 			var button = this;
@@ -148,6 +149,26 @@
 			$(field).on( 'change irischange', update );
 		});
 		update();
+	}
+
+	function setupColorReset() {
+		var resetButton = document.getElementById( 'ats-reset-branding-colors' );
+		if ( ! resetButton ) return;
+
+		resetButton.addEventListener( 'click', function () {
+			document.querySelectorAll( '.ats-branding-color-field' ).forEach(function (field) {
+				var defaultColor = field.dataset.default || '';
+				field.value = defaultColor;
+
+				if ( window.jQuery && window.jQuery.fn.wpColorPicker ) {
+					window.jQuery( field ).wpColorPicker( 'color', defaultColor );
+				}
+
+				field.dispatchEvent( new Event( 'input', { bubbles: true } ) );
+				field.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+				window.jQuery && window.jQuery( field ).trigger( 'change' );
+			});
+		});
 	}
 
 	function brandingCheckboxChecked() {
