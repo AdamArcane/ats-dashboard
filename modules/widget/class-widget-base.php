@@ -38,6 +38,7 @@ class Widget_Base_Module extends Base_Module {
 	public function setup() {
 
 		add_action( 'init', array( $this, 'register_post_type' ) );
+		add_action( 'admin_menu', array( $this, 'remove_add_widget_submenu' ), 999 );
 		add_filter( 'post_updated_messages', array( $this, 'update_messages' ) );
 		add_filter( 'manage_ats_widgets_posts_columns', array( $this, 'set_columns' ) );
 		add_action( 'manage_ats_widgets_posts_custom_column', array( $this, 'column_content' ), 10, 2 );
@@ -67,6 +68,13 @@ class Widget_Base_Module extends Base_Module {
 		$post_type = require __DIR__ . '/inc/post-type.php';
 		$post_type();
 
+	}
+
+	/**
+	 * Remove the duplicate Add Dashboard Widget submenu item.
+	 */
+	public function remove_add_widget_submenu() {
+		remove_submenu_page( 'edit.php?post_type=ats_widgets', 'post-new.php?post_type=ats_widgets' );
 	}
 
 	/**
