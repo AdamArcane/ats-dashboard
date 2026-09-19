@@ -200,17 +200,8 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 	</head>
 	<body class="login <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 
-	<?php if ( ! ats_is_pro_active() ) : ?>
 
-		<div class="ats-pro-login-customizer-notice">
-			<?php esc_html_e( 'This feature is available in ATS Dashboard.', 'ats-dashboard' ); ?>
-			<a href="https://ats-dashboard.io/docs/login-customizer/?utm_source=plugin&utm_medium=login_customizer_bar&utm_campaign=ats" class="button button-primary ats-login-customizer-pro-button" target="_blank">
-				<?php esc_html_e( 'Get ATS Dashboard', 'ats-dashboard' ); ?>
-			</a>
-		</div>
-
-	<?php endif; ?>
-
+	
 	<?php
 	/**
 	 * Fires in the login page header after the body tag is opened.

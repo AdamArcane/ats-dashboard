@@ -260,11 +260,6 @@ class Admin_Page_Base_Module extends Base_Module {
 
 		add_meta_box( 'ats-active-status-metabox', __( 'Active', 'ats-dashboard' ), array( $this, 'active_status_metabox' ), 'ats_admin_page', 'side', 'high' );
 		add_meta_box( 'ats-content-type-metabox', __( 'Content Type', 'ats-dashboard' ), array( $this, 'content_type_metabox' ), 'ats_admin_page', 'side', 'high' );
-
-		if ( ! ats_is_pro_active() ) {
-			add_meta_box( 'ats-pro-link-metabox', __( 'PRO Features Available', 'ats-dashboard' ), array( $this, 'pro_link_metabox' ), 'ats_admin_page', 'side', 'high' );
-		}
-
 		add_meta_box( 'ats-menu-metabox', __( 'Menu Attributes', 'ats-dashboard' ), array( $this, 'menu_metabox' ), 'ats_admin_page', 'side' );
 		add_meta_box( 'ats-html-metabox', __( 'HTML', 'ats-dashboard' ), array( $this, 'html_metabox' ), 'ats_admin_page', 'normal', 'high' );
 		add_meta_box( 'ats-display-metabox', __( 'Display Options', 'ats-dashboard' ), array( $this, 'display_metabox' ), 'ats_admin_page', 'normal' );

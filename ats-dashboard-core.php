@@ -38,15 +38,6 @@ require __DIR__ . '/class-ats-core-backwards-compatibility.php';
 require __DIR__ . '/class-ats-core-vars.php';
 require __DIR__ . '/class-ats-core-setup.php';
 
-/**
- * Check whether ATS Dashboard is active.
- * This function can be called anywhere after "plugins_loaded" hook.
- *
- * @return bool
- */
-function ats_is_pro_active() {
-	return defined( 'ATS_DASHBOARD_PLUGIN_VERSION' );
-}
 
 ats\Backwards_Compatibility::init();
 ats\Setup::init();

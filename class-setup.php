@@ -62,17 +62,6 @@ class Setup {
 		require __DIR__ . '/helpers/class-multisite-helper.php';
 		register_deactivation_hook( ATS_DASHBOARD_PLUGIN_FILE, array( $this, 'deactivation' ) );
 
-		// Check whether ATS Dashboard free active status & version.
-		if ( ! defined( 'ATS_DASHBOARD_PLUGIN_VERSION' ) || version_compare( ATS_DASHBOARD_PLUGIN_VERSION, '3.0', '<' ) ) {
-
-			require __DIR__ . '/modules/instant-install/class-instant-install-module.php';
-			InstantInstall\Instant_Install_Module::init();
-
-			// Stop if ATS Dashboard free is not active, or it's version is lower than 3.0.
-			return;
-
-		}
-
 		$this->load_helpers();
 		Backwards_Compatibility::init();
 

@@ -193,9 +193,6 @@ class Widget_Base_Module extends Base_Module {
 		add_meta_box( 'ats-main-metabox', __( 'ATS Dashboard', 'ats-dashboard' ), array( $this, 'main_metabox' ), 'ats_widgets', 'normal', 'high' );
 		add_meta_box( 'ats-active-status-metabox', __( 'Active', 'ats-dashboard' ), array( $this, 'active_status_metabox' ), 'ats_widgets', 'side', 'high' );
 
-		if ( ! ats_is_pro_active() ) {
-			add_meta_box( 'ats-pro-link-metabox', __( 'PRO Features Available', 'ats-dashboard' ), array( $this, 'pro_link_metabox' ), 'ats_widgets', 'side' );
-		}
 
 		$tags_metabox_header  = __( 'Placeholder Tags', 'ats-dashboard' );
 		$tags_metabox_header .= '<br><span class="action-status">📋 Copied</span>';

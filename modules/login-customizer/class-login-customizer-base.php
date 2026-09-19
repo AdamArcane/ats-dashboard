@@ -351,8 +351,7 @@ class Login_Customizer_Base_Module extends Base_Module {
 			'pluginUrl'    => rtrim( ATS_DASHBOARD_PLUGIN_URL, '/' ),
 			'moduleUrl'    => ATS_DASHBOARD_PLUGIN_URL . '/modules/login-customizer',
 			'assetUrl'     => $this->url . '/assets',
-			'wpLogoUrl'    => admin_url( 'images/wordpress-logo.svg?ver=' . ATS_DASHBOARD_PLUGIN_VERSION ),
-			'isProActive'  => ats_is_pro_active(),
+			'wpLogoUrl'    => admin_url( 'images/wordpress-logo.svg?ver=' . ATS_DASHBOARD_PLUGIN_VERSION )
 		);
 
 	}

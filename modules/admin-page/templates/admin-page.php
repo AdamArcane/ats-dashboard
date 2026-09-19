@@ -54,13 +54,11 @@ $custom_css = $post->custom_css;
 	<?php endif; ?>
 
 	<?php
-	if ( ! ats_is_pro_active() ) {
 		if ( 'html' === $post->content_type ) {
 			echo wp_kses_post( $post->html_content );
 		} else {
 			echo wp_kses_post( apply_filters( 'the_content', $post->post_content ) );
 		}
-	}
 
 	do_action( 'ats_admin_page_content_output', $post, $editor, $from_multisite );
 	?>

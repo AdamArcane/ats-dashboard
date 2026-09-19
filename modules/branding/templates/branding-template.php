@@ -60,15 +60,12 @@ return function () {
 					<?php
 					do_settings_sections( 'ats-admin-colors-settings' );
 
-					if ( ats_is_pro_active() ) {
+				
 						?>
 
 						<div class="heatbox-overlay"></div>
 
-						<?php
-					}
-					?>
-
+					
 					<p>
 						<button type="button" class="button button-secondary" id="ats-reset-branding-colors">
 							<?php esc_html_e( 'Reset to defaults', 'ats-dashboard' ); ?>
@@ -82,14 +79,12 @@ return function () {
 					<?php
 					do_settings_sections( 'ats-admin-logo-settings' );
 
-					if ( ats_is_pro_active() ) {
+				
 						?>
 
 						<div class="heatbox-overlay"></div>
 
-						<?php
-					}
-					?>
+					
 				</div>
 
 				<?php do_action( 'ats_after_admin_logo_metabox' ); ?>

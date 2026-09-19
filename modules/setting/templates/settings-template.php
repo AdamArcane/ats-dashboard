@@ -58,11 +58,7 @@ return function () {
 				<nav>
 					<ul class="heatbox-tab-nav">
 						<?php foreach ( $setting_tab_menus as $tab_index => $tab ) : ?>
-							<?php
-							if ( ! empty( $tab['is_pro'] ) && ! ats_is_pro_active() ) {
-								continue;
-							}
-							?>
+						
 							<li class="heatbox-tab-nav-item <?php echo esc_attr( $tab['id'] ); ?>-panel">
 								<a href="#<?php echo esc_attr( $tab['id'] ); ?>"><?php echo esc_html( $tab['text'] ); ?></a>
 							</li>
@@ -99,7 +95,6 @@ return function () {
 
 					<?php do_action( 'ats_after_widgets_panel' ); ?>
 
-					<?php if ( ats_is_pro_active() ) : ?>
 						<div class="heatbox-admin-panel ats-page-builder-dashboard-panel">
 							<div class="heatbox">
 								<?php do_settings_sections( 'ats-page-builder-dashboard-settings' ); ?>
@@ -107,7 +102,6 @@ return function () {
 
 							<?php do_action( 'ats_after_page_builder_dashboard_metabox' ); ?>
 						</div>
-					<?php endif; ?>
 
 					<div class="heatbox-admin-panel ats-general-panel">
 						<div class="heatbox">
@@ -134,15 +128,12 @@ return function () {
 
 			</form>
 
-			<?php if ( ! ats_is_pro_active() ) { ?>
 
 			<div class="heatbox-divider"></div>
 
-			<?php } ?>
 
 		</div>
 
-		<?php if ( ! ats_is_pro_active() ) { ?>
 
 		<div class="heatbox-container heatbox-container-wide heatbox-container-center featured-products">
 
@@ -188,7 +179,6 @@ return function () {
 
 		</div>
 
-		<?php } ?>
 
 	</div>
 

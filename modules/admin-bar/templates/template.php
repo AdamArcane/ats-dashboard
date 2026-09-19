@@ -76,16 +76,7 @@ return function ( $module ) {
 		<div class="heatbox-container heatbox-container-center heatbox-column-container">
 			<div class="heatbox-main">
 
-				<?php if ( ! ats_is_pro_active() ) : ?>
 
-					<div class="ats-pro-upgrade-nag">
-						<p><?php esc_html_e( 'This feature is available in ATS Dashboard.', 'ats-dashboard' ); ?></p>
-						<a href="https://ats-dashboard.io/pro/?utm_source=plugin&utm_medium=admin_bar_link&utm_campaign=ats" class="button button-large button-primary" target="_blank">
-							<?php esc_html_e( 'Get ATS Dashboard', 'ats-dashboard' ); ?>
-						</a>
-					</div>
-
-				<?php endif; ?>
 
 				<?php do_action( 'ats_admin_bar_before_form' ); ?>
 
@@ -114,7 +105,6 @@ return function ( $module ) {
 
 						<div class="heatbox-footer">
 
-							<?php if ( ! ats_is_pro_active() ) : ?>
 
 								<div class="ats-pro-settings-page-notice ats-pro-admin-bar-notice">
 									<p><?php esc_html_e( 'This feature is available in ATS Dashboard.', 'ats-dashboard' ); ?></p>
@@ -123,7 +113,6 @@ return function ( $module ) {
 									</a>
 								</div>
 
-							<?php endif; ?>
 
 							<?php do_action( 'ats_admin_bar_form_footer' ); ?>
 

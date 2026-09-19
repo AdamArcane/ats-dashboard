@@ -79,8 +79,6 @@ class Admin_Page_Base_Output extends Base_Output {
 	 */
 	public function setup_menu() {
 
-		// This is done separately in the PRO version to handle multisite support.
-		if ( ! ats_is_pro_active() ) {
 			$parent_pages  = $this->get_posts( 'parent' );
 			$submenu_pages = $this->get_posts( 'submenu' );
 
@@ -91,7 +89,6 @@ class Admin_Page_Base_Output extends Base_Output {
 			if ( ! empty( $submenu_pages ) ) {
 				$this->prepare_menu( $submenu_pages );
 			}
-		}
 
 		// Hook for the pro version to run setup_menu.
 		do_action( 'ats_admin_page_setup_menu', $this );

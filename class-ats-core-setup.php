@@ -93,17 +93,11 @@ class Setup {
 
 		add_action( 'plugins_loaded', array( $this, 'load_modules' ), 20 );
 		add_action( 'plugins_loaded', array( $this, 'load_plugin_onboarding_module' ), 20 );
-		add_action( 'plugins_loaded', array( $this, 'load_onboarding_wizard_module' ), 20 );
 		add_action( 'init', array( self::get_instance(), 'check_activation_meta' ) );
 		add_action( 'init', array( $this, 'register_action_links' ) );
-		add_action( 'admin_menu', array( $this, 'pro_submenu' ), 20 );
 		add_filter( 'admin_body_class', array( $this, 'admin_body_class' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ), 20 );
-		add_action( 'admin_notices', array( self::get_instance(), 'review_notice' ) );
-		add_action( 'admin_notices', array( self::get_instance(), 'bfcm_notice' ) );
-		add_action( 'wp_ajax_ats_dismiss_review_notice', array( $this, 'dismiss_review_notice' ) );
-		add_action( 'wp_ajax_ats_dismiss_bfcm_notice', array( $this, 'dismiss_bfcm_notice' ) );
 
 		register_deactivation_hook( ATS_DASHBOARD_PLUGIN_FILE, array( $this, 'deactivation' ), 20 );
 
@@ -161,7 +155,6 @@ class Setup {
 			'ats_widgets_page_ats_admin_menu',
 			'ats_widgets_page_ats_admin_bar',
 			'ats_widgets_page_ats_plugin_onboarding',
-			'ats_widgets_page_ats_onboarding_wizard',
 		);
 
 		$screen = get_current_screen();
@@ -203,19 +196,15 @@ class Setup {
 	 */
 	public function on_plugin_activation() {
 
-		// Stop if this is activation from Erident's migration to ats.
+		// Stop if this is activation from Erident's migration to ATS.
 		if ( get_option( 'ats_migration_from_erident' ) ) {
-			// Prevent "Setup Wizard" from being shown for Erident's users.
-			update_option( 'ats_onboarding_wizard_completed', 1 );
 			return;
 		}
 
 		// We bail out early in multisite because this function will still be called in the main site.
-		if ( is_multisite() || ats_is_pro_active() ) {
+		if ( is_multisite() ) {
 			return;
 		}
-
-		update_option( 'ats_onboarding_wizard_redirect', 1 );
 
 	}
 
@@ -223,8 +212,9 @@ class Setup {
 	 * Load ATS Dashboard modules.
 	 */
 	public function load_modules() {
+		$modules = array();
 
-		if ( ! defined( 'ATS_DASHBOARD_PLUGIN_VERSION' ) || ATS_DASHBOARD_PLUGIN_VERSION >= '3.1' ) {
+		if ( ! defined( 'ATS_DASHBOARD_PLUGIN_VERSION' ) || version_compare( ATS_DASHBOARD_PLUGIN_VERSION, '3.1', '>=' ) ) {
 			$modules['ats\\Feature\\Feature_Module'] = __DIR__ . '/modules/feature/class-feature-module.php';
 		}
 
@@ -303,81 +293,6 @@ class Setup {
 	}
 
 	/**
-	 * Load onboarding wizard module.
-	 */
-	public function load_onboarding_wizard_module() {
-
-		if ( is_multisite() || ats_is_pro_active() ) {
-			return;
-		}
-
-		if ( get_option( 'ats_onboarding_wizard_completed' ) ) {
-			return;
-		}
-
-		if ( get_option( 'ats_onboarding_wizard_redirect' ) ) {
-			// Redirect to onboarding wizard page.
-			add_action( 'current_screen', array( $this, 'redirect_to_onboarding_wizard_page' ), 20 );
-		}
-
-		require_once __DIR__ . '/modules/onboarding-wizard/class-onboarding-wizard-module.php';
-		$module = new OnboardingWizard\Onboarding_Wizard_Module();
-		$module->setup();
-
-	}
-
-	/**
-	 * Redirect to the Onboarding Wizard page after activate the plugin.
-	 */
-	public function redirect_to_onboarding_wizard_page() {
-
-		$current_screen = get_current_screen();
-
-		if ( is_null( $current_screen ) ) {
-			return;
-		}
-
-		// Stop if current screen is onboarding wizard page.
-		if ( 'ats_widgets_page_ats_onboarding_wizard' === $current_screen->id ) {
-			return;
-		}
-
-		// Stop if this request is not supposed to be redirected.
-		if ( ! get_option( 'ats_onboarding_wizard_redirect' ) ) {
-			return;
-		}
-
-		// Immediately delete the redirect option because redirect is supposed to happen once.
-		delete_option( 'ats_onboarding_wizard_redirect' );
-
-		// Redirect to the Onboarding Wizard page.
-		wp_safe_redirect( admin_url( 'edit.php?post_type=ats_widgets&page=ats_onboarding_wizard' ) );
-		exit;
-
-	}
-
-	/**
-	 * Generate PRO submenu link.
-	 */
-	public function pro_submenu() {
-
-		// Stop if PRO version is active.
-		if ( ats_is_pro_active() ) {
-			return;
-		}
-
-		// Stop if user isn't an admin.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		global $submenu;
-
-		$submenu['edit.php?post_type=ats_widgets'][] = array( 'Upgrade to PRO', 'manage_options', 'https://ats-dashboard.io/pro/' );
-
-	}
-
-	/**
 	 * Enqueue admin styles.
 	 */
 	public function admin_styles() {
@@ -400,178 +315,6 @@ class Setup {
 				'nonce' => wp_create_nonce( 'ats_dismiss_notice' ),
 			)
 		);
-
-	}
-
-	/**
-	 * Show review notice after certain number of day(s).
-	 */
-	public function review_notice() {
-
-		// Stop if user isn't an admin.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		// Stop if review notice had been dismissed.
-		if ( get_option( 'review_notice_dismissed' ) ) {
-			return;
-		}
-
-		$install_date = get_option( 'ats_install_date' );
-
-		// Stop if there's no install date.
-		if ( empty( $install_date ) ) {
-			return;
-		}
-
-		$diff = round( ( time() - strtotime( $install_date ) ) / 24 / 60 / 60 );
-
-		// Don't show the notice if ATS Dashboard is running not more than 5 days.
-		if ( $diff < 5 ) {
-			return;
-		}
-
-		$emoji      = '😍';
-		$review_url = 'https://wordpress.org/support/plugin/ats-dashboard/reviews/?rate=5#new-post';
-		$link_start = '<a href="' . $review_url . '" target="_blank">';
-		$link_end   = '</a>';
-		// translators: %1$s: Emoji, %2$s: Link start tag, %3$s: Link end tag.
-		$notice   = sprintf( __( '%1$s Love using ATS Dashboard? - That\'s Awesome! Help us spread the word and leave us a %2$s 5-star review %3$s in the WordPress repository.', 'ats-dashboard' ), $emoji, $link_start, $link_end );
-		$btn_text = __( 'Sure! You deserve it!', 'ats-dashboard' );
-		$notice  .= '<br/>';
-		$notice  .= "<a href=\"$review_url\" style=\"margin-top: 15px;\" target='_blank' class=\"button-primary\">$btn_text</a>";
-
-		echo '<div class="notice ats-notice ats-review-notice notice-success is-dismissible is-permanent-dismissible" data-ajax-action="ats_dismiss_review_notice">';
-		echo '<p>' . wp_kses_post( $notice ) . '</p>';
-		echo '</div>';
-
-	}
-
-	/**
-	 * Dismiss review notice.
-	 */
-	public function dismiss_review_notice() {
-
-		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
-
-		if ( ! wp_verify_nonce( $nonce, 'ats_dismiss_notice' ) ) {
-			wp_send_json_error( __( 'Invalid token', 'ats-dashboard' ) );
-		}
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'You do not have permission to perform this action', 'ats-dashboard' ) );
-		}
-
-		if ( empty( $_POST['dismiss'] ) ) {
-			wp_send_json_error( __( 'Invalid request', 'ats-dashboard' ) );
-		}
-
-		update_option( 'review_notice_dismissed', 1 );
-		wp_send_json_success( __( 'Review notice has been dismissed.', 'ats-dashboard' ) );
-
-	}
-
-	/**
-	 * Show BFCM notice.
-	 */
-	public function bfcm_notice() {
-
-		// Stop if PRO version is active.
-		if ( ats_is_pro_active() ) {
-			return;
-		}
-
-		// Stop here if we are not on the main site of the network.
-		if ( ! is_main_site() ) {
-			return;
-		}
-
-		// Stop here if current user is not an admin.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		// Intentional: using manually written string instead of gmdate( 'Y' ).
-		$this_year = '2025';
-		$last_year = $this_year - 1;
-		$start     = strtotime( 'november 24th, ' . $this_year );
-		$end       = strtotime( 'december 1st, ' . $this_year );
-		$now       = time();
-
-		// Stop here if we are not in the sales period.
-		if ( $now < $start || $now > $end ) {
-			return;
-		}
-
-		// Clean up: Delete initial deal dismissal if triggered.
-		if ( ! empty( get_option( 'ats_bfcm_notice_dismissed', 0 ) ) ) {
-			delete_option( 'ats_bfcm_notice_dismissed' );
-		}
-
-		// Clean up: Delete last years dismissal if triggered.
-		if ( ! empty( get_option( 'ats_bfcm_notice_dismissed_' . $last_year, 0 ) ) ) {
-			delete_option( 'ats_bfcm_notice_dismissed_' . $last_year );
-		}
-
-		// Stop here if notice has been dismissed.
-		if ( ! empty( get_option( 'ats_bfcm_notice_dismissed_' . $this_year, 0 ) ) ) {
-			return;
-		}
-
-		$bfcm_url = 'https://ats-dashboard.io/pricing/?utm_source=repository&utm_medium=bfcm_banner&utm_campaign=ats';
-		?>
-
-		<div class="notice ats-notice ats-bfcm-notice notice-info is-dismissible is-permanent-dismissible" data-ajax-action="ats_dismiss_bfcm_notice">
-			<div class="notice-body">
-				<div class="notice-icon">
-					<img src="<?php echo esc_url( ATS_DASHBOARD_CORE_URL ); ?>/assets/img/logo.png" alt="ATS Dashboard Logo">
-				</div>
-				<div class="notice-content">
-					<h2>
-						<?php esc_html_e( 'Black Friday Sale! - Up to 25% Off ATS Dashboard', 'ats-dashboard' ); ?>
-					</h2>
-					<p>
-						<?php echo wp_kses_post( __( 'Save big & upgrade to <strong>ATS Dashboard</strong>, today!', 'ats-dashboard' ) ); ?>
-					</p>
-					<p>
-						<?php esc_html_e( 'But hurry up, the deal will expire soon!', 'ats-dashboard' ); ?><br>
-						<em><?php esc_html_e( 'All prices are reduced. No coupon code required.', 'ats-dashboard' ); ?></em>
-					</p>
-					<p>
-						<a target="_blank" href="<?php echo esc_url( $bfcm_url ); ?>" class="button button-primary">
-							<?php esc_html_e( 'Learn more', 'ats-dashboard' ); ?>
-						</a>
-						<small><?php esc_html_e( '*Only Administrators will see this message.', 'ats-dashboard' ); ?></small>
-					</p>
-				</div>
-			</div>
-		</div>
-
-		<?php
-	}
-
-	/**
-	 * Dismiss BFCM notice.
-	 */
-	public function dismiss_bfcm_notice() {
-
-		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
-
-		if ( ! wp_verify_nonce( $nonce, 'ats_dismiss_notice' ) ) {
-			wp_send_json_error( __( 'Invalid token', 'ats-dashboard' ) );
-		}
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'You do not have permission to perform this action', 'ats-dashboard' ) );
-		}
-
-		if ( empty( $_POST['dismiss'] ) ) {
-			wp_send_json_error( __( 'Invalid request', 'ats-dashboard' ) );
-		}
-
-		update_option( 'ats_bfcm_notice_dismissed_2025', 1 );
-		wp_send_json_success( __( 'BFCM notice has been dismissed.', 'ats-dashboard' ) );
 
 	}
 
@@ -665,12 +408,6 @@ class Setup {
 			delete_blog_option( $site_id, 'ats_login_customizer_flush_url' );
 			delete_blog_option( $site_id, 'review_notice_dismissed' );
 
-			/**
-			 * Backwards compatibility
-			 * We will no longer have to remove related data on multisites as from 2022 on we will only show the bfcm notice on the main site.
-			 */
-			delete_blog_option( $site_id, 'ats_bfcm_notice_dismissed' );
-
 			delete_blog_option( $site_id, 'ats_install_date' );
 			delete_blog_option( $site_id, 'ats_plugin_activated' );
 
@@ -700,10 +437,6 @@ class Setup {
 
 			delete_option( 'ats_install_date' );
 			delete_option( 'ats_plugin_activated' );
-
-			// These 2 options won't be available in multisite install.
-			delete_option( 'ats_onboarding_wizard_redirect' );
-			delete_option( 'ats_onboarding_wizard_completed' );
 
 			if ( $restore_removal_option && defined( 'ATS_DASHBOARD_PLUGIN_VERSION' ) ) {
 				update_option( $site_id, 'ats_settings', array( 'remove-on-uninstall' => 1 ) );

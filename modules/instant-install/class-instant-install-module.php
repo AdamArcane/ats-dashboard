@@ -70,19 +70,7 @@ class Instant_Install_Module {
 		if ( ! current_user_can( 'update_plugins' ) ) {
 			return;
 		}
-
-		// Check whether ATS Dashboard free is active or not.
-		if ( ! defined( 'ATS_DASHBOARD_PLUGIN_VERSION' ) ) {
-
-			add_action( 'admin_notices', array( self::get_instance(), 'free_version_notice' ) );
-
-		} else {
-			if ( version_compare( ATS_DASHBOARD_PLUGIN_VERSION, '3.0', '<' ) ) {
-
-				add_action( 'admin_notices', array( self::get_instance(), 'lower_free_version_notice' ) );
-
-			}
-		}
+	
 
 		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_assets' ) );
 
@@ -116,30 +104,7 @@ class Instant_Install_Module {
 
 	}
 
-	/**
-	 * Admin notice which shows that the free version is lower version 3.0.
-	 *
-	 * Example case:
-	 *
-	 * This could happen when they're still using version 2.x of the free version.
-	 * Then without upgrading to version 3, they decide to buy the Pro one.
-	 * And then they just install it without deactivating the old free version.
-	 */
-	public function lower_free_version_notice() {
-
-		$notice_class  = 'notice notice-warning';
-		$button_text   = __( 'Update Now', 'ats-dashboard' );
-		$update_button = '<button type="button" class="button button-primary ats-button ats-update-plugin">' . $button_text . '</button>';
-
-		$description  = '<h2>' . __( 'ATS Dashboard 3.0', 'ats-dashboard' ) . '</h2>';
-		$description .= __( 'Since version 3.0, <strong>ATS Dashboard</strong> requires at minimum <strong>ATS Dashboard</strong> version 3 to run on your WordPress installation.', 'ats-dashboard' );
-		$description .= '<br><br>';
-		$description .= $update_button;
-
-		printf( '<div class="%1s"><p>%2s</p></div>', $notice_class, $description );
-
-	}
-
+	
 	/**
 	 * Enqueue admin assets.
 	 */
@@ -171,7 +136,6 @@ class Instant_Install_Module {
 				'isActivated' => ( defined( 'ATS_DASHBOARD_PLUGIN_VERSION' ) ? true : false ),
 				'redirectUrl' => admin_url( 'edit.php?post_type=ats_widgets' ),
 				'activateUrl' => $activate_url,
-				'updateNonce' => wp_create_nonce( 'upgrade-plugin_' . $plugin ),
 				'texts'       => array(
 					'update'     => __( 'Update', 'ats-dashboard' ),
 					'updating'   => __( 'Updating...', 'ats-dashboard' ),

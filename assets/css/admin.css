@@ -119,15 +119,6 @@
 }
 
 /**
- * Highlight PRO upgrade link.
- */
-#adminmenu #menu-posts-ats_widgets a[href="https://ats-dashboard.io/pro/"],
-#adminmenu #menu-posts-ats_widgets a[href="edit.php?post_type=ats_widgets&page=ats_plugin_onboarding"] {
-	background: #00a32a;
-	color: #fff;
-}
-
-/**
  * Notices for metabox.
  */
 .ats-notice-metabox .heatbox-content p:last-child {
@@ -187,46 +178,8 @@
 	margin-bottom: 0;
 }
 
-/**
- * Upgrade nag.
- */
-.ats-pro-upgrade-nag {
-	margin-top: 15px;
-	background: #197cff;
-	color: #fff;
-	margin-bottom: 20px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 20px;
-	font-weight: 700;
-}
-
-.ats-pro-upgrade-nag > * {
-	margin: 0;
-}
-
-.ats-pro-upgrade-nag .button {
-	background: rgba(0, 45, 96, 0.5);
-	padding: 5px 15px !important;
-}
-
-.ats-pro-upgrade-nag .button:hover {
-	background: rgba(0, 45, 96, 0.6);
-}
-
 .ats-pro-admin-bar-notice {
 	border-top: none;
 	margin-top: 0;
 	padding-top: 0;
-}
-
-@media screen and (max-width: 991px) {
-	.ats-pro-upgrade-nag {
-		flex-wrap: wrap;
-	}
-	.ats-pro-upgrade-nag .button {
-		margin-top: 20px;
-		margin-bottom: 0;
-	}
 }
