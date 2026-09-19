@@ -129,56 +129,12 @@ return function () {
 			</form>
 
 
-			<div class="heatbox-divider"></div>
 
 
 		</div>
 
 
-		<div class="heatbox-container heatbox-container-wide heatbox-container-center featured-products">
-
-			<h2><?php esc_html_e( 'Check out our other free WordPress products!', 'ats-dashboard' ); ?></h2>
-
-			<ul class="products">
-				<li class="heatbox">
-					<a href="https://wordpress.org/plugins/better-admin-bar/" target="_blank">
-						<img src="<?php echo esc_url( ATS_DASHBOARD_CORE_URL ); ?>/assets/img/swift-control.jpg">
-					</a>
-					<div class="heatbox-content">
-						<h3><?php esc_html_e( 'Better Admin Bar', 'ats-dashboard' ); ?></h3>
-						<p class="subheadline"><?php esc_html_e( 'Replace the boring WordPress Admin Bar with this!', 'ats-dashboard' ); ?></p>
-						<p><?php esc_html_e( 'Better Admin Bar is the plugin that make your clients love WordPress. It drastically improves the user experience when working with WordPress and allows you to replace the boring WordPress admin bar with your own navigation panel.', 'ats-dashboard' ); ?></p>
-						<a href="https://wordpress.org/plugins/better-admin-bar/" target="_blank" class="button"><?php esc_html_e( 'View Features', 'ats-dashboard' ); ?></a>
-					</div>
-				</li>
-				<li class="heatbox">
-					<a href="https://wordpress.org/themes/page-builder-framework/" target="_blank">
-						<img src="<?php echo esc_url( ATS_DASHBOARD_CORE_URL ); ?>/assets/img/page-builder-framework.jpg">
-					</a>
-					<div class="heatbox-content">
-						<h3><?php esc_html_e( 'Page Builder Framework', 'ats-dashboard' ); ?></h3>
-						<p class="subheadline"><?php esc_html_e( 'The only Theme you\'ll ever need.', 'ats-dashboard' ); ?></p>
-						<p class="description"><?php esc_html_e( 'With its minimalistic design the Page Builder Framework theme is the perfect foundation for your next project. Build blazing fast websites with a theme that is easy to use, lightweight & highly customizable.', 'ats-dashboard' ); ?></p>
-						<a href="https://wordpress.org/themes/page-builder-framework/" target="_blank" class="button"><?php esc_html_e( 'View Features', 'ats-dashboard' ); ?></a>
-					</div>
-				</li>
-				<li class="heatbox">
-					<a href="https://wordpress.org/plugins/responsive-youtube-vimeo-popup/" target="_blank">
-						<img src="<?php echo esc_url( ATS_DASHBOARD_CORE_URL ); ?>/assets/img/wp-video-popup.jpg">
-					</a>
-					<div class="heatbox-content">
-						<h3><?php esc_html_e( 'WP Video Popup', 'ats-dashboard' ); ?></h3>
-						<p class="subheadline"><?php esc_html_e( 'The #1 Video Popup Plugin for WordPress.', 'ats-dashboard' ); ?></p>
-						<p><?php esc_html_e( 'Add beautiful responsive YouTube & Vimeo video lightbox popups to any post, page or custom post type of website without sacrificing performance.', 'ats-dashboard' ); ?></p>
-						<a href="https://wordpress.org/plugins/responsive-youtube-vimeo-popup/" target="_blank" class="button"><?php esc_html_e( 'View Features', 'ats-dashboard' ); ?></a>
-					</div>
-				</li>
-			</ul>
-
-			<p class="credit"><?php esc_html_e( 'Made with ❤ in Torsby, Sweden', 'ats-dashboard' ); ?></p>
-
-		</div>
-
+		
 
 	</div>
 

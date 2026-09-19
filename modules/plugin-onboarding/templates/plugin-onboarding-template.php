@@ -21,7 +21,7 @@ return function ( $referrer = '' ) {
 		),
 		array(
 			'module' => 'white_label',
-			'title'  => __( 'White Label', 'ats-dashboard' ),
+			'title'  => __( 'Customization', 'ats-dashboard' ),
 		),
 		array(
 			'module' => 'login_redirect',

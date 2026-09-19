@@ -8,6 +8,8 @@
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 return function ( $module ) {
+	wp_enqueue_style( 'ats-widget-admin-menu', $module->url . '/assets/css/admin-menu.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
+
 	if ( $module->screen()->is_new_widget() || $module->screen()->is_edit_widget() ) {
 
 		if ( apply_filters( 'ats_font_awesome', true ) ) {

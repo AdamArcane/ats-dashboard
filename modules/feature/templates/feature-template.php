@@ -15,10 +15,9 @@ return function () {
 
 	$features = array(
 		array(
-			'title'   => __( 'White Label', 'ats-dashboard' ),
+			'title'   => __( 'Customization', 'ats-dashboard' ),
 			'img'     => ATS_DASHBOARD_CORE_URL . '/modules/feature/assets/img/white-label.png',
-			'text'    => __( 'White label & rebrand the WordPress admin area with the White Label module.', 'ats-dashboard' ),
-			'feature' => 'white_label',
+			'text'    => __( 'Customize admin area appearance and functionality.', 'ats-dashboard' ),			'feature' => 'white_label',
 		),
 		array(
 			'title'   => __( 'Login Customizer', 'ats-dashboard' ),

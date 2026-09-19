@@ -1,0 +1,4 @@
+#adminmenu #menu-posts-ats_widgets .wp-menu-image:before {
+	display: inline-block;
+	transform: rotate(35deg);
+}

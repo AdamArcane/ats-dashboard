@@ -19,7 +19,7 @@ return function () {
 		'new_item'           => __( 'New Dashboard Widget', 'ats-dashboard' ),
 		'edit_item'          => __( 'Edit Dashboard Widget', 'ats-dashboard' ),
 		'view_item'          => __( 'View Dashboard Widget', 'ats-dashboard' ),
-		'all_items'          => __( 'All Widgets', 'ats-dashboard' ),
+		'all_items'          => __( 'Dashboard Widgets', 'ats-dashboard' ),
 		'search_items'       => __( 'Search Dashboard Widgets', 'ats-dashboard' ),
 		'not_found'          => __( 'No Dashboard Widgets found.', 'ats-dashboard' ),
 		'not_found_in_trash' => __( 'No Dashboard Widgets in Trash.', 'ats-dashboard' ),
@@ -41,7 +41,7 @@ return function () {
 	// Arguments.
 	$args = array(
 		'labels'             => $labels,
-		'menu_icon'          => 'dashicons-format-gallery',
+		'menu_icon'          => 'dashicons-move',
 		'publicly_queryable' => false,
 		'show_ui'            => true,
 		'show_in_menu'       => true,

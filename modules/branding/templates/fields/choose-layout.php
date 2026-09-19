@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 return function () {
 
 	$branding = get_option( 'ats_branding' );
-	$layout   = isset( $branding['layout'] ) ? $branding['layout'] : 'default';
+	$layout   = isset( $branding['layout'] ) ? $branding['layout'] : 'Modern';
 
 	echo '<select name="ats_branding[layout]">';
 

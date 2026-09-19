@@ -118,7 +118,7 @@ class Branding_Module extends Base_Module {
 	 */
 	public function submenu_page() {
 
-		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'White Label', 'ats-dashboard' ), __( 'White Label', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_branding', array( $this, 'submenu_page_content' ) );
+		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'Admin Customization', 'ats-dashboard' ), __( 'Customization', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_branding', array( $this, 'submenu_page_content' ) );
 
 	}
 
@@ -139,10 +139,10 @@ class Branding_Module extends Base_Module {
 
 		register_setting( 'ats-branding-group', 'ats_branding', array( 'sanitize_callback' => array( $this, 'sanitize_branding_settings' ) ) );
 
-		add_settings_section( 'ats-branding-section', __( 'WordPress Admin Branding', 'ats-dashboard' ), '', 'ats-branding-settings' );
+		add_settings_section( 'ats-branding-section', __( 'Admin Branding', 'ats-dashboard' ), '', 'ats-branding-settings' );
 		add_settings_section( 'ats-darkmode-section', __( 'Dark Mode (Experimental)', 'ats-dashboard' ), '', 'ats-darkmode-settings' );
-		add_settings_section( 'ats-admin-colors-section', __( 'WordPress Admin Colors', 'ats-dashboard' ), '', 'ats-admin-colors-settings' );
-		add_settings_section( 'ats-admin-logo-section', __( 'WordPress Admin Logo', 'ats-dashboard' ), '', 'ats-admin-logo-settings' );
+		add_settings_section( 'ats-admin-colors-section', __( 'Admin Colors', 'ats-dashboard' ), '', 'ats-admin-colors-settings' );
+		add_settings_section( 'ats-admin-logo-section', __( 'Admin Logo', 'ats-dashboard' ), '', 'ats-admin-logo-settings' );
 		add_settings_section( 'ats-branding-misc-section', __( 'Misc', 'ats-dashboard' ), '', 'ats-branding-misc-settings' );
 
 		$this->add_branding_field( 'ats-branding-enable-field', 'Enable', 'enable_field', 'ats-branding-settings', 'ats-branding-section' );

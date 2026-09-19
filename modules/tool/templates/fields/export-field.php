@@ -34,7 +34,7 @@ return function () {
 	<p>
 		<label>
 			<input type="checkbox" name="ats_export_modules[]" class="ats-module-checkbox" value="branding" checked />
-			<?php esc_html_e( 'White Label Settings', 'ats-dashboard' ); ?>
+			<?php esc_html_e( 'Customization Settings', 'ats-dashboard' ); ?>
 		</label>
 	</p>
 	<p>
