@@ -11,13 +11,7 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 $branding = get_option( 'ats_branding' );
 
-$colors = array(
-	'menu_item_color'        => '#fff',
-	'accent_color'           => '#0073AA',
-	'admin_bar_bg_color'     => '#232931',
-	'admin_menu_bg_color'    => '#2E3640',
-	'admin_submenu_bg_color' => '#38404B',
-);
+$colors = \ATSDash\Helpers\Branding_Helper::default_colors();
 
 $colors = apply_filters( 'ats_branding_colors', $colors );
 
@@ -26,7 +20,21 @@ $accent_color           = $colors['accent_color'];
 $admin_bar_bg_color     = $colors['admin_bar_bg_color'];
 $admin_menu_bg_color    = $colors['admin_menu_bg_color'];
 $admin_submenu_bg_color = $colors['admin_submenu_bg_color'];
+
+$color_helper     = new \ATSDash\Helpers\Color_Helper();
+$secondary_color  = $color_helper->soften( $accent_color );
+$secondary_hover  = $color_helper->darken( $secondary_color, 0.06 );
+$secondary_border = $color_helper->darken( $secondary_color, 0.12 );
+$secondary_text   = $color_helper->readable_text_color( $secondary_color );
 ?>
+
+/* A softened take on the accent colour, for destructive actions. */
+:root {
+	--ats-secondary-color: <?php echo esc_attr( $secondary_color ); ?>;
+	--ats-secondary-color-hover: <?php echo esc_attr( $secondary_hover ); ?>;
+	--ats-secondary-border-color: <?php echo esc_attr( $secondary_border ); ?>;
+	--ats-secondary-text-color: <?php echo esc_attr( $secondary_text ); ?>;
+}
 
 /* For instant preview purpose */
 #wpadminbar #wp-admin-bar-wp-logo > .ab-item {

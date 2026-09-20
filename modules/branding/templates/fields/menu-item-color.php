@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 return function () {
 
 	$branding = get_option( 'ats_branding' );
-	$default  = '#ffffff';
+	$default  = \ATSDash\Helpers\Branding_Helper::default_color( 'menu_item_color' );
 	$color    = isset( $branding['menu_item_color'] ) ? $branding['menu_item_color'] : $default;
 	?>
 

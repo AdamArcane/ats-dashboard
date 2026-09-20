@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 return function () {
 
 	$branding     = get_option( 'ats_branding' );
-	$default      = '#0073AA';
+	$default      = \ATSDash\Helpers\Branding_Helper::default_color( 'accent_color' );
 	$accent_color = isset( $branding['accent_color'] ) ? $branding['accent_color'] : $default;
 	?>
 

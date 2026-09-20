@@ -11,13 +11,7 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 $branding = get_option( 'ats_branding' );
 
-$colors = array(
-	'menu_item_color'        => '#fff',
-	'accent_color'           => '#0073AA',
-	'admin_bar_bg_color'     => '#232931',
-	'admin_menu_bg_color'    => '#2E3640',
-	'admin_submenu_bg_color' => '#38404B',
-);
+$colors = \ATSDash\Helpers\Branding_Helper::default_colors();
 
 $colors = apply_filters( 'ats_branding_colors', $colors );
 

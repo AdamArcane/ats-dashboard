@@ -376,25 +376,26 @@
 	animation: loadingSpinAround 0.5s infinite linear;
 }
 
+/* The branding module sets these from the accent colour when it's enabled. */
 .ats-menu-builder-box .ats-menu-builder--reset-button {
 	margin-left: 10px;
-	color: #fff;
-	background-color: tomato;
-	border-color: tomato;
+	color: var(--ats-secondary-text-color, #932217);
+	background-color: var(--ats-secondary-color, #f2b3ad);
+	border-color: var(--ats-secondary-border-color, #ea8278);
 }
 
 .ats-menu-builder-box .ats-menu-builder--reset-button:hover,
 .ats-menu-builder-box .ats-menu-builder--reset-button:active,
 .ats-menu-builder-box .ats-menu-builder--reset-button:focus {
-	color: #fff;
-	background-color: #f5492a;
-	border-color: #f5492a;
+	color: var(--ats-secondary-text-color, #932217);
+	background-color: var(--ats-secondary-color-hover, #ee9b93);
+	border-color: var(--ats-secondary-border-color, #ea8278);
 }
 
 .ats-menu-builder-box .ats-menu-builder--reset-button:focus {
 	box-shadow:
 		0 0 0 1px #fff,
-		0 0 0 3px #f5492a;
+		0 0 0 3px var(--ats-secondary-border-color, #ea8278);
 }
 
 .ats-menu-builder--expanded-panel {

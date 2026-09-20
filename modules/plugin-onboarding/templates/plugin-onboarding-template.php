@@ -56,7 +56,7 @@ return function ( $referrer = '' ) {
 							<?php esc_html_e( 'Welcome to ATS Dashboard', 'ats-dashboard' ); ?>
 						</span>
 						<p class="subtitle">
-							<?php echo wp_kses_post( __( 'Complete the 1-Click Setup & get an <strong style="font-weight: 700; color: tomato;">exclusive Discount</strong> on <strong>ATS Dashboard!</strong>', 'ats-dashboard' ) ); ?>							
+							<?php echo wp_kses_post( __( 'Complete the 1-Click Setup & get an <strong style="font-weight: 700; color: var(--ats-secondary-color, #e06256);">exclusive Discount</strong> on <strong>ATS Dashboard!</strong>', 'ats-dashboard' ) ); ?>							
 						</p>
 					</div>
 
