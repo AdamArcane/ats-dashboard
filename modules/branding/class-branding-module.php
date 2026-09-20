@@ -88,6 +88,8 @@ class Branding_Module extends Base_Module {
 		add_filter( 'ats_branding_sanitize_settings', array( self::get_instance(), 'sanitize_pro_fields' ), 10, 2 );
 
 		// The module output.
+		Branding_Base_Output::init();
+
 		require_once __DIR__ . '/class-branding-output.php';
 		Branding_Output::init();
 

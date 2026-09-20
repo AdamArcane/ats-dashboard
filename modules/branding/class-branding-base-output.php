@@ -53,6 +53,16 @@ class Branding_Base_Output extends Base_Output {
 	}
 
 	/**
+	 * Init the class setup.
+	 */
+	public static function init() {
+
+		$class = new self();
+		$class->setup();
+
+	}
+
+	/**
 	 * Setup branding output.
 	 */
 	public function setup() {
