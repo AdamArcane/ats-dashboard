@@ -39,28 +39,10 @@ return function ( $column, $post_id ) {
 			echo esc_html( ucwords( $allowed_roles ) );
 			break;
 
-		case 'is_active':
-			$is_active = get_post_meta( $post_id, 'ats_is_active', true );
-			?>
+		case 'status':
+			$status_object = get_post_status_object( get_post_status( $post_id ) );
 
-			<div class="heatbox-wrap status-switch">
-				<label for="ats_is_active_<?php echo esc_attr( $post_id ); ?>" class="toggle-switch">
-					<input
-						type="checkbox"
-						name="ats_is_active"
-						id="ats_is_active_<?php echo esc_attr( $post_id ); ?>"
-						value="1"
-						data-nonce="<?php echo esc_attr( wp_create_nonce( 'ats_widget_' . $post_id . '_change_active_status' ) ); ?>"
-						data-post-id="<?php echo esc_attr( $post_id ); ?>"
-						<?php checked( $is_active, 1 ); ?>
-					/>
-					<div class="switch-track">
-						<div class="switch-thumb"></div>
-					</div>
-				</label>
-			</div>
-
-			<?php
+			echo esc_html( $status_object ? $status_object->label : get_post_status( $post_id ) );
 			break;
 
 	}

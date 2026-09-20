@@ -29,9 +29,6 @@ return function ( $module ) {
 
 	} elseif ( $module->screen()->is_widget_list() ) {
 
-		// Widget list.
-		wp_enqueue_script( 'ats-widget-list', $module->url . '/assets/js/widget-list.js', array( 'jquery' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
-
 		do_action( 'ats_widget_list_scripts' );
 
 	} elseif ( $module->screen()->is_dashboard() ) {

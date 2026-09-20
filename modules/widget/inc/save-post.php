@@ -26,6 +26,61 @@ return function ( $post_id ) {
 		return;
 	}
 
+	// Widget type.
+	$is_valid_widget_type_nonce = isset( $_POST['ats_widget_type_nonce'] ) && wp_verify_nonce( $_POST['ats_widget_type_nonce'], 'ats_widget_type' ) ? true : false;
+
+	if ( $is_valid_widget_type_nonce && isset( $_POST['ats_widget_type'] ) ) {
+		update_post_meta( $post_id, 'ats_widget_type', sanitize_text_field( $_POST['ats_widget_type'] ) );
+	}
+
+	// Icon, text & HTML widget fields all live inside the same metabox as the widget type field.
+	if ( $is_valid_widget_type_nonce ) {
+
+		// Icon widget.
+		if ( isset( $_POST['ats_icon'] ) ) {
+			update_post_meta( $post_id, 'ats_icon_key', sanitize_text_field( $_POST['ats_icon'] ) );
+		}
+
+		if ( isset( $_POST['ats_tooltip'] ) ) {
+			update_post_meta( $post_id, 'ats_tooltip', sanitize_textarea_field( $_POST['ats_tooltip'] ) );
+		}
+
+		if ( isset( $_POST['ats_link'] ) ) {
+			update_post_meta( $post_id, 'ats_link', esc_url_raw( $_POST['ats_link'] ) );
+		}
+
+		$check = isset( $_POST['ats_link_target'] ) && $_POST['ats_link_target'] ? '_blank' : '';
+		update_post_meta( $post_id, 'ats_link_target', $check );
+
+		// Text widget.
+		if ( isset( $_POST['ats_content'] ) ) {
+			update_post_meta( $post_id, 'ats_content', wp_kses_post( wp_unslash( $_POST['ats_content'] ) ) );
+		}
+
+		if ( isset( $_POST['ats_content_height'] ) ) {
+			update_post_meta( $post_id, 'ats_content_height', sanitize_text_field( $_POST['ats_content_height'] ) );
+		}
+
+		// HTML widget.
+		if ( isset( $_POST['ats_html'] ) ) {
+			update_post_meta( $post_id, 'ats_html', wp_kses_post( wp_unslash( $_POST['ats_html'] ) ) );
+		}
+	}
+
+	// Position.
+	$is_valid_position_nonce = isset( $_POST['ats_position_nonce'] ) && wp_verify_nonce( $_POST['ats_position_nonce'], 'ats_position' ) ? true : false;
+
+	if ( $is_valid_position_nonce && isset( $_POST['ats_metabox_position'] ) ) {
+		update_post_meta( $post_id, 'ats_position_key', sanitize_text_field( $_POST['ats_metabox_position'] ) );
+	}
+
+	// Priority.
+	$is_valid_priority_nonce = isset( $_POST['ats_priority_nonce'] ) && wp_verify_nonce( $_POST['ats_priority_nonce'], 'ats_priority' ) ? true : false;
+
+	if ( $is_valid_priority_nonce && isset( $_POST['ats_metabox_priority'] ) ) {
+		update_post_meta( $post_id, 'ats_priority_key', sanitize_text_field( $_POST['ats_metabox_priority'] ) );
+	}
+
 	// Video widget.
 	if ( isset( $_POST['ats_video_thumbnail'] ) ) {
 		update_post_meta( $post_id, 'ats_video_thumbnail', esc_url_raw( $_POST['ats_video_thumbnail'] ) );

@@ -52,8 +52,6 @@ class Widget_Base_Module extends Base_Module {
 		add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
 
-		add_action( 'wp_ajax_ats_widget_change_active_status', array( $this, 'change_active_status' ) );
-
 		// The module output.
 		require_once __DIR__ . '/class-widget-base-output.php';
 		Widget_Base_Output::init();
@@ -119,11 +117,11 @@ class Widget_Base_Module extends Base_Module {
 	public function set_columns( $columns ) {
 
 		$columns = array(
-			'cb'        => '<input type="checkbox" />',
-			'title'     => __( 'Widget Title', 'ats-dashboard' ),
-			'type'      => __( 'Widget Type', 'ats-dashboard' ),
-			'roles'     => __( 'User Roles', 'ats-dashboard' ),
-			'is_active' => __( 'Active', 'ats-dashboard' ),
+			'cb'     => '<input type="checkbox" />',
+			'title'  => __( 'Widget Title', 'ats-dashboard' ),
+			'type'   => __( 'Widget Type', 'ats-dashboard' ),
+			'roles'  => __( 'User Roles', 'ats-dashboard' ),
+			'status' => __( 'Status', 'ats-dashboard' ),
 		);
 
 		return $columns;
@@ -199,8 +197,6 @@ class Widget_Base_Module extends Base_Module {
 	public function register_meta_boxes() {
 
 		add_meta_box( 'ats-main-metabox', __( 'ATS Dashboard', 'ats-dashboard' ), array( $this, 'main_metabox' ), 'ats_widgets', 'normal', 'high' );
-		add_meta_box( 'ats-active-status-metabox', __( 'Active', 'ats-dashboard' ), array( $this, 'active_status_metabox' ), 'ats_widgets', 'side', 'high' );
-
 
 		$tags_metabox_header  = __( 'Placeholder Tags', 'ats-dashboard' );
 		$tags_metabox_header .= '<br><span class="action-status">📋 Copied</span>';
@@ -218,18 +214,6 @@ class Widget_Base_Module extends Base_Module {
 
 		$metabox = require __DIR__ . '/templates/metaboxes/main.php';
 		$metabox();
-
-	}
-
-	/**
-	 * Active status metabox.
-	 *
-	 * @param WP_Post $post The WP_Post object.
-	 */
-	public function active_status_metabox( $post ) {
-
-		$metabox = require __DIR__ . '/templates/metaboxes/active-status.php';
-		$metabox( $post );
 
 	}
 
@@ -276,16 +260,6 @@ class Widget_Base_Module extends Base_Module {
 
 		$save_widget = require __DIR__ . '/inc/save-post.php';
 		$save_widget( $post_id );
-
-	}
-
-	/**
-	 * Ajax handler of widget's active status change.
-	 */
-	public function change_active_status() {
-
-		$ajax = require __DIR__ . '/ajax/change-active-status.php';
-		$ajax();
 
 	}
 

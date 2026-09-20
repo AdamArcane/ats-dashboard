@@ -137,8 +137,7 @@ class Widget_Base_Output extends Base_Output {
 		$args = array(
 			'post_type'      => 'ats_widgets',
 			'posts_per_page' => 100,
-			'meta_key'       => 'ats_is_active',
-			'meta_value'     => 1,
+			'post_status'    => 'publish',
 		);
 
 		$loop = new WP_Query( $args );
