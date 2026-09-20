@@ -57,17 +57,6 @@ class ats_Customize_Pro_Control extends \WP_Customize_Control {
 	 * Control content can alternately be rendered in JS. See WP_Customize_Control::print_template().
 	 */
 	public function render_content() {
-		if ( empty( $this->description ) ) {
-			$this->description = __( 'This feature is available in ATS Dashboard.', 'ats-dashboard' );
-		}
-
-		if ( empty( $this->button_text ) ) {
-			$this->button_text = __( 'Get ATS Dashboard', 'ats-dashboard' );
-		}
-
-		if ( empty( $this->button_url ) ) {
-			$this->button_url = 'https://ats-dashboard.io/docs/login-customizer/?utm_source=plugin&utm_medium=login_customizer_control&utm_campaign=ats';
-		}
 		?>
 
 		<header class="ats-customize-control-header">

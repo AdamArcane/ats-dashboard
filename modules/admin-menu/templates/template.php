@@ -171,20 +171,7 @@ foreach ( $saved_menu as $identifier => $menu_item ) {
 						</div><!-- .ats-menu-builder--tab-content -->
 					</div><!-- .ats-menu-builder--user-tabs -->
 
-					<div class="heatbox-footer">
-
-
-							<div class="ats-pro-settings-page-notice ats-pro-admin-menu-notice">
-								<p><?php esc_html_e( 'This feature is available in ATS Dashboard.', 'ats-dashboard' ); ?></p>
-								<a href="https://ats-dashboard.io/pro/?utm_source=plugin&utm_medium=admin_menu_link&utm_campaign=ats" class="button button-large button-primary" target="_blank">
-									<?php esc_html_e( 'Get ATS Dashboard', 'ats-dashboard' ); ?>
-								</a>
-							</div>
-
-
-						<?php do_action( 'ats_admin_menu_form_footer' ); ?>
-
-					</div>
+					
 				</div>
 
 			</form>

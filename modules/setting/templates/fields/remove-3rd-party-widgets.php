@@ -42,15 +42,7 @@ return function () {
 
 	</div>
 
-	<div class="ats-pro-settings-page-notice">
-
-		<p><?php esc_html_e( 'This feature is available in ATS Dashboard.', 'ats-dashboard' ); ?></p>
-
-		<a href="https://ats-dashboard.io/pro/?utm_source=plugin&utm_medium=remove_3rd_party_widgets_link&utm_campaign=ats" class="button button-primary" target="_blank">
-			<?php esc_html_e( 'Get ATS Dashboard', 'ats-dashboard' ); ?>
-		</a>
-
-	</div>
+	
 
 	<?php
 
