@@ -10,8 +10,8 @@ namespace ATSDash\Multisite\Output;
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use ATSDash\Helpers\Multisite_Helper;
-use ats\Base\Base_Output;
-use ats\LoginRedirect\Login_Redirect_Output as Free_Login_Redirect_Output;
+use ATSDash\Base\Base_Output;
+use ATSDash\LoginRedirect\Login_Redirect_Output as Free_Login_Redirect_Output;
 
 /**
  * Class to setup login url output.

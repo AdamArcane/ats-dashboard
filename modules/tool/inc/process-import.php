@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Helpers\Array_Helper;
+use ATSDash\Helpers\Array_Helper;
 
 return function () {
 

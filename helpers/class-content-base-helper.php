@@ -5,7 +5,7 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\Helpers;
+namespace ATSDash\Helpers;
 
 use WP_Customize_Setting;
 
@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 /**
  * Class to set up content helper.
  */
-class Content_Helper {
+class Content_Base_Helper {
 
 	/**
 	 * Image sanitization callback.

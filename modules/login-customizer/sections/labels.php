@@ -12,8 +12,8 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\ats_Customize_Color_Control;
-use ats\ats_Customize_Range_Control;
+use ATSDash\Customize_Color_Control;
+use ATSDash\Customize_Range_Control;
 
 $wp_customize->add_setting(
 	'ats_login[labels_font_size]',
@@ -27,7 +27,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[labels_font_size]',
 		array(
@@ -56,7 +56,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[labels_color]',
 		array(

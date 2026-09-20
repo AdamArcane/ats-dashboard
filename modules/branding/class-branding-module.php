@@ -9,7 +9,7 @@ namespace ATSDash\Branding;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Module;
+use ATSDash\Base\Base_Module;
 
 /**
  * Class to setup branding module.

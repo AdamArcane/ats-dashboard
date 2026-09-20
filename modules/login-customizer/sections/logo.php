@@ -9,13 +9,13 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\ats_Customize_Control;
-use ats\ats_Customize_Range_Control;
-use ats\ats_Customize_Image_Control;
+use ATSDash\Customize_Control;
+use ATSDash\Customize_Range_Control;
+use ATSDash\Customize_Image_Control;
 
-use ats\Helpers\Content_Helper;
+use ATSDash\Helpers\Content_Base_Helper;
 
-$content_helper = new Content_Helper();
+$content_helper = new Content_Base_Helper();
 
 $wp_customize->add_setting(
 	'ats_login[logo_image]',
@@ -29,7 +29,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Image_Control(
+	new Customize_Image_Control(
 		$wp_customize,
 		'ats_login[logo_image]',
 		array(
@@ -57,7 +57,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[logo_height]',
 		array(
@@ -86,7 +86,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Control(
+	new Customize_Control(
 		$wp_customize,
 		'ats_login[logo_url]',
 		array(
@@ -114,7 +114,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Control(
+	new Customize_Control(
 		$wp_customize,
 		'ats_login[logo_title]',
 		array(

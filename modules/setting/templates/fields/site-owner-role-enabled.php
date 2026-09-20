@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Setting\Site_Owner_Role;
+use ATSDash\Setting\Site_Owner_Role;
 
 return function () {
 

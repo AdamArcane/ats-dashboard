@@ -9,10 +9,10 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\ats_Customize_Control;
-use ats\ats_Customize_Range_Control;
-use ats\ats_Customize_Color_Control;
-use ats\ats_Customize_Toggle_Switch_Control;
+use ATSDash\Customize_Control;
+use ATSDash\Customize_Range_Control;
+use ATSDash\Customize_Color_Control;
+use ATSDash\Customize_Toggle_Switch_Control;
 
 $wp_customize->add_setting(
 	'ats_login[form_position]',
@@ -26,7 +26,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Control(
+	new Customize_Control(
 		$wp_customize,
 		'ats_login[form_position]',
 		array(
@@ -65,7 +65,7 @@ foreach ( $layout_settings as $setting_name => $setting ) {
 	);
 
 	$wp_customize->add_control(
-		new ats_Customize_Range_Control(
+		new Customize_Range_Control(
 			$wp_customize,
 			'ats_login[' . $setting_name . ']',
 			array(
@@ -80,15 +80,15 @@ foreach ( $layout_settings as $setting_name => $setting ) {
 }
 
 $wp_customize->add_setting( 'ats_login[form_border_style]', array( 'type' => 'option', 'capability' => 'edit_theme_options', 'default' => 'solid', 'transport' => 'postMessage', 'sanitize_callback' => 'sanitize_text_field' ) );
-$wp_customize->add_control( new ats_Customize_Control( $wp_customize, 'ats_login[form_border_style]', array( 'type' => 'select', 'section' => 'ats_login_customizer_layout_section', 'settings' => 'ats_login[form_border_style]', 'label' => __( 'Border Style', 'ats-dashboard' ), 'choices' => array( 'solid' => __( 'Solid', 'ats-dashboard' ), 'dashed' => __( 'Dashed', 'ats-dashboard' ), 'dotted' => __( 'Dotted', 'ats-dashboard' ), 'none' => __( 'None', 'ats-dashboard' ) ) ) ) );
+$wp_customize->add_control( new Customize_Control( $wp_customize, 'ats_login[form_border_style]', array( 'type' => 'select', 'section' => 'ats_login_customizer_layout_section', 'settings' => 'ats_login[form_border_style]', 'label' => __( 'Border Style', 'ats-dashboard' ), 'choices' => array( 'solid' => __( 'Solid', 'ats-dashboard' ), 'dashed' => __( 'Dashed', 'ats-dashboard' ), 'dotted' => __( 'Dotted', 'ats-dashboard' ), 'none' => __( 'None', 'ats-dashboard' ) ) ) ) );
 
 foreach ( array( 'form_border_color' => array( 'Border Color', '#dddddd' ) ) as $setting_name => $setting ) {
 	$wp_customize->add_setting( 'ats_login[' . $setting_name . ']', array( 'type' => 'option', 'capability' => 'edit_theme_options', 'default' => $setting[1], 'transport' => 'postMessage', 'sanitize_callback' => 'sanitize_hex_color' ) );
-	$wp_customize->add_control( new ats_Customize_Color_Control( $wp_customize, 'ats_login[' . $setting_name . ']', array( 'label' => __( $setting[0], 'ats-dashboard' ), 'section' => 'ats_login_customizer_layout_section', 'settings' => 'ats_login[' . $setting_name . ']' ) ) );
+	$wp_customize->add_control( new Customize_Color_Control( $wp_customize, 'ats_login[' . $setting_name . ']', array( 'label' => __( $setting[0], 'ats-dashboard' ), 'section' => 'ats_login_customizer_layout_section', 'settings' => 'ats_login[' . $setting_name . ']' ) ) );
 }
 
 $wp_customize->add_setting( 'ats_login[enable_form_shadow]', array( 'type' => 'option', 'capability' => 'edit_theme_options', 'default' => 0, 'transport' => 'postMessage', 'sanitize_callback' => 'absint' ) );
-$wp_customize->add_control( new ats_Customize_Toggle_Switch_Control( $wp_customize, 'ats_login[enable_form_shadow]', array( 'section' => 'ats_login_customizer_layout_section', 'settings' => 'ats_login[enable_form_shadow]', 'label' => __( 'Enable Form Shadow', 'ats-dashboard' ) ) ) );
+$wp_customize->add_control( new Customize_Toggle_Switch_Control( $wp_customize, 'ats_login[enable_form_shadow]', array( 'section' => 'ats_login_customizer_layout_section', 'settings' => 'ats_login[enable_form_shadow]', 'label' => __( 'Enable Form Shadow', 'ats-dashboard' ) ) ) );
 
 $wp_customize->add_setting(
 	'ats_login[form_shadow_blur]',
@@ -101,7 +101,7 @@ $wp_customize->add_setting(
 	)
 );
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[form_shadow_blur]',
 		array(
@@ -115,7 +115,7 @@ $wp_customize->add_control(
 );
 
 $wp_customize->add_setting( 'ats_login[form_shadow_color]', array( 'type' => 'option', 'capability' => 'edit_theme_options', 'default' => '#cccccc', 'transport' => 'postMessage', 'sanitize_callback' => 'sanitize_hex_color' ) );
-$wp_customize->add_control( new ats_Customize_Color_Control( $wp_customize, 'ats_login[form_shadow_color]', array( 'label' => __( 'Shadow Color', 'ats-dashboard' ), 'section' => 'ats_login_customizer_layout_section', 'settings' => 'ats_login[form_shadow_color]' ) ) );
+$wp_customize->add_control( new Customize_Color_Control( $wp_customize, 'ats_login[form_shadow_color]', array( 'label' => __( 'Shadow Color', 'ats-dashboard' ), 'section' => 'ats_login_customizer_layout_section', 'settings' => 'ats_login[form_shadow_color]' ) ) );
 
 $wp_customize->add_setting(
 	'ats_login[box_width]',
@@ -129,7 +129,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[box_width]',
 		array(

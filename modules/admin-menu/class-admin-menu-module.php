@@ -9,8 +9,8 @@ namespace ATSDash\AdminMenu;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Module;
-use ats\Helpers\Screen_Helper;
+use ATSDash\Base\Base_Module;
+use ATSDash\Helpers\Screen_Helper;
 use ATSDash\Helpers\Multisite_Helper;
 
 /**
@@ -85,8 +85,8 @@ class Admin_Menu_Module extends Base_Module {
 		require_once __DIR__ . '/ajax/class-reset-menu.php';
 		require_once __DIR__ . '/ajax/class-save-menu.php';
 
-		$get_menu  = new \ats\AdminMenu\Ajax\Get_Menu();
-		$get_users = new \ats\AdminMenu\Ajax\Get_Users();
+		$get_menu  = new \ATSDash\AdminMenu\Ajax\Get_Menu();
+		$get_users = new \ATSDash\AdminMenu\Ajax\Get_Users();
 
 		add_action( 'wp_ajax_ats_admin_menu_get_menu', array( $get_menu, 'ajax' ) );
 		add_action( 'wp_ajax_ats_admin_menu_get_users', array( $get_users, 'ajax' ) );

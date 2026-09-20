@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Helpers\Admin_Bar_Helper;
+use ATSDash\Helpers\Admin_Bar_Helper;
 
 $admin_bar_helper = new Admin_Bar_Helper();
 $saved_roles      = $admin_bar_helper->roles_to_remove();

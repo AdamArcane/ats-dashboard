@@ -5,7 +5,7 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\Setting;
+namespace ATSDash\Setting;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 

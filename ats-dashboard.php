@@ -19,8 +19,10 @@ define( 'ATS_DASHBOARD_PLUGIN_URL', rtrim( plugin_dir_url( __FILE__ ), '/' ) );
 define( 'ATS_DASHBOARD_PLUGIN_VERSION', '1.0.1' );
 define( 'ATS_DASHBOARD_PLUGIN_FILE', plugin_basename( __FILE__ ) );
 
-require __DIR__ . '/ats-dashboard-core.php';
-require __DIR__ . '/class-backwards-compatibility.php';
+// Admin menu specific support — must run directly (unhooked) to avoid being overlapped by other plugins.
+require_once __DIR__ . '/modules/admin-menu/inc/not-doing-ajax.php';
+ats_admin_menu_not_doing_ajax();
+
 require __DIR__ . '/class-setup.php';
 
 ATSDash\Setup::init();

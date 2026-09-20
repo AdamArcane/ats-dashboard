@@ -9,7 +9,7 @@ namespace ATSDash\AdminBar;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
+use ATSDash\Base\Base_Output;
 use ATSDash\AdminBar\Admin_Bar_Module;
 use ATSDash\Helpers\Multisite_Helper;
 use ATSDash\Helpers\Placeholder_Helper;

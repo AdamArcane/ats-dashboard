@@ -9,7 +9,7 @@ namespace ATSDash\Branding;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
+use ATSDash\Base\Base_Output;
 use ATSDash\Helpers\Branding_Helper;
 
 /**
@@ -568,12 +568,12 @@ class Branding_Output extends Base_Output {
 	 */
 	public function print_rgba_from_hex( $hex_color, $opacity ) {
 
-		if ( ! class_exists( '\ats\Helpers\Color_Helper' ) ) {
+		if ( ! class_exists( '\ATSDash\Helpers\Color_Helper' ) ) {
 			echo esc_attr( $hex_color );
 			return;
 		}
 
-		$color_helper = new \ats\Helpers\Color_Helper();
+		$color_helper = new \ATSDash\Helpers\Color_Helper();
 
 		$rgb = $color_helper->hex_to_rgb( $hex_color );
 

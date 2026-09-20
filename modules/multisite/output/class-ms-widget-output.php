@@ -9,11 +9,11 @@ namespace ATSDash\Multisite\Output;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
+use ATSDash\Base\Base_Output;
 use ATSDash\Helpers\Branding_Helper;
 use ATSDash\Helpers\Multisite_Helper;
 
-use ats\Widget\Widget_Base_Output as Free_Widget_Output;
+use ATSDash\Widget\Widget_Base_Output as Free_Widget_Output;
 use ATSDash\Widget\Widget_Output;
 
 /**

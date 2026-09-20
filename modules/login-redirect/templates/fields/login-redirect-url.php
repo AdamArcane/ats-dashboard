@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Vars;
+use ATSDash\Vars;
 
 return function ( $site_type = 'blueprint' ) {
 

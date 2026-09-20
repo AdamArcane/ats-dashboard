@@ -12,8 +12,8 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\ats_Customize_Color_Control;
-use ats\ats_Customize_Range_Control;
+use ATSDash\Customize_Color_Control;
+use ATSDash\Customize_Range_Control;
 
 $wp_customize->add_setting(
 	'ats_login[fields_height]',
@@ -27,7 +27,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[fields_height]',
 		array(
@@ -56,7 +56,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[fields_horizontal_padding]',
 		array(
@@ -85,7 +85,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[fields_border_width]',
 		array(
@@ -114,7 +114,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[fields_border_radius]',
 		array(
@@ -143,7 +143,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[fields_font_size]',
 		array(
@@ -172,7 +172,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[fields_text_color]',
 		array(
@@ -195,7 +195,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[fields_text_color_focus]',
 		array(
@@ -218,7 +218,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[fields_bg_color]',
 		array(
@@ -241,7 +241,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[fields_bg_color_focus]',
 		array(
@@ -264,7 +264,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[fields_border_color]',
 		array(
@@ -287,7 +287,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[fields_border_color_focus]',
 		array(

@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats;
+namespace ATSDash;
 
 /**
  * Custom control.
  */
-class ats_Customize_Color_Picker_Control extends \WP_Customize_Control {
+class Customize_Color_Picker_Control extends \WP_Customize_Control {
 
 	/**
 	 * Type.

@@ -9,8 +9,8 @@ namespace ATSDash\AdminMenu;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
-use ats\Helpers\Array_Helper;
+use ATSDash\Base\Base_Output;
+use ATSDash\Helpers\Array_Helper;
 use ATSDash\Helpers\Multisite_Helper;
 use ATSDash\Helpers\Placeholder_Helper;
 use WP_User;

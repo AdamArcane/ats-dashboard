@@ -5,11 +5,11 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\Branding;
+namespace ATSDash\Branding;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
+use ATSDash\Base\Base_Output;
 
 /**
  * Class to setup branding output.

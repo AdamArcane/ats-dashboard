@@ -5,16 +5,16 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\Base;
+namespace ATSDash\Base;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Vars;
-use ats\Helpers\Array_Helper;
-use ats\Helpers\Screen_Helper;
-use ats\Helpers\Content_Helper;
-use ats\Helpers\User_Helper;
-use ats\Helpers\Widget_Helper;
+use ATSDash\Vars;
+use ATSDash\Helpers\Array_Helper;
+use ATSDash\Helpers\Screen_Helper;
+use ATSDash\Helpers\Content_Base_Helper;
+use ATSDash\Helpers\User_Helper;
+use ATSDash\Helpers\Widget_Base_Helper;
 
 /**
  * Class to setup base module.
@@ -55,11 +55,11 @@ class Base_Module {
 	/**
 	 * Content helper.
 	 *
-	 * @return Content_Helper Instance of content helper.
+	 * @return Content_Base_Helper Instance of content helper.
 	 */
 	public function content() {
 
-		return new Content_Helper();
+		return new Content_Base_Helper();
 
 	}
 
@@ -92,7 +92,7 @@ class Base_Module {
 	 */
 	public function widget() {
 
-		return new Widget_Helper();
+		return new Widget_Base_Helper();
 
 	}
 }

@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\Feature;
+namespace ATSDash\Feature;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Setup;
-use ats\Base\Base_Module;
+use ATSDash\Setup;
+use ATSDash\Base\Base_Module;
 
 /**
  * Class to setup dashboard module.
@@ -36,7 +36,7 @@ class Feature_Module extends Base_Module {
 	 */
 	public function __construct() {
 
-		$this->url = ATS_DASHBOARD_CORE_URL . '/modules/feature';
+		$this->url = ATS_DASHBOARD_PLUGIN_URL . '/modules/feature';
 
 	}
 

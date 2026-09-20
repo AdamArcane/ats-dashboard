@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Helpers\Content_Helper;
+use ATSDash\Helpers\Content_Helper;
 
 $content_helper = new Content_Helper();
 

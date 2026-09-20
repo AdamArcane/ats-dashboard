@@ -5,11 +5,11 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\LoginCustomizer;
+namespace ATSDash\LoginCustomizer;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Module;
+use ATSDash\Base\Base_Module;
 
 /**
  * Class to setup login customizer module.

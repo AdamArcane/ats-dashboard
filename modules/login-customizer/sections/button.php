@@ -12,8 +12,8 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\ats_Customize_Color_Control;
-use ats\ats_Customize_Range_Control;
+use ATSDash\Customize_Color_Control;
+use ATSDash\Customize_Range_Control;
 
 $wp_customize->add_setting(
 	'ats_login[button_height]',
@@ -27,7 +27,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[button_height]',
 		array(
@@ -56,7 +56,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[button_horizontal_padding]',
 		array(
@@ -85,7 +85,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Range_Control(
+	new Customize_Range_Control(
 		$wp_customize,
 		'ats_login[button_border_radius]',
 		array(
@@ -114,7 +114,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[button_text_color]',
 		array(
@@ -137,7 +137,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[button_text_color_hover]',
 		array(
@@ -160,7 +160,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[button_bg_color]',
 		array(
@@ -183,7 +183,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[button_bg_color_hover]',
 		array(

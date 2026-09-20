@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\Setting;
+namespace ATSDash\Setting;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Module;
-use ats\Helpers\Content_Helper;
+use ATSDash\Base\Base_Module;
+use ATSDash\Helpers\Content_Helper;
 use ATSDash\Helpers\Multisite_Helper;
 
 require_once __DIR__ . '/inc/class-site-owner-role.php';
@@ -32,7 +32,7 @@ class Setting_Module extends Base_Module {
 	 */
 	public function __construct() {
 
-		$this->url = ATS_DASHBOARD_CORE_URL . '/modules/setting';
+		$this->url = ATS_DASHBOARD_PLUGIN_URL . '/modules/setting';
 
 	}
 
@@ -53,8 +53,8 @@ class Setting_Module extends Base_Module {
 		add_filter( 'ats_setting_tab_menus', array( $this, 'add_site_owner_role_tab' ) );
 		add_action( 'admin_init', array( $this, 'add_site_owner_role_settings' ) );
 		add_action( 'ats_after_custom_panel', array( $this, 'site_owner_role_panel' ) );
-		add_action( 'init', array( 'ats\\Setting\\Site_Owner_Role', 'sync' ) );
-		register_deactivation_hook( ATS_DASHBOARD_PLUGIN_FILE, array( 'ats\\Setting\\Site_Owner_Role', 'remove_on_deactivation' ) );
+		add_action( 'init', array( 'ATSDash\\Setting\\Site_Owner_Role', 'sync' ) );
+		register_deactivation_hook( ATS_DASHBOARD_PLUGIN_FILE, array( 'ATSDash\\Setting\\Site_Owner_Role', 'remove_on_deactivation' ) );
 
 		// The module output.
 		require_once __DIR__ . '/class-setting-output.php';

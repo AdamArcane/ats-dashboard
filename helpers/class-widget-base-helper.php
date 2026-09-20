@@ -5,16 +5,16 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\Helpers;
+namespace ATSDash\Helpers;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Widget\Widget_Base_Output;
+use ATSDash\Widget\Widget_Base_Output;
 
 /**
  * Class to setup widget helper.
  */
-class Widget_Helper {
+class Widget_Base_Helper {
 	/**
 	 * Get all dashboard widgets array.
 	 *

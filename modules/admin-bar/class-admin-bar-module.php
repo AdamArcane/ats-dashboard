@@ -9,13 +9,13 @@ namespace ATSDash\AdminBar;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Helpers\Screen_Helper;
+use ATSDash\Helpers\Screen_Helper;
 use ATSDash\Helpers\Multisite_Helper;
 
 /**
  * Class to setup admin menu module.
  */
-class Admin_Bar_Module extends \ats\AdminBar\Admin_Bar_Base_Module {
+class Admin_Bar_Module extends \ATSDash\AdminBar\Admin_Bar_Base_Module {
 
 	/**
 	 * The class instance.
@@ -89,9 +89,9 @@ class Admin_Bar_Module extends \ats\AdminBar\Admin_Bar_Base_Module {
 		require_once __DIR__ . '/ajax/class-reset-menu.php';
 		require_once __DIR__ . '/ajax/class-save-menu.php';
 
-		$get_users = new \ats\AdminBar\Ajax\Get_Users();
+		$get_users = new \ATSDash\AdminBar\Ajax\Get_Users();
 		add_action( 'wp_ajax_ats_admin_bar_get_users', array( $get_users, 'ajax' ) );
-		new \ats\AdminBar\Ajax\Save_Remove_By_Roles();
+		new \ATSDash\AdminBar\Ajax\Save_Remove_By_Roles();
 
 		add_action( 'wp_ajax_ats_admin_bar_reset_menu', array( Ajax\Reset_Menu::get_instance(), 'reset' ) );
 		add_action( 'wp_ajax_ats_admin_bar_save_menu', array( Ajax\Save_Menu::get_instance(), 'save' ) );

@@ -9,10 +9,10 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 $menu_icon   = get_post_meta( $post->ID, 'ats_menu_icon', true );
 $menu_icon   = $menu_icon ? $menu_icon : 'dashicons dashicons-admin-post';
-$dashicons   = file_get_contents( ATS_DASHBOARD_CORE_DIR . '/assets/json/dashicons.json' );
+$dashicons   = file_get_contents( ATS_DASHBOARD_PLUGIN_DIR . '/assets/json/dashicons.json' );
 $dashicons   = json_decode( $dashicons, true );
 $dashicons   = $dashicons ? $dashicons : array();
-$fontawesome = file_get_contents( ATS_DASHBOARD_CORE_DIR . '/assets/json/fontawesome5.json' );
+$fontawesome = file_get_contents( ATS_DASHBOARD_PLUGIN_DIR . '/assets/json/fontawesome5.json' );
 $fontawesome = json_decode( $fontawesome, true );
 $fontawesome = $fontawesome ? $fontawesome : array();
 $ats_icons   = array_merge( $dashicons, $fontawesome );

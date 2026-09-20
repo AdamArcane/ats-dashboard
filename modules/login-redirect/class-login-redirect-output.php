@@ -5,11 +5,11 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\LoginRedirect;
+namespace ATSDash\LoginRedirect;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
+use ATSDash\Base\Base_Output;
 use WP_User;
 use WP_Error;
 
@@ -78,7 +78,7 @@ class Login_Redirect_Output extends Base_Output {
 	 */
 	public function __construct() {
 
-		$this->url = ATS_DASHBOARD_CORE_URL . '/modules/login-redirect';
+		$this->url = ATS_DASHBOARD_PLUGIN_URL . '/modules/login-redirect';
 
 	}
 

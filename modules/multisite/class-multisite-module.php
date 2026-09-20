@@ -10,11 +10,11 @@ namespace ATSDash\Multisite;
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use ATSDash\Helpers\Multisite_Helper;
-use ats\Base\Base_Module;
+use ATSDash\Base\Base_Module;
 
-use ats\Feature\Feature_Module as Free_Feature_Module;
-use ats\LoginRedirect\Login_Redirect_Module as Free_Login_Redirect_Module;
-use ats\Tool\Tool_Module as Free_Tool_Module;
+use ATSDash\Feature\Feature_Module as Free_Feature_Module;
+use ATSDash\LoginRedirect\Login_Redirect_Module as Free_Login_Redirect_Module;
+use ATSDash\Tool\Tool_Module as Free_Tool_Module;
 
 /**
  * Class to setup multisite module.

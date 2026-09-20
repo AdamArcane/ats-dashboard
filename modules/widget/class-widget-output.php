@@ -9,13 +9,13 @@ namespace ATSDash\Widget;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
-use ats\Helpers\Array_Helper;
+use ATSDash\Base\Base_Output;
+use ATSDash\Helpers\Array_Helper;
 use ATSDash\Helpers\Content_Helper;
 use ATSDash\Helpers\Widget_Helper;
 use ATSDash\Helpers\Video_Helper;
 use ATSDash\Helpers\Multisite_Helper;
-use ats\Widget\Widget_Base_Output as Free_Widget_Output;
+use ATSDash\Widget\Widget_Base_Output as Free_Widget_Output;
 use ATSDash\Helpers\Bricks_Helper;
 
 /**

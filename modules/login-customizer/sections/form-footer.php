@@ -12,8 +12,8 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\ats_Customize_Color_Control;
-use ats\ats_Customize_Toggle_Switch_Control;
+use ATSDash\Customize_Color_Control;
+use ATSDash\Customize_Toggle_Switch_Control;
 
 $wp_customize->add_setting(
 	'ats_login[footer_link_color]',
@@ -27,7 +27,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[footer_link_color]',
 		array(
@@ -50,7 +50,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[footer_link_color_hover]',
 		array(
@@ -73,7 +73,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Toggle_Switch_Control(
+	new Customize_Toggle_Switch_Control(
 		$wp_customize,
 		'ats_login[remove_register_lost_pw_link]',
 		array(
@@ -96,7 +96,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Toggle_Switch_Control(
+	new Customize_Toggle_Switch_Control(
 		$wp_customize,
 		'ats_login[remove_back_to_site_link]',
 		array(
@@ -120,7 +120,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Toggle_Switch_Control(
+	new Customize_Toggle_Switch_Control(
 		$wp_customize,
 		'ats_login[remove_lang_switcher]',
 		array(

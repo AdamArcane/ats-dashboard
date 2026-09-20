@@ -15,7 +15,7 @@ use WP_Post;
 /**
  * Class to setup admin page module.
  */
-class Admin_Page_Module extends \ats\AdminPage\Admin_Page_Base_Module {
+class Admin_Page_Module extends \ATSDash\AdminPage\Admin_Page_Base_Module {
 
 	/**
 	 * The class instance.

@@ -9,12 +9,12 @@ namespace ATSDash\Helpers;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Helpers\Widget_Helper as Free_Widget_Helper;
+use ATSDash\Helpers\Widget_Base_Helper;
 
 /**
  * Class to setup widget helper.
  */
-class Widget_Helper extends Free_Widget_Helper {
+class Widget_Helper extends Widget_Base_Helper {
 
 	/**
 	 * Get saved 3rd party widgets.

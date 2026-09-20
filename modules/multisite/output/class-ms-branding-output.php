@@ -12,8 +12,8 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 use ATSDash\Helpers\Branding_Helper;
 use ATSDash\Helpers\Multisite_Helper;
 
-use ats\Base\Base_Output;
-use ats\Branding\Branding_Output as Free_Branding_Output;
+use ATSDash\Base\Base_Output;
+use ATSDash\Branding\Branding_Output as Free_Branding_Output;
 use ATSDash\Branding\Branding_Output;
 
 /**

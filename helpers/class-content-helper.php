@@ -10,13 +10,13 @@ namespace ATSDash\Helpers;
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use Exception;
-use ats\Helpers\Content_Helper as Free_Content_Helper;
+use ATSDash\Helpers\Content_Base_Helper;
 use WP_Post;
 
 /**
  * Class to set up content helper.
  */
-class Content_Helper extends Free_Content_Helper {
+class Content_Helper extends Content_Base_Helper {
 
 	/**
 	 * Check whether post is built with Elementor.

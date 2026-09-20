@@ -14,7 +14,7 @@ namespace ATSDash\Multisite\Output;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
+use ATSDash\Base\Base_Output;
 
 /**
  * Class to setup the module output.

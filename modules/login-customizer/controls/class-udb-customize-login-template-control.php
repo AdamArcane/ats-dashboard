@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats;
+namespace ATSDash;
 
 /**
  * Image list control.
  */
-class ats_Customize_Login_Template_Control extends \WP_Customize_Control {
+class Customize_Login_Template_Control extends \WP_Customize_Control {
 
 	/**
 	 * Control's type.

@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\AdminPage;
+namespace ATSDash\AdminPage;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
-use ats\Helpers\Array_Helper;
+use ATSDash\Base\Base_Output;
+use ATSDash\Helpers\Array_Helper;
 use WP_Post;
 
 /**
@@ -273,7 +273,7 @@ class Admin_Page_Base_Output extends Base_Output {
 	 */
 	public function render_admin_page( $post, $from_multisite = false ) {
 
-		require ATS_DASHBOARD_CORE_DIR . '/modules/admin-page/templates/admin-page.php';
+		require ATS_DASHBOARD_PLUGIN_DIR . '/modules/admin-page/templates/admin-page.php';
 
 	}
 
@@ -284,12 +284,12 @@ class Admin_Page_Base_Output extends Base_Output {
 	 * @param string $icon_class The icon class.
 	 */
 	public function add_menu_icon( $menu_slug, $icon_class ) {
-		$unicodes = file_get_contents( ATS_DASHBOARD_CORE_DIR . '/assets/json/fontawesome5-unicodes.json' );
+		$unicodes = file_get_contents( ATS_DASHBOARD_PLUGIN_DIR . '/assets/json/fontawesome5-unicodes.json' );
 		$unicodes = json_decode( $unicodes, true );
 		$unicodes = is_null( $unicodes ) ? array() : $unicodes;
 
 		// Compatibility.
-		$unicodes_fa4 = file_get_contents( ATS_DASHBOARD_CORE_DIR . '/assets/json/fontawesome4-unicodes.json' );
+		$unicodes_fa4 = file_get_contents( ATS_DASHBOARD_PLUGIN_DIR . '/assets/json/fontawesome4-unicodes.json' );
 		$unicodes_fa4 = json_decode( $unicodes_fa4, true );
 		$unicodes_fa4 = is_null( $unicodes_fa4 ) ? array() : $unicodes_fa4;
 

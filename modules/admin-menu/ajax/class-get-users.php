@@ -5,7 +5,7 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\AdminMenu\Ajax;
+namespace ATSDash\AdminMenu\Ajax;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 

@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats;
+namespace ATSDash;
 
 /**
  * Custom control.
  */
-class ats_Customize_Color_Control extends \WP_Customize_Color_Control {
+class Customize_Color_Control extends \WP_Customize_Color_Control {
 
 	/**
 	 * Renders the range control wrapper and calls $this->render_content() for the internals.

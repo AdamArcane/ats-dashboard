@@ -5,13 +5,13 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\Widget;
+namespace ATSDash\Widget;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use WP_Query;
-use ats\Base\Base_Output;
-use ats\Helpers\Widget_Helper;
+use ATSDash\Base\Base_Output;
+use ATSDash\Helpers\Widget_Helper;
 
 /**
  * Class to setup widgets output.

@@ -5,7 +5,7 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\PluginOnboarding\Ajax;
+namespace ATSDash\PluginOnboarding\Ajax;
 
 /**
  * Class to manage ajax request of migration to ats.

@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Widget\Widget_Base_Output;
+use ATSDash\Widget\Widget_Base_Output;
 
 return function () {
 

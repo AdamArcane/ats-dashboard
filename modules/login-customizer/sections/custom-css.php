@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\LoginCustomizer\Custom_Css_Setting;
+use ATSDash\LoginCustomizer\Custom_Css_Setting;
 
 $custom_css_setting = new Custom_Css_Setting(
 	$wp_customize,

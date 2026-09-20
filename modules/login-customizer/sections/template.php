@@ -9,7 +9,7 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\ats_Customize_Login_Template_Control;
+use ATSDash\Customize_Login_Template_Control;
 
 $wp_customize->add_setting(
 	'ats_login[template]',
@@ -23,7 +23,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Login_Template_Control(
+	new Customize_Login_Template_Control(
 		$wp_customize,
 		'ats_login[template]',
 		array(

@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats;
+namespace ATSDash;
 
 /**
  * Custom PRO control.
  */
-class ats_Customize_Pro_Control extends \WP_Customize_Control {
+class Customize_Pro_Control extends \WP_Customize_Control {
 	/**
 	 * Control's type.
 	 *

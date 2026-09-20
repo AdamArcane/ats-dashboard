@@ -9,9 +9,9 @@ namespace ATSDash\Multisite\Output;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
-use ats\Helpers\User_Helper;
-use ats\AdminMenu\Admin_Menu_Module as Free_Admin_Menu_Module;
+use ATSDash\Base\Base_Output;
+use ATSDash\Helpers\User_Helper;
+use ATSDash\AdminMenu\Admin_Menu_Module as Free_Admin_Menu_Module;
 
 use ATSDash\Helpers\Multisite_Helper;
 use ATSDash\AdminMenu\Admin_Menu_Output;

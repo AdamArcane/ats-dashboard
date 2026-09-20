@@ -14,7 +14,7 @@ use WP_Post;
 /**
  * Class to set up widgets module.
  */
-class Widget_Module extends \ats\Widget\Widget_Base_Module {
+class Widget_Module extends \ATSDash\Widget\Widget_Base_Module {
 
 	/**
 	 * The class instance.

@@ -9,8 +9,8 @@ namespace ATSDash\AdminPage;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
-use ats\Widget\Widget_Base_Output;
+use ATSDash\Base\Base_Output;
+use ATSDash\Widget\Widget_Base_Output;
 use ATSDash\Helpers\Bricks_Helper;
 use ATSDash\Helpers\Content_Helper;
 use ATSDash\Helpers\Multisite_Helper;

@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Setup;
+use ATSDash\Setup;
 
 return function ( $referrer = '' ) {
 
@@ -61,7 +61,7 @@ return function ( $referrer = '' ) {
 					</div>
 
 					<div style="width: 20%">
-						<img src="<?php echo esc_url( ATS_DASHBOARD_CORE_URL ); ?>/assets/img/logo.png">
+						<img src="<?php echo esc_url( ATS_DASHBOARD_PLUGIN_URL ); ?>/assets/img/logo.png">
 					</div>
 
 				</div>
@@ -79,7 +79,7 @@ return function ( $referrer = '' ) {
 					<div class="ats-onboarding-slide ats-modules-slide">
 
 						<header>
-							<img src="<?php echo esc_url( ATS_DASHBOARD_CORE_URL ); ?>/modules/plugin-onboarding/assets/images/undraw_reviewed_docs_re_9lmr.svg" alt="ATS Dashboard Features" class="ats-illustration module-illustration">
+							<img src="<?php echo esc_url( ATS_DASHBOARD_PLUGIN_URL ); ?>/modules/plugin-onboarding/assets/images/undraw_reviewed_docs_re_9lmr.svg" alt="ATS Dashboard Features" class="ats-illustration module-illustration">
 
 							<h2>
 								<?php esc_html_e( '1 Click Setup', 'ats-dashboard' ); ?>
@@ -143,7 +143,7 @@ return function ( $referrer = '' ) {
 					<div class="ats-onboarding-slide ats-subscription-slide">
 
 						<header>
-							<img src="<?php echo esc_url( ATS_DASHBOARD_CORE_URL ); ?>/modules/plugin-onboarding/assets/images/undraw_discount_d-4-bd.svg" alt="ATS Dashboard Features" class="ats-illustration subscription-illustration">
+							<img src="<?php echo esc_url( ATS_DASHBOARD_PLUGIN_URL ); ?>/modules/plugin-onboarding/assets/images/undraw_discount_d-4-bd.svg" alt="ATS Dashboard Features" class="ats-illustration subscription-illustration">
 
 							<h2>
 								<?php esc_html_e( 'Exclusive Discount 🥳', 'ats-dashboard' ); ?>

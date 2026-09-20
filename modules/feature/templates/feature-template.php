@@ -6,7 +6,7 @@
  */
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
-use ats\Setup;
+use ATSDash\Setup;
 
 return function () {
 
@@ -16,42 +16,42 @@ return function () {
 	$features = array(
 		array(
 			'title'   => __( 'Customization', 'ats-dashboard' ),
-			'img'     => ATS_DASHBOARD_CORE_URL . '/modules/feature/assets/img/white-label.png',
+			'img'     => ATS_DASHBOARD_PLUGIN_URL . '/modules/feature/assets/img/white-label.png',
 			'text'    => __( 'Customize admin area appearance and functionality.', 'ats-dashboard' ),			'feature' => 'white_label',
 		),
 		array(
 			'title'   => __( 'Login Customizer', 'ats-dashboard' ),
-			'img'     => ATS_DASHBOARD_CORE_URL . '/modules/feature/assets/img/login-customizer.png',
+			'img'     => ATS_DASHBOARD_PLUGIN_URL . '/modules/feature/assets/img/login-customizer.png',
 			'text'    => __( 'Fully customize the login screen, directly within the WordPress customizer.', 'ats-dashboard' ),
 			'feature' => 'login_customizer',
 		),
 		array(
 			'title'   => __( 'Login Redirect', 'ats-dashboard' ),
-			'img'     => ATS_DASHBOARD_CORE_URL . '/modules/feature/assets/img/login-redirect.png',
+			'img'     => ATS_DASHBOARD_PLUGIN_URL . '/modules/feature/assets/img/login-redirect.png',
 			'text'    => __( 'Change the WordPress login url, redirect users after login & set a <code>/wp-admin/</code> redirect for non logged-in users.', 'ats-dashboard' ),
 			'feature' => 'login_redirect',
 		),
 		array(
 			'title'   => __( 'Admin Pages', 'ats-dashboard' ),
-			'img'     => ATS_DASHBOARD_CORE_URL . '/modules/feature/assets/img/admin-pages.png',
+			'img'     => ATS_DASHBOARD_PLUGIN_URL . '/modules/feature/assets/img/admin-pages.png',
 			'text'    => __( 'Create useful custom admin pages for your customers with the Admin Pages module.', 'ats-dashboard' ),
 			'feature' => 'admin_pages',
 		),
 		array(
 			'title'   => __( 'Admin Menu Editor', 'ats-dashboard' ),
-			'img'     => ATS_DASHBOARD_CORE_URL . '/modules/feature/assets/img/admin-menu.png',
+			'img'     => ATS_DASHBOARD_PLUGIN_URL . '/modules/feature/assets/img/admin-menu.png',
 			'text'    => __( 'Rearrange, hide & add new admin menu items for specific users & user roles with the Admin Menu Editor module.', 'ats-dashboard' ),
 			'feature' => 'admin_menu_editor',
 		),
 		array(
 			'title'   => __( 'Admin Bar Editor', 'ats-dashboard' ),
-			'img'     => ATS_DASHBOARD_CORE_URL . '/modules/feature/assets/img/admin-bar.png',
+			'img'     => ATS_DASHBOARD_PLUGIN_URL . '/modules/feature/assets/img/admin-bar.png',
 			'text'    => __( 'Rearrange, hide & add new items to the WordPress toolbar with the Admin Bar Editor module.', 'ats-dashboard' ),
 			'feature' => 'admin_bar_editor',
 		),
 		array(
 			'title'   => __( 'Integrations', 'ats-dashboard' ),
-			'img'     => ATS_DASHBOARD_CORE_URL . '/modules/feature/assets/img/integrations.svg',
+			'img'     => ATS_DASHBOARD_PLUGIN_URL . '/modules/feature/assets/img/integrations.svg',
 			'text'    => __( 'View data pushed from MainWP (site ID, hosting, CRM status) and other third-party integrations, with manual override options.', 'ats-dashboard' ),
 			'feature' => 'integrations',
 		),
@@ -76,7 +76,7 @@ return function () {
 					</div>
 
 					<div>
-						<img src="<?php echo esc_url( ATS_DASHBOARD_CORE_URL ); ?>/assets/img/logo.png">
+						<img src="<?php echo esc_url( ATS_DASHBOARD_PLUGIN_URL ); ?>/assets/img/logo.png">
 					</div>
 
 				</div>

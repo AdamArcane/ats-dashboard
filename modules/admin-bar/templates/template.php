@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use ATSDash\AdminBar\Admin_Bar_Module;
-use ats\Vars;
+use ATSDash\Vars;
 
 /**
  * This function is being called in class-admin-bar-module.php.
@@ -60,7 +60,7 @@ return function ( $module ) {
 					</div>
 
 					<div>
-						<img src="<?php echo esc_url( ATS_DASHBOARD_CORE_URL ); ?>/assets/img/logo.png">
+						<img src="<?php echo esc_url( ATS_DASHBOARD_PLUGIN_URL ); ?>/assets/img/logo.png">
 					</div>
 
 				</div>

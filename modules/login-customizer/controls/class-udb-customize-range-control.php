@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats;
+namespace ATSDash;
 
 /**
  * Custom range control.
  */
-class ats_Customize_Range_Control extends \WP_Customize_Control {
+class Customize_Range_Control extends \WP_Customize_Control {
 	/**
 	 * Control's type.
 	 *

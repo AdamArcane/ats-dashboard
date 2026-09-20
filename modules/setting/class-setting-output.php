@@ -5,15 +5,15 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\Setting;
+namespace ATSDash\Setting;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use WP_Admin_Bar;
-use ats\Base\Base_Output;
-use ats\Helpers\Content_Helper;
-use ats\Widget\Widget_Base_Output;
-use ats\Helpers\Admin_Bar_Helper;
+use ATSDash\Base\Base_Output;
+use ATSDash\Helpers\Content_Helper;
+use ATSDash\Widget\Widget_Base_Output;
+use ATSDash\Helpers\Admin_Bar_Helper;
 
 /**
  * Class to set up setting output.
@@ -54,7 +54,7 @@ class Setting_Output extends Base_Output {
 	 */
 	public function __construct() {
 
-		$this->url = ATS_DASHBOARD_CORE_URL . '/modules/setting';
+		$this->url = ATS_DASHBOARD_PLUGIN_URL . '/modules/setting';
 
 	}
 

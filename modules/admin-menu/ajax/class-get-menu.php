@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\AdminMenu\Ajax;
+namespace ATSDash\AdminMenu\Ajax;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Helpers\Content_Helper;
-use ats\Helpers\Array_Helper;
+use ATSDash\Helpers\Content_Helper;
+use ATSDash\Helpers\Array_Helper;
 
 /**
  * Class to get menu & submenu.

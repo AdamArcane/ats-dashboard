@@ -9,8 +9,8 @@ namespace ATSDash\Multisite\Output;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
-use ats\LoginCustomizer\Login_Customizer_Output as Free_Login_Customizer_Output;
+use ATSDash\Base\Base_Output;
+use ATSDash\LoginCustomizer\Login_Customizer_Output as Free_Login_Customizer_Output;
 
 use ATSDash\LoginCustomizer\Login_Customizer_Output;
 

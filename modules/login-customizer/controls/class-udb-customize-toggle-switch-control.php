@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats;
+namespace ATSDash;
 
 /**
  * Custom toggle switch control.
  */
-class ats_Customize_Toggle_Switch_Control extends \WP_Customize_Control {
+class Customize_Toggle_Switch_Control extends \WP_Customize_Control {
 	/**
 	 * Control's type.
 	 *

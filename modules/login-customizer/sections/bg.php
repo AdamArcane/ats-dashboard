@@ -9,12 +9,12 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Helpers\Content_Helper;
-use ats\ats_Customize_Control;
-use ats\ats_Customize_Image_Control;
-use ats\ats_Customize_Color_Control;
-use ats\ats_Customize_Toggle_Switch_Control;
-use ats\ats_Customize_Color_Picker_Control;
+use ATSDash\Helpers\Content_Base_Helper;
+use ATSDash\Customize_Control;
+use ATSDash\Customize_Image_Control;
+use ATSDash\Customize_Color_Control;
+use ATSDash\Customize_Toggle_Switch_Control;
+use ATSDash\Customize_Color_Picker_Control;
 
 $wp_customize->add_setting(
 	'ats_login[bg_color]',
@@ -28,7 +28,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Control(
+	new Customize_Color_Control(
 		$wp_customize,
 		'ats_login[bg_color]',
 		array(
@@ -39,7 +39,7 @@ $wp_customize->add_control(
 	)
 );
 
-$content_helper = new Content_Helper();
+$content_helper = new Content_Base_Helper();
 
 $wp_customize->add_setting(
 	'ats_login[bg_image]',
@@ -53,7 +53,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Image_Control(
+	new Customize_Image_Control(
 		$wp_customize,
 		'ats_login[bg_image]',
 		array(
@@ -76,7 +76,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Control(
+	new Customize_Control(
 		$wp_customize,
 		'ats_login[bg_repeat]',
 		array(
@@ -106,7 +106,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Control(
+	new Customize_Control(
 		$wp_customize,
 		'ats_login[bg_position]',
 		array(
@@ -142,7 +142,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Control(
+	new Customize_Control(
 		$wp_customize,
 		'ats_login[bg_custom_position]',
 		array(
@@ -170,7 +170,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Control(
+	new Customize_Control(
 		$wp_customize,
 		'ats_login[bg_size]',
 		array(
@@ -200,7 +200,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Control(
+	new Customize_Control(
 		$wp_customize,
 		'ats_login[bg_custom_size]',
 		array(
@@ -228,7 +228,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Toggle_Switch_Control(
+	new Customize_Toggle_Switch_Control(
 		$wp_customize,
 		'ats_login[enable_bg_overlay_color]',
 		array(
@@ -259,7 +259,7 @@ $wp_customize->add_setting(
 );
 
 $wp_customize->add_control(
-	new ats_Customize_Color_Picker_Control(
+	new Customize_Color_Picker_Control(
 		$wp_customize,
 		'ats_login[bg_overlay_color]',
 		array(

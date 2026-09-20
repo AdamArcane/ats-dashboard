@@ -9,7 +9,7 @@ namespace ATSDash\Multisite;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
+use ATSDash\Base\Base_Output;
 use ATSDash\Setup;
 
 /**
@@ -87,7 +87,7 @@ class Multisite_Output extends Base_Output {
 			Output\Ms_Login_Customizer_Output::init();
 		}
 
-		if ( isset( $saved_modules['login_redirect'] ) && 'true' === $saved_modules['login_redirect'] && class_exists( '\ats\LoginRedirect\Login_Redirect_Output' ) ) {
+		if ( isset( $saved_modules['login_redirect'] ) && 'true' === $saved_modules['login_redirect'] && class_exists( '\ATSDash\LoginRedirect\Login_Redirect_Output' ) ) {
 			require_once __DIR__ . '/output/class-ms-login-redirect-output.php';
 			Output\Ms_Login_Redirect_Output::init();
 		}

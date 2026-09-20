@@ -11,10 +11,10 @@ return function ( $module ) {
 
 	if ( $module->screen()->is_plugin_onboarding() ) {
 
-		wp_enqueue_script( 'tiny-slider', ATS_DASHBOARD_CORE_URL . '/modules/plugin-onboarding/assets/js/tiny-slider.js', array( 'jquery' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
+		wp_enqueue_script( 'tiny-slider', ATS_DASHBOARD_PLUGIN_URL . '/modules/plugin-onboarding/assets/js/tiny-slider.js', array( 'jquery' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
 
 		// Plugin onboarding.
-		wp_enqueue_script( 'ats-plugin-onboarding', ATS_DASHBOARD_CORE_URL . '/modules/plugin-onboarding/assets/js/plugin-onboarding.js', array( 'tiny-slider' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
+		wp_enqueue_script( 'ats-plugin-onboarding', ATS_DASHBOARD_PLUGIN_URL . '/modules/plugin-onboarding/assets/js/plugin-onboarding.js', array( 'tiny-slider' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
 
 		wp_localize_script(
 			'ats-plugin-onboarding',

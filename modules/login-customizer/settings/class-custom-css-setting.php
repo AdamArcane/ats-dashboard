@@ -7,9 +7,9 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\LoginCustomizer;
+namespace ATSDash\LoginCustomizer;
 
-use ats\Helpers\Content_Helper;
+use ATSDash\Helpers\Content_Helper;
 use WP_Customize_Setting;
 use WP_Error;
 

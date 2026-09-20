@@ -10,7 +10,7 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Integrations\Integrations_Output;
+use ATSDash\Integrations\Integrations_Output;
 
 return function () {
 

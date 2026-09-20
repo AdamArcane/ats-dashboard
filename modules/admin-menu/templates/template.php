@@ -46,7 +46,7 @@ foreach ( $saved_menu as $identifier => $menu_item ) {
 				</div>
 
 				<div>
-					<img src="<?php echo esc_url( ATS_DASHBOARD_CORE_URL ); ?>/assets/img/logo.png">
+					<img src="<?php echo esc_url( ATS_DASHBOARD_PLUGIN_URL ); ?>/assets/img/logo.png">
 				</div>
 
 			</div>

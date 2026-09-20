@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\AdminBar;
+namespace ATSDash\AdminBar;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Vars;
-use ats\Base\Base_Module;
+use ATSDash\Vars;
+use ATSDash\Base\Base_Module;
 
 /**
  * Class to setup admin menu module.

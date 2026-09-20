@@ -5,12 +5,12 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\LoginCustomizer;
+namespace ATSDash\LoginCustomizer;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Output;
-use ats\Helpers\Content_Helper;
+use ATSDash\Base\Base_Output;
+use ATSDash\Helpers\Content_Helper;
 
 /**
  * Class to setup login customizer output.

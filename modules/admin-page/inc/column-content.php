@@ -5,7 +5,7 @@
  * @package ATS_Dashboard
  */
 
-use ats\AdminPage\Admin_Page_Module;
+use ATSDash\AdminPage\Admin_Page_Module;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 

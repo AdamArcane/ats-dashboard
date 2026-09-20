@@ -14,7 +14,7 @@ use ATSDash\Helpers\Multisite_Helper;
 /**
  * Class to setup login customizer module.
  */
-class Login_Customizer_Module extends \ats\LoginCustomizer\Login_Customizer_Base_Module {
+class Login_Customizer_Module extends \ATSDash\LoginCustomizer\Login_Customizer_Base_Module {
 
 	/**
 	 * The class instance.

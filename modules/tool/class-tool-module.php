@@ -5,11 +5,11 @@
  * @package ATS_Dashboard
  */
 
-namespace ats\Tool;
+namespace ATSDash\Tool;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ats\Base\Base_Module;
+use ATSDash\Base\Base_Module;
 
 /**
  * Class to setup tool module.
@@ -35,7 +35,7 @@ class Tool_Module extends Base_Module {
 	 */
 	public function __construct() {
 
-		$this->url = ATS_DASHBOARD_CORE_URL . '/modules/tool';
+		$this->url = ATS_DASHBOARD_PLUGIN_URL . '/modules/tool';
 
 	}
 
