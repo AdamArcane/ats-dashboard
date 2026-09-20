@@ -54,9 +54,8 @@ return function ( $module ) {
 					<div>
 						<span class="title">
 							<?php echo esc_html( get_admin_page_title() ); ?>
-							<span class="version"><?php echo esc_html( ATS_DASHBOARD_PLUGIN_VERSION ); ?></span>
 						</span>
-						<p class="subtitle"><?php esc_html_e( 'Fully customize the WordPress admin bar.', 'ats-dashboard' ); ?></p>
+						<p class="subtitle"><?php esc_html_e( 'Customize the top admin bar.', 'ats-dashboard' ); ?></p>
 					</div>
 
 					<div>
@@ -103,20 +102,7 @@ return function ( $module ) {
 							</div>
 						</div>
 
-						<div class="heatbox-footer">
-
-
-								<div class="ats-pro-settings-page-notice ats-pro-admin-bar-notice">
-									<p><?php esc_html_e( 'This feature is available in ATS Dashboard.', 'ats-dashboard' ); ?></p>
-									<a href="https://ats-dashboard.io/pro/?utm_source=plugin&utm_medium=admin_bar_link&utm_campaign=ats" class="button button-large button-primary" target="_blank">
-										<?php esc_html_e( 'Get ATS Dashboard', 'ats-dashboard' ); ?>
-									</a>
-								</div>
-
-
-							<?php do_action( 'ats_admin_bar_form_footer' ); ?>
-
-						</div>
+						
 					</div>
 
 				</form>
