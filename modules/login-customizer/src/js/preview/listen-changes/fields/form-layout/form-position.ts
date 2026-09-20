@@ -48,6 +48,10 @@ const listenFormPositionFieldChange = () => {
 			'[data-listen-value="ats_login[form_border_width]"]'
 		) as HTMLStyleElement;
 
+		const boxWidthStyleTag = document.querySelector(
+			'[data-listen-value="ats_login[box_width]"]'
+		) as HTMLStyleElement;
+
 		setting.bind(function (val) {
 			let formBgColor = getSetting("ats_login[form_bg_color]");
 			const formBgImage = getSetting("ats_login[form_bg_image]");
@@ -152,6 +156,45 @@ const listenFormPositionFieldChange = () => {
 					"#loginform {padding-left: 24px; padding-right: 24px;}";
 
 				formBorderWidthStyleTag.innerHTML = "#loginform {border-width: 0;}";
+			} else {
+				// Undo everything the "left"/"right" layouts wrote above, otherwise
+				// switching back to "default" leaves the old layout on screen.
+				formPositionStyleTag.innerHTML = "";
+				boxWidthStyleTag.innerHTML = "";
+
+				// These are the form's own background in the default layout, which
+				// the static login stylesheet already renders.
+				formBgColorStyleTag.innerHTML = "";
+				formBgImageStyleTag.innerHTML = "";
+				formBgRepeatStyleTag.innerHTML = "";
+				formBgPositionStyleTag.innerHTML = "";
+				formBgSizeStyleTag.innerHTML = "";
+
+				// The tags below were overwritten, so rebuild them from their own
+				// settings the same way their individual handlers do.
+				const rawFormWidth = getSetting("ats_login[form_width]");
+
+				const rawHorizontalPadding = getSetting(
+					"ats_login[form_horizontal_padding]"
+				);
+
+				const rawBorderWidth = getSetting("ats_login[form_border_width]");
+
+				formWidthStyleTag.innerHTML = rawFormWidth
+					? "#login {width: " + rawFormWidth + ";}"
+					: "";
+
+				formHorizontalPaddingStyleTag.innerHTML = rawHorizontalPadding
+					? "#loginform {padding-left: " +
+					  rawHorizontalPadding +
+					  "; padding-right: " +
+					  rawHorizontalPadding +
+					  ";}"
+					: "";
+
+				formBorderWidthStyleTag.innerHTML = rawBorderWidth
+					? "#loginform {border-width: " + rawBorderWidth + ";}"
+					: "";
 			}
 		});
 	});

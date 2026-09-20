@@ -152,7 +152,7 @@ $wp_customize->add_control(
 			'settings'    => 'ats_login[logo_title]',
 			'label'       => __( 'Logo Title', 'ats-dashboard' ),
 			'input_attrs' => array(
-				'placeholder' => 'Powered by WordPress',
+				'placeholder' => 'Arcane Tech Solutions',
 			),
 		)
 	)
