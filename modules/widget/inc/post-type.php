@@ -26,16 +26,22 @@ return function () {
 	);
 
 	// Change capabilities so only users that can 'manage_options' are able to access the dashboard widgets & settings.
+	$capability   = apply_filters( 'ats_settings_capability', 'manage_options' );
 	$capabilities = array(
-		'edit_post'          => apply_filters( 'ats_settings_capability', 'manage_options' ),
-		'read_post'          => apply_filters( 'ats_settings_capability', 'manage_options' ),
-		'delete_post'        => apply_filters( 'ats_settings_capability', 'manage_options' ),
-		'delete_posts'       => apply_filters( 'ats_settings_capability', 'manage_options' ),
-		'edit_posts'         => apply_filters( 'ats_settings_capability', 'manage_options' ),
-		'edit_others_posts'  => apply_filters( 'ats_settings_capability', 'manage_options' ),
-		'publish_posts'      => apply_filters( 'ats_settings_capability', 'manage_options' ),
-		'read_private_posts' => apply_filters( 'ats_settings_capability', 'manage_options' ),
-		'create_posts'       => apply_filters( 'ats_settings_capability', 'manage_options' ),
+		'edit_post'              => $capability,
+		'read_post'              => $capability,
+		'delete_post'            => $capability,
+		'delete_posts'           => $capability,
+		'edit_posts'             => $capability,
+		'edit_others_posts'      => $capability,
+		'edit_private_posts'     => $capability,
+		'edit_published_posts'   => $capability,
+		'publish_posts'          => $capability,
+		'read_private_posts'     => $capability,
+		'delete_private_posts'   => $capability,
+		'delete_published_posts' => $capability,
+		'delete_others_posts'    => $capability,
+		'create_posts'           => $capability,
 	);
 
 	// Arguments.

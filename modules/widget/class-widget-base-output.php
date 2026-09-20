@@ -162,7 +162,7 @@ class Widget_Base_Output extends Base_Output {
 			// Preventing edge case when widget_type is empty.
 			if ( ! $widget_type ) {
 
-				do_action( 'ats_compat_widget_type', $post_id );
+				$widget_type = apply_filters( 'ats_compat_widget_type', $widget_type, $post_id );
 
 			}
 

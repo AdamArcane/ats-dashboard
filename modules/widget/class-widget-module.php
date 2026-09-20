@@ -83,6 +83,8 @@ class Widget_Module extends \ATSDash\Widget\Widget_Base_Module {
 		add_action( 'ats_widget_metabox', array( self::get_instance(), 'video_widget' ) );
 		add_action( 'ats_widget_metabox', array( self::get_instance(), 'form_widget' ) );
 
+		add_filter( 'ats_compat_widget_type', array( self::get_instance(), 'compat_widget_type' ), 20, 2 );
+
 		add_action( 'ats_dashboard_styles', array( self::get_instance(), 'dashboard_styles' ) );
 		add_action( 'ats_edit_widget_scripts', array( self::get_instance(), 'edit_widget_scripts' ) );
 		add_action( 'ats_dashboard_scripts', array( self::get_instance(), 'dashboard_scripts' ) );
@@ -267,6 +269,34 @@ class Widget_Module extends \ATSDash\Widget\Widget_Base_Module {
 
 		$widget = require __DIR__ . '/templates/widget-types/form-widget.php';
 		$widget();
+
+	}
+
+	/**
+	 * Backfill widget_type with the pro-only types, based on which fields the widget has data in.
+	 *
+	 * @param string $widget_type The current widget type.
+	 * @param int    $post_id The widget's post id.
+	 *
+	 * @return string The detected widget type.
+	 */
+	public function compat_widget_type( $widget_type, $post_id ) {
+
+		if ( $widget_type ) {
+			return $widget_type;
+		}
+
+		if ( get_post_meta( $post_id, 'ats_video_id', true ) || get_post_meta( $post_id, 'ats_video_platform', true ) ) {
+			$widget_type = 'video';
+		} elseif ( get_post_meta( $post_id, 'ats_form_name', true ) || get_post_meta( $post_id, 'ats_form_email', true ) ) {
+			$widget_type = 'form';
+		}
+
+		if ( $widget_type ) {
+			update_post_meta( $post_id, 'ats_widget_type', $widget_type );
+		}
+
+		return $widget_type;
 
 	}
 

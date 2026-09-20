@@ -52,6 +52,8 @@ class Widget_Base_Module extends Base_Module {
 		add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
 
+		add_filter( 'ats_compat_widget_type', array( $this, 'compat_widget_type' ), 10, 2 );
+
 		// The module output.
 		require_once __DIR__ . '/class-widget-base-output.php';
 		Widget_Base_Output::init();
@@ -260,6 +262,32 @@ class Widget_Base_Module extends Base_Module {
 
 		$save_widget = require __DIR__ . '/inc/save-post.php';
 		$save_widget( $post_id );
+
+	}
+
+	/**
+	 * Backfill widget_type for widgets saved before that meta existed, based on which fields they have data in.
+	 *
+	 * @param string $widget_type The current (empty) widget type.
+	 * @param int    $post_id The widget's post id.
+	 *
+	 * @return string The detected widget type.
+	 */
+	public function compat_widget_type( $widget_type, $post_id ) {
+
+		if ( get_post_meta( $post_id, 'ats_html', true ) ) {
+			$widget_type = 'html';
+		} elseif ( get_post_meta( $post_id, 'ats_content', true ) ) {
+			$widget_type = 'text';
+		} elseif ( get_post_meta( $post_id, 'ats_icon_key', true ) || get_post_meta( $post_id, 'ats_link', true ) || get_post_meta( $post_id, 'ats_tooltip', true ) ) {
+			$widget_type = 'icon';
+		}
+
+		if ( $widget_type ) {
+			update_post_meta( $post_id, 'ats_widget_type', $widget_type );
+		}
+
+		return $widget_type;
 
 	}
 
