@@ -39,8 +39,16 @@ class Customize_Range_Control extends \WP_Customize_Control {
 		$id    = 'customize-control-' . str_replace( array( '[', ']' ), array( '-', '' ), $this->id );
 		$class = 'customize-control customize-control-' . $this->type . ' ats-customize-control ats-customize-control-' . $this->type;
 
-		$this->value_unit   = preg_replace( '/\d+/', '', $this->value() );
-		$this->value_number = str_ireplace( $this->value_unit, '', $this->value() );
+		// Split a css length like "10px" into its number and its unit.
+		if ( preg_match( '/^\s*(-?\d*\.?\d+)\s*(.*)$/', (string) $this->value(), $matches ) ) {
+			$unit = trim( $matches[2] );
+
+			$this->value_number = $matches[1];
+			$this->value_unit   = $unit ? $unit : '%';
+		} else {
+			$this->value_number = '';
+			$this->value_unit   = '%';
+		}
 
 		printf( '<li id="%s" class="%s" data-control-name="%s">', esc_attr( $id ), esc_attr( $class ), esc_attr( $this->id ) );
 		$this->render_content();

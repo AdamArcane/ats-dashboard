@@ -45,9 +45,9 @@ $wp_customize->add_control(
 );
 
 $layout_settings = array(
-	'form_top_padding'        => array( 'label' => 'Top Padding', 'default' => '0px', 'min' => 0, 'max' => 100 ),
-	'form_bottom_padding'     => array( 'label' => 'Bottom Padding', 'default' => '0px', 'min' => 0, 'max' => 100 ),
-	'form_horizontal_padding' => array( 'label' => 'Side Padding', 'default' => '0px', 'min' => 0, 'max' => 80 ),
+	'form_top_padding'        => array( 'label' => 'Top Padding', 'default' => '10px', 'min' => 0, 'max' => 100 ),
+	'form_bottom_padding'     => array( 'label' => 'Bottom Padding', 'default' => '10px', 'min' => 0, 'max' => 100 ),
+	'form_horizontal_padding' => array( 'label' => 'Side Padding', 'default' => '10px', 'min' => 0, 'max' => 80 ),
 	'form_border_width'       => array( 'label' => 'Border Width', 'default' => '2px', 'min' => 0, 'max' => 30 ),
 	'form_border_radius'      => array( 'label' => 'Border Radius', 'default' => '4px', 'min' => 0, 'max' => 50 ),
 );

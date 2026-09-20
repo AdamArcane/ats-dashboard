@@ -49,9 +49,9 @@ $form_bg_custom_position = isset( $login['form_bg_custom_position'] ) ? $login['
 $box_width  = isset( $login['box_width'] ) ? $login['box_width'] : '40%';
 $form_width = isset( $login['form_width'] ) ? $login['form_width'] : '320px';
 
-$form_top_padding        = isset( $login['form_top_padding'] ) ? $login['form_top_padding'] : '';
-$form_bottom_padding     = isset( $login['form_bottom_padding'] ) ? $login['form_bottom_padding'] : '';
-$form_horizontal_padding = isset( $login['form_horizontal_padding'] ) ? $login['form_horizontal_padding'] : '';
+$form_top_padding        = isset( $login['form_top_padding'] ) ? $login['form_top_padding'] : '10px';
+$form_bottom_padding     = isset( $login['form_bottom_padding'] ) ? $login['form_bottom_padding'] : '10px';
+$form_horizontal_padding = isset( $login['form_horizontal_padding'] ) ? $login['form_horizontal_padding'] : '10px';
 $form_border_width       = isset( $login['form_border_width'] ) ? $login['form_border_width'] : '2px';
 $form_border_style       = isset( $login['form_border_style'] ) ? $login['form_border_style'] : 'solid';
 $form_border_color       = isset( $login['form_border_color'] ) ? $login['form_border_color'] : '#dddddd';
