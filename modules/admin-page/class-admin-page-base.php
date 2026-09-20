@@ -297,16 +297,6 @@ class Admin_Page_Base_Module extends Base_Module {
 	}
 
 	/**
-	 * PRO link metabox.
-	 */
-	public function pro_link_metabox() {
-
-		$metabox = require __DIR__ . '/templates/metaboxes/pro-link.php';
-		$metabox();
-
-	}
-
-	/**
 	 * Menu metabox.
 	 *
 	 * @param WP_Post $post The WP_Post object.

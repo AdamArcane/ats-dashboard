@@ -234,16 +234,6 @@ class Widget_Base_Module extends Base_Module {
 	}
 
 	/**
-	 * PRO link metabox.
-	 */
-	public function pro_link_metabox() {
-
-		$metabox = require __DIR__ . '/templates/metaboxes/pro-link.php';
-		$metabox();
-
-	}
-
-	/**
 	 * Placeholder tags metabox.
 	 */
 	public function placeholder_tags_metabox() {
