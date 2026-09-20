@@ -276,14 +276,14 @@ class Login_Customizer_Base_Module extends Base_Module {
 	public function register_controls( $wp_customize ) {
 
 		// Customize control classes.
-		require __DIR__ . '/controls/class-udb-customize-control.php';
-		require __DIR__ . '/controls/class-udb-customize-pro-control.php';
-		require __DIR__ . '/controls/class-udb-customize-range-control.php';
-		require __DIR__ . '/controls/class-udb-customize-image-control.php';
-		require __DIR__ . '/controls/class-udb-customize-color-control.php';
-		require __DIR__ . '/controls/class-udb-customize-color-picker-control.php';
-		require __DIR__ . '/controls/class-udb-customize-login-template-control.php';
-		require __DIR__ . '/controls/class-udb-customize-toggle-switch-control.php';
+		require __DIR__ . '/controls/class-ats-customize-control.php';
+		require __DIR__ . '/controls/class-ats-customize-pro-control.php';
+		require __DIR__ . '/controls/class-ats-customize-range-control.php';
+		require __DIR__ . '/controls/class-ats-customize-image-control.php';
+		require __DIR__ . '/controls/class-ats-customize-color-control.php';
+		require __DIR__ . '/controls/class-ats-customize-color-picker-control.php';
+		require __DIR__ . '/controls/class-ats-customize-login-template-control.php';
+		require __DIR__ . '/controls/class-ats-customize-toggle-switch-control.php';
 
 		$branding         = get_option( 'ats_branding', array() );
 		$branding_enabled = isset( $branding['enabled'] ) ? true : false;
