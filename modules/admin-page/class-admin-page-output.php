@@ -10,6 +10,7 @@ namespace ATSDash\AdminPage;
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use ats\Base\Base_Output;
+use ats\Widget\Widget_Base_Output;
 use ATSDash\Helpers\Bricks_Helper;
 use ATSDash\Helpers\Content_Helper;
 use ATSDash\Helpers\Multisite_Helper;
@@ -190,7 +191,10 @@ class Admin_Page_Output extends Base_Output {
 
 		if ( 'html' === $post->content_type ) {
 
-			echo $post->html_content;
+			$html_content = do_shortcode( $post->html_content );
+			$html_content = Widget_Base_Output::get_instance()->convert_placeholder_tags( $html_content );
+
+			echo $html_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- admin-authored HTML content, same as before placeholder support was added.
 
 		} else {
 

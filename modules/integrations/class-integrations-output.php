@@ -55,8 +55,107 @@ class Integrations_Output extends Base_Output {
 
 	/**
 	 * Setup integrations output.
+	 *
+	 * Wires this module's data into the widget placeholder tag system so it
+	 * can be used in custom dashboard widgets and custom admin pages.
 	 */
-	public function setup() {}
+	public function setup() {
+
+		add_filter( 'ats_widgets_placeholder_tags', array( $this, 'filter_placeholder_tags' ) );
+		add_filter( 'ats_widgets_convert_placeholder_tags', array( $this, 'filter_convert_placeholder_tags' ) );
+
+	}
+
+	/**
+	 * Append the integrations placeholder tags that currently have data to the
+	 * displayed placeholder tag list, so a tag only shows up as available once
+	 * MainWP (or another integration) has actually pushed a value for it.
+	 *
+	 * @param array $tags The existing placeholder tags.
+	 * @return array The placeholder tags with the available integrations tags appended.
+	 */
+	public function filter_placeholder_tags( $tags ) {
+
+		return array_merge( $tags, $this->get_available_placeholder_tags() );
+
+	}
+
+	/**
+	 * Replace integrations placeholder tags with their resolved values.
+	 *
+	 * @param string $str The string to replace the tags in.
+	 * @return string The modified string.
+	 */
+	public function filter_convert_placeholder_tags( $str ) {
+
+		$map = $this->get_placeholder_map();
+
+		return str_replace( array_keys( $map ), array_values( $map ), $str );
+
+	}
+
+	/**
+	 * Get every integrations placeholder tag mapped to its current resolved
+	 * value (manual override, if set, otherwise the MainWP-pushed value).
+	 * A tag with no data available yet resolves to an empty string.
+	 *
+	 * @return array Tag (e.g. "{mainwp_site_id}") => string value.
+	 */
+	public function get_placeholder_map() {
+
+		$map = array();
+
+		$mainwp_site_id           = $this->get_mainwp_site_id();
+		$map['{mainwp_site_id}'] = (string) $mainwp_site_id['value'];
+
+		$ploi = $this->get_ploi_status();
+
+		foreach ( $ploi['fields'] as $key => $field ) {
+			$map[ '{ploi_' . $key . '}' ] = (string) $field['value'];
+		}
+
+		$suitedash = $this->get_suitedash_status();
+
+		foreach ( $suitedash['fields'] as $key => $field ) {
+			$map[ '{suitedash_' . $key . '}' ] = (string) $field['value'];
+		}
+
+		$postmark = $this->get_postmark_status();
+
+		if ( $postmark && ! empty( $postmark['has_detail'] ) ) {
+			$map['{postmark_server_name}']    = ! empty( $postmark['server_name'] ) ? $postmark['server_name'] : '';
+			$map['{postmark_message_stream}'] = ! empty( $postmark['message_stream'] ) ? $postmark['message_stream'] : 'outbound';
+			$map['{postmark_sender_email}']   = ! empty( $postmark['sender_email'] ) ? $postmark['sender_email'] : get_option( 'admin_email' );
+		} else {
+			$map['{postmark_server_name}']    = '';
+			$map['{postmark_message_stream}'] = '';
+			$map['{postmark_sender_email}']   = '';
+		}
+
+		return $map;
+
+	}
+
+	/**
+	 * Get only the integrations placeholder tags that currently resolve to a
+	 * non-empty value, so the tag picker UI doesn't advertise tags that would
+	 * just render blank.
+	 *
+	 * @return string[] Placeholder tags, e.g. array( "{mainwp_site_id}", "{ploi_domain}" ).
+	 */
+	public function get_available_placeholder_tags() {
+
+		$available = array();
+
+		foreach ( $this->get_placeholder_map() as $tag => $value ) {
+			if ( '' !== trim( $value ) ) {
+				$available[] = $tag;
+			}
+		}
+
+		return $available;
+
+	}
 
 	/**
 	 * Get the MainWP site ID, resolved against any manual override.

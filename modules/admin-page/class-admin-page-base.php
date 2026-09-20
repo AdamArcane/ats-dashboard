@@ -261,6 +261,11 @@ class Admin_Page_Base_Module extends Base_Module {
 		add_meta_box( 'ats-active-status-metabox', __( 'Active', 'ats-dashboard' ), array( $this, 'active_status_metabox' ), 'ats_admin_page', 'side', 'high' );
 		add_meta_box( 'ats-content-type-metabox', __( 'Content Type', 'ats-dashboard' ), array( $this, 'content_type_metabox' ), 'ats_admin_page', 'side', 'high' );
 		add_meta_box( 'ats-menu-metabox', __( 'Menu Attributes', 'ats-dashboard' ), array( $this, 'menu_metabox' ), 'ats_admin_page', 'side' );
+
+		$tags_metabox_header  = __( 'Placeholder Tags', 'ats-dashboard' );
+		$tags_metabox_header .= '<br><span class="action-status">📋 Copied</span>';
+
+		add_meta_box( 'ats-tags-metabox', $tags_metabox_header, array( $this, 'placeholder_tags_metabox' ), 'ats_admin_page', 'side' );
 		add_meta_box( 'ats-html-metabox', __( 'HTML', 'ats-dashboard' ), array( $this, 'html_metabox' ), 'ats_admin_page', 'normal', 'high' );
 		add_meta_box( 'ats-display-metabox', __( 'Display Options', 'ats-dashboard' ), array( $this, 'display_metabox' ), 'ats_admin_page', 'normal' );
 		add_meta_box( 'ats-advanced-metabox', __( 'Advanced', 'ats-dashboard' ), array( $this, 'advanced_metabox' ), 'ats_admin_page', 'normal' );
@@ -310,6 +315,21 @@ class Admin_Page_Base_Module extends Base_Module {
 
 		$metabox = require __DIR__ . '/templates/metaboxes/menu.php';
 		$metabox( $this, $post );
+
+	}
+
+	/**
+	 * Placeholder tags metabox.
+	 *
+	 * Reuses the widget module's placeholder tags template — the tags
+	 * (including any pushed by the Integrations module) are converted the
+	 * same way for both custom widgets and custom (HTML) admin pages via
+	 * `ats\Widget\Widget_Base_Output::convert_placeholder_tags()`.
+	 */
+	public function placeholder_tags_metabox() {
+
+		$metabox = require ATS_DASHBOARD_PLUGIN_DIR . '/modules/widget/templates/metaboxes/placeholder-tags.php';
+		$metabox();
 
 	}
 
