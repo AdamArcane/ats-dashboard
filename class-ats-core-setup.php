@@ -61,6 +61,7 @@ class Setup {
 			'admin_pages'       => 'true',
 			'admin_menu_editor' => 'true',
 			'admin_bar_editor'  => 'true',
+			'integrations'      => 'true',
 		);
 
 		$saved_modules = get_option( 'ats_modules', $defaults );
@@ -235,6 +236,10 @@ class Setup {
 			$modules['ats\\LoginRedirect\\Login_Redirect_Module'] = __DIR__ . '/modules/login-redirect/class-login-redirect-module.php';
 		}
 
+		if ( isset( $saved_modules['integrations'] ) && 'true' === $saved_modules['integrations'] ) {
+			$modules['ats\\Integrations\\Integrations_Module'] = __DIR__ . '/modules/integrations/class-integrations-module.php';
+		}
+
 		if ( isset( $saved_modules['admin_menu_editor'] ) && 'true' === $saved_modules['admin_menu_editor'] ) {
 		}
 
@@ -392,6 +397,7 @@ class Setup {
 			delete_blog_option( $site_id, 'ats_branding' );
 			delete_blog_option( $site_id, 'ats_login' );
 			delete_blog_option( $site_id, 'ats_login_redirect' );
+			delete_blog_option( $site_id, 'ats_integrations' );
 			delete_blog_option( $site_id, 'ats_import' );
 			delete_blog_option( $site_id, 'ats_modules' );
 			delete_blog_option( $site_id, 'ats_recent_admin_menu' );
@@ -419,6 +425,7 @@ class Setup {
 			delete_option( 'ats_branding' );
 			delete_option( 'ats_login' );
 			delete_option( 'ats_login_redirect' );
+			delete_option( 'ats_integrations' );
 			delete_option( 'ats_import' );
 			delete_option( 'ats_modules' );
 			delete_option( 'ats_recent_admin_menu' );

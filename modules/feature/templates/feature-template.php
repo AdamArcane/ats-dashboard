@@ -49,6 +49,12 @@ return function () {
 			'text'    => __( 'Rearrange, hide & add new items to the WordPress toolbar with the Admin Bar Editor module.', 'ats-dashboard' ),
 			'feature' => 'admin_bar_editor',
 		),
+		array(
+			'title'   => __( 'Integrations', 'ats-dashboard' ),
+			'img'     => ATS_DASHBOARD_CORE_URL . '/modules/feature/assets/img/integrations.svg',
+			'text'    => __( 'View data pushed from MainWP (site ID, hosting, CRM status) and other third-party integrations, with manual override options.', 'ats-dashboard' ),
+			'feature' => 'integrations',
+		),
 	)
 
 	?>

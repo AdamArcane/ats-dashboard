@@ -4,7 +4,7 @@
 	"description": "Development tooling for ATS Dashboard",
 	"repository": {
 		"type": "git",
-		"url": "git+https://bitbucket.org/mapsteps/ats-dashboard.git"
+		"url": "git+https://github.com/ArcaneTechCT/ats-dashboard.git"
 	},
 	"keywords": [
 		"ats-dashboard"

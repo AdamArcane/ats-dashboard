@@ -323,6 +323,7 @@ class Setup {
 			'admin_pages'       => 'true',
 			'admin_menu_editor' => 'true',
 			'admin_bar_editor'  => 'true',
+			'integrations'      => 'true',
 		);
 
 		$saved_modules = get_option( 'ats_modules', $defaults );
@@ -364,6 +365,10 @@ class Setup {
 
 		if ( isset( $saved_modules['login_redirect'] ) && 'true' === $saved_modules['login_redirect'] ) {
 			$modules['ats\\LoginRedirect\\Login_Redirect_Module'] = __DIR__ . '/modules/login-redirect/class-login-redirect-module.php';
+		}
+
+		if ( isset( $saved_modules['integrations'] ) && 'true' === $saved_modules['integrations'] ) {
+			$modules['ats\\Integrations\\Integrations_Module'] = __DIR__ . '/modules/integrations/class-integrations-module.php';
 		}
 
 		if ( isset( $saved_modules['admin_pages'] ) && 'true' === $saved_modules['admin_pages'] ) {

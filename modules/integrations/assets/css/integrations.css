@@ -1,0 +1,66 @@
+.ats-integrations-badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	margin-bottom: 6px;
+}
+
+.ats-integrations-badge--live {
+	background: #edfaef;
+	color: #1a7f37;
+}
+
+.ats-integrations-badge--override {
+	background: #fff5e5;
+	color: #a15c00;
+}
+
+.ats-integrations-badge--empty {
+	background: #f0f0f1;
+	color: #646970;
+}
+
+.ats-integrations-status-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 12px;
+}
+
+.ats-integrations-status-table th,
+.ats-integrations-status-table td {
+	text-align: left;
+	padding: 6px 10px 6px 0;
+	vertical-align: top;
+}
+
+.ats-integrations-status-table th {
+	width: 160px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.ats-integrations-overrides {
+	margin-top: 16px;
+	padding-top: 16px;
+	border-top: 1px solid #dcdcde;
+}
+
+.ats-integrations-overrides h4 {
+	margin: 0 0 8px;
+}
+
+.ats-integrations-overrides .ats-integrations-override-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 8px;
+}
+
+.ats-integrations-overrides label {
+	width: 160px;
+	flex-shrink: 0;
+}

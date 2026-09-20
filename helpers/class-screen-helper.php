@@ -110,6 +110,18 @@ class Screen_Helper {
 	}
 
 	/**
+	 * Check if current screen is integrations page.
+	 *
+	 * @return boolean
+	 */
+	public function is_integrations() {
+
+		$current_screen = get_current_screen();
+		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_integrations' === $current_screen->id ? true : false );
+
+	}
+
+	/**
 	 * Check if current screen is tools page.
 	 *
 	 * @return boolean

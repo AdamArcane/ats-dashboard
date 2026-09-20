@@ -13,6 +13,8 @@ use ats\Base\Base_Module;
 use ats\Helpers\Content_Helper;
 use ATSDash\Helpers\Multisite_Helper;
 
+require_once __DIR__ . '/inc/class-site-owner-role.php';
+
 /**
  * Class to setup setting module.
  */
@@ -47,11 +49,100 @@ class Setting_Module extends Base_Module {
 			add_action( 'admin_init', array( $this, 'pro_setting_fields' ) );
 			add_action( 'ats_after_page_builder_dashboard_metabox', array( $this, 'block_editor_template_metabox' ) );
 
+		// Site Owner role: settings tab wiring + role sync.
+		add_filter( 'ats_setting_tab_menus', array( $this, 'add_site_owner_role_tab' ) );
+		add_action( 'admin_init', array( $this, 'add_site_owner_role_settings' ) );
+		add_action( 'ats_after_custom_panel', array( $this, 'site_owner_role_panel' ) );
+		add_action( 'init', array( 'ats\\Setting\\Site_Owner_Role', 'sync' ) );
+		register_deactivation_hook( ATS_DASHBOARD_PLUGIN_FILE, array( 'ats\\Setting\\Site_Owner_Role', 'remove_on_deactivation' ) );
+
 		// The module output.
 		require_once __DIR__ . '/class-setting-output.php';
 		Setting_Output::init();
 
 	}
+
+		/**
+		 * Add the "Site Owner Role" tab to the Settings page tab nav.
+		 *
+		 * @param array $setting_tab_menus The existing tab menu entries.
+		 * @return array The tab menu entries with the Site Owner Role tab appended.
+		 */
+		public function add_site_owner_role_tab( $setting_tab_menus ) {
+
+			$setting_tab_menus[] = array(
+				'id'   => 'site-owner-role',
+				'text' => __( 'Site Owner Role', 'ats-dashboard' ),
+			);
+
+			return $setting_tab_menus;
+
+		}
+
+		/**
+		 * Register the "Site Owner Role" settings section & fields.
+		 *
+		 * Saved into the same `ats_settings` option as the rest of this module.
+		 */
+		public function add_site_owner_role_settings() {
+
+			add_settings_section( 'ats-site-owner-role-section', '', '', 'ats-site-owner-role-settings' );
+
+			add_settings_field(
+				'site-owner-role-enabled',
+				__( 'Enable Site Owner Role', 'ats-dashboard' ),
+				array( $this, 'site_owner_role_enabled_field' ),
+				'ats-site-owner-role-settings',
+				'ats-site-owner-role-section'
+			);
+
+			add_settings_field(
+				'site-owner-role-capabilities',
+				__( 'Restricted Capabilities', 'ats-dashboard' ),
+				array( $this, 'site_owner_role_capabilities_field' ),
+				'ats-site-owner-role-settings',
+				'ats-site-owner-role-section'
+			);
+
+		}
+
+		/**
+		 * Site Owner role enabled field.
+		 */
+		public function site_owner_role_enabled_field() {
+
+			$field = require __DIR__ . '/templates/fields/site-owner-role-enabled.php';
+			$field();
+
+		}
+
+		/**
+		 * Site Owner role capabilities field.
+		 */
+		public function site_owner_role_capabilities_field() {
+
+			$field = require __DIR__ . '/templates/fields/site-owner-role-capabilities.php';
+			$field();
+
+		}
+
+		/**
+		 * Render the "Site Owner Role" settings panel.
+		 *
+		 * Hooked into `ats_after_custom_panel` so the free-tier settings
+		 * template doesn't need to be modified directly.
+		 */
+		public function site_owner_role_panel() {
+			?>
+
+			<div class="heatbox-admin-panel ats-site-owner-role-panel">
+				<div class="heatbox">
+					<?php do_settings_sections( 'ats-site-owner-role-settings' ); ?>
+				</div>
+			</div>
+
+			<?php
+		}
 
 		/**
 		 * Add dashboard builder settings after the widget settings.
