@@ -456,19 +456,9 @@ class Setup {
 			$modules['ATSDash\\AdminMenu\\Admin_Menu_Module'] = __DIR__ . '/modules/admin-menu/class-admin-menu-module.php';
 		}
 
-		/**
-		 * Admin Bar Editor is intentionally NOT registered here.
-		 *
-		 * Before this refactor it was gated behind `version_compare( ATS_DASHBOARD_PLUGIN_VERSION, '3.2.1', '>' )`
-		 * — a leftover check against the original commercial plugin's version scheme that is
-		 * always false against this fork's '1.0.1' version, so the module has never actually
-		 * loaded in this deployment. Re-enabling it surfaced a real, pre-existing bug: in
-		 * `Admin_Bar_Base_Module::parse_frontend_items()` (modules/admin-bar/class-admin-bar-base.php),
-		 * the 'after' positioning key is stripped from an item before it's conditionally deferred
-		 * into `$uninserted_items`, so a deferred item can never resolve its position and
-		 * `insert_uninserted_items()` recurses without terminating. Left disabled until that's
-		 * fixed and verified — this is unrelated to the namespace merge, so it isn't fixed here.
-		 */
+		if ( isset( $saved_modules['admin_bar_editor'] ) && 'true' === $saved_modules['admin_bar_editor'] ) {
+			$modules['ATSDash\\AdminBar\\Admin_Bar_Module'] = __DIR__ . '/modules/admin-bar/class-admin-bar-module.php';
+		}
 
 		$ms_helper = new Multisite_Helper();
 

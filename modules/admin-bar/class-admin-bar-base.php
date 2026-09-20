@@ -505,12 +505,10 @@ class Admin_Bar_Base_Module extends Base_Module {
 			if ( ! in_array( $menu_id, $non_ats_items_id, true ) ) {
 				$new_item = $menu;
 
-				if ( isset( $new_item['after'] ) ) {
-					unset( $new_item['after'] );
-				}
-
 				if ( isset( $menu['after'] ) && $menu['after'] ) {
 					if ( isset( $saved_menu[ $menu['after'] ] ) ) {
+						unset( $new_item['after'] );
+
 						$pos = array_search( $menu['after'], array_keys( $saved_menu ), true );
 						++$pos;
 
@@ -518,11 +516,20 @@ class Admin_Bar_Base_Module extends Base_Module {
 							array( $menu_id => $new_item ) +
 							array_slice( $saved_menu, $pos, count( $saved_menu ) - 1, true );
 					} else {
+						/**
+						 * Keep the 'after' key here (unlike the immediate-insert branch
+						 * above) — insert_uninserted_items() needs it to resolve the
+						 * item's position once its target exists in $saved_menu, and
+						 * strips it itself right before actually inserting.
+						 */
 						$uninserted_items[ $menu_id ] = $new_item;
 					}
 				} elseif ( empty( $prev_id ) ) {
-						$saved_menu = array( $menu_id => $new_item ) + $saved_menu;
+					unset( $new_item['after'] );
+					$saved_menu = array( $menu_id => $new_item ) + $saved_menu;
 				} else {
+					unset( $new_item['after'] );
+
 					$pos = array_search( $prev_id, array_keys( $saved_menu ), true );
 
 					$saved_menu = array_slice( $saved_menu, 0, $pos, true ) +
@@ -542,38 +549,51 @@ class Admin_Bar_Base_Module extends Base_Module {
 	/**
 	 * Insert un-inserted items to saved menu.
 	 *
+	 * Each pass re-attempts only the items still left over from the previous
+	 * pass (not the full original set), so an item resolved on an earlier
+	 * pass is never re-processed. If a full pass inserts nothing, no further
+	 * pass can make progress either (nothing in $saved_menu changed), so we
+	 * stop immediately rather than burning through the remaining iterations —
+	 * this also guarantees termination when an item's 'after' target is
+	 * permanently missing (e.g. removed by another plugin), instead of
+	 * looping (previously: recursing without a depth limit).
+	 *
 	 * @param array $saved_menu The saved menu.
-	 * @param array $uninserted_items The uninserted items.
-	 * @param int   $total_loop Max number of the the loop.
+	 * @param array $uninserted_items The uninserted items, each still carrying its 'after' key.
+	 * @param int   $total_loop Max number of passes.
 	 *
 	 * @return array
 	 */
-	public function insert_uninserted_items( $saved_menu, $uninserted_items, $total_loop = 1 ) {
+	public function insert_uninserted_items( $saved_menu, $uninserted_items, $total_loop = 10 ) {
 
-		for ( $i = 0; $i < $total_loop; $i++ ) {
+		for ( $i = 0; $i < $total_loop && ! empty( $uninserted_items ); $i++ ) {
 			$remaining_items = array();
+			$inserted_any    = false;
 
 			// Get new items from $uninserted_items which are not inside $saved_menu.
 			foreach ( $uninserted_items as $menu_id => $menu ) {
-				$new_item = $menu;
-
 				if ( isset( $saved_menu[ $menu['after'] ] ) ) {
+					$new_item = $menu;
+					unset( $new_item['after'] );
+
 					$pos = array_search( $menu['after'], array_keys( $saved_menu ), true );
 					++$pos;
 
 					$saved_menu = array_slice( $saved_menu, 0, $pos, true ) +
 					array( $menu_id => $new_item ) +
 					array_slice( $saved_menu, $pos, count( $saved_menu ) - 1, true );
+
+					$inserted_any = true;
 				} else {
-					$remaining_items[ $menu_id ] = $new_item;
+					$remaining_items[ $menu_id ] = $menu;
 				}
 			}
 
-			if ( empty( $remaining_items ) ) {
+			if ( empty( $remaining_items ) || ! $inserted_any ) {
 				break;
-			} else {
-				$saved_menu = $this->insert_uninserted_items( $saved_menu, $remaining_items );
 			}
+
+			$uninserted_items = $remaining_items;
 		}
 
 		return $saved_menu;
