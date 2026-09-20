@@ -53,6 +53,45 @@ class Login_Customizer_Base_Module extends Base_Module {
 	}
 
 	/**
+	 * The logo used on the login page when the user hasn't picked one.
+	 *
+	 * @return string The default logo image url.
+	 */
+	public static function default_logo_url() {
+
+		return apply_filters( 'ats_login_customizer_default_logo_url', ATS_DASHBOARD_DEFAULT_LOGO_URL );
+
+	}
+
+	/**
+	 * Resolve the logo image to use on the login page.
+	 *
+	 * An uploaded logo wins over the logo url field, and the plugin's default
+	 * logo is used whenever neither is set.
+	 *
+	 * @param array $login The ats_login option.
+	 *
+	 * @return string The logo image url.
+	 */
+	public static function logo_image( $login = null ) {
+
+		if ( ! is_array( $login ) ) {
+			$login = get_option( 'ats_login', array() );
+		}
+
+		if ( ! empty( $login['logo_image'] ) ) {
+			return $login['logo_image'];
+		}
+
+		if ( ! empty( $login['logo_image_url'] ) ) {
+			return $login['logo_image_url'];
+		}
+
+		return self::default_logo_url();
+
+	}
+
+	/**
 	 * Setup login customizer module.
 	 */
 	public function setup() {
@@ -345,13 +384,18 @@ class Login_Customizer_Base_Module extends Base_Module {
 	 */
 	public function create_js_object() {
 
+		$login = get_option( 'ats_login', array() );
+
+		// What the preview should show once the uploaded logo is cleared.
+		$fallback_logo = ! empty( $login['logo_image_url'] ) ? $login['logo_image_url'] : self::default_logo_url();
+
 		return array(
 			'homeUrl'      => home_url(),
 			'loginPageUrl' => home_url( 'ats-login-customizer' ),
 			'pluginUrl'    => rtrim( ATS_DASHBOARD_PLUGIN_URL, '/' ),
 			'moduleUrl'    => ATS_DASHBOARD_PLUGIN_URL . '/modules/login-customizer',
 			'assetUrl'     => $this->url . '/assets',
-			'wpLogoUrl'    => admin_url( 'images/wordpress-logo.svg?ver=' . ATS_DASHBOARD_PLUGIN_VERSION )
+			'wpLogoUrl'    => $fallback_logo
 		);
 
 	}

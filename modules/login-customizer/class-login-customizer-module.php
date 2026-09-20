@@ -126,7 +126,7 @@ class Login_Customizer_Module extends \ATSDash\LoginCustomizer\Login_Customizer_
 			global $blueprint;
 
 			$blueprint_login = get_blog_option( $blueprint, 'ats_login', array() );
-			$height          = ! empty( $blueprint_login ) && isset( $blueprint_login['logo_height'] ) ? $blueprint_login['logo_height'] : '100%';
+			$height          = ! empty( $blueprint_login ) && isset( $blueprint_login['logo_height'] ) ? $blueprint_login['logo_height'] : '90%';
 		}
 
 		return $height;

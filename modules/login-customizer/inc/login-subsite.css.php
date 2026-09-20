@@ -9,6 +9,7 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
+use ATSDash\LoginCustomizer\Login_Customizer_Base_Module;
 use ATSDash\Helpers\Multisite_Helper;
 
 $branding        = get_option( 'ats_branding', array() );
@@ -26,14 +27,14 @@ $branding_enabled = isset( $branding['enabled'] ) ? true : false;
 $accent_color     = isset( $branding['accent_color'] ) ? $branding['accent_color'] : '';
 $has_accent_color = $branding_enabled && ! empty( $accent_color ) ? true : false;
 
-$logo_image  = isset( $login['logo_image'] ) ? $login['logo_image'] : '';
+$logo_image  = Login_Customizer_Base_Module::logo_image( $login );
 $logo_height = isset( $login['logo_height'] ) ? $login['logo_height'] : 0;
 
 if ( empty( $logo_height ) ) {
 	if ( ! empty( $blueprint_login ) && isset( $blueprint_login['logo_height'] ) ) {
 		$logo_height = $blueprint_login['logo_height'];
 	} else {
-		$logo_height = '100%';
+		$logo_height = '90%';
 	}
 }
 

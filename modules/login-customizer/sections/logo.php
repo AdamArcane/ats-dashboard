@@ -13,6 +13,7 @@ use ATSDash\Customize_Control;
 use ATSDash\Customize_Range_Control;
 use ATSDash\Customize_Image_Control;
 
+use ATSDash\LoginCustomizer\Login_Customizer_Base_Module;
 use ATSDash\Helpers\Content_Base_Helper;
 
 $content_helper = new Content_Base_Helper();
@@ -40,7 +41,35 @@ $wp_customize->add_control(
 	)
 );
 
-$default_logo_height = '100%';
+$wp_customize->add_setting(
+	'ats_login[logo_image_url]',
+	array(
+		'type'              => 'option',
+		'capability'        => 'edit_theme_options',
+		'default'           => '',
+		'transport'         => 'refresh',
+		'sanitize_callback' => 'esc_url_raw',
+	)
+);
+
+$wp_customize->add_control(
+	new Customize_Control(
+		$wp_customize,
+		'ats_login[logo_image_url]',
+		array(
+			'type'        => 'text',
+			'section'     => 'ats_login_customizer_logo_section',
+			'settings'    => 'ats_login[logo_image_url]',
+			'label'       => __( 'Logo Image URL', 'ats-dashboard' ),
+			'description' => __( 'Use an externally hosted logo. Ignored when a logo is uploaded above. Leave empty to use the default logo.', 'ats-dashboard' ),
+			'input_attrs' => array(
+				'placeholder' => '', //Login_Customizer_Base_Module::default_logo_url(),
+			),
+		)
+	)
+);
+
+$default_logo_height = '90%';
 
 // Used to provide multisite support in the PRO version.
 $default_logo_height = apply_filters( 'ats_login_customizer_default_logo_height', $default_logo_height );

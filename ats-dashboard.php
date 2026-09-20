@@ -18,6 +18,7 @@ define( 'ATS_DASHBOARD_PLUGIN_DIR', rtrim( plugin_dir_path( __FILE__ ), '/' ) );
 define( 'ATS_DASHBOARD_PLUGIN_URL', rtrim( plugin_dir_url( __FILE__ ), '/' ) );
 define( 'ATS_DASHBOARD_PLUGIN_VERSION', '1.0.1' );
 define( 'ATS_DASHBOARD_PLUGIN_FILE', plugin_basename( __FILE__ ) );
+define( 'ATS_DASHBOARD_DEFAULT_LOGO_URL', 'https://cdn-r2.arcanetechct.com/LogoWideTransparent.png' );
 
 // Admin menu specific support — must run directly (unhooked) to avoid being overlapped by other plugins.
 require_once __DIR__ . '/modules/admin-menu/inc/not-doing-ajax.php';
