@@ -102,7 +102,10 @@ return function ( $module ) {
 							</div>
 						</div>
 
-						
+						<div class="heatbox-footer">
+							<?php do_action( 'ats_admin_bar_form_footer' ); ?>
+						</div>
+
 					</div>
 
 				</form>

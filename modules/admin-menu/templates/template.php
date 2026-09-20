@@ -171,7 +171,10 @@ foreach ( $saved_menu as $identifier => $menu_item ) {
 						</div><!-- .ats-menu-builder--tab-content -->
 					</div><!-- .ats-menu-builder--user-tabs -->
 
-					
+					<div class="heatbox-footer">
+						<?php do_action( 'ats_admin_menu_form_footer' ); ?>
+					</div>
+
 				</div>
 
 			</form>
