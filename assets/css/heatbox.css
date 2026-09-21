@@ -344,6 +344,15 @@
 	opacity: 0;
 }
 
+/* Belt-and-braces: if the custom indicator above doesn't end up covering the
+   native control (e.g. another stylesheet resets its opacity), the native
+   checkbox/radio should still pick up the accent color rather than the
+   browser's default blue. */
+.heatbox .label input[type="checkbox"],
+.heatbox .label input[type="radio"] {
+	accent-color: var(--wp-admin-theme-color, #3858e9);
+}
+
 .heatbox .label .indicator {
 	position: absolute;
 	top: 0;
@@ -451,7 +460,7 @@
 }
 
 .heatbox-cta.primary {
-	background: #197cff;
+	background: var(--wp-admin-theme-color, #3858e9);
 	color: #fff;
 	border: none;
 }

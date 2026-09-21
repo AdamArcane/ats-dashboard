@@ -198,7 +198,7 @@ input::-moz-focus-outer {
 .ats-customize-control-login-template
 	.ats-customize-control-template.is-selected
 	img {
-	box-shadow: 0 0 0 2px #3858e9;
+	box-shadow: 0 0 0 2px var(--wp-admin-theme-color, #3858e9);
 }
 
 .ats-customize-control-login-template .ats-customize-control-template img {

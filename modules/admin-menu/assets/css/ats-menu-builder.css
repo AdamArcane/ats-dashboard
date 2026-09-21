@@ -140,7 +140,7 @@
 	display: block;
 	height: 1em;
 	border: 2px solid #dbdbdb;
-	border-color: transparent transparent #197cff #197cff !important;
+	border-color: transparent transparent var(--wp-admin-theme-color, #3858e9) var(--wp-admin-theme-color, #3858e9) !important;
 	border-radius: 290486px;
 	-webkit-animation: loadingSpinAround 0.5s infinite linear;
 	animation: loadingSpinAround 0.5s infinite linear;

@@ -11,6 +11,7 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use ATSDash\Helpers\Content_Helper;
 use ATSDash\Helpers\Multisite_Helper;
+use ATSDash\Helpers\Color_Helper;
 
 /**
  * Class to set up ATS Dashboard plugin.
@@ -523,6 +524,50 @@ class Setup {
 	public function admin_styles() {
 
 		wp_enqueue_style( 'ats-admin', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/admin.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
+
+		wp_add_inline_style( 'ats-admin', $this->accent_color_css_variables() );
+
+	}
+
+	/**
+	 * Build the CSS custom properties that let the plugin's own admin UI
+	 * (heatbox forms, previews, and any core UI that already reads WP's
+	 * theme color variable) follow the configured branding accent color
+	 * instead of WordPress' default admin blue.
+	 *
+	 * @return string CSS.
+	 */
+	public function accent_color_css_variables() {
+
+		$branding     = get_option( 'ats_branding', array() );
+		$accent_color = isset( $branding['accent_color'] ) ? $branding['accent_color'] : '';
+
+		if ( ! isset( $branding['enabled'] ) || empty( $accent_color ) ) {
+			return '';
+		}
+
+		$color_helper = new Color_Helper();
+
+		$darker_10 = $color_helper->darken( $accent_color, 0.08 );
+		$darker_20 = $color_helper->darken( $accent_color, 0.16 );
+
+		$rgb          = implode( ',', $color_helper->hex_to_rgb( $accent_color ) );
+		$rgb_darker10 = implode( ',', $color_helper->hex_to_rgb( $darker_10 ) );
+		$rgb_darker20 = implode( ',', $color_helper->hex_to_rgb( $darker_20 ) );
+
+		// WordPress core sets --wp-admin-theme-color on `body.admin-color-{scheme}`
+		// (one per color scheme), which is more specific than a plain `:root` rule
+		// and so beats it regardless of load order. Match that specificity (and add
+		// !important) so this override reliably wins no matter which admin color
+		// scheme the current user has selected.
+		return 'body.wp-admin{'
+			. '--wp-admin-theme-color:' . $accent_color . ' !important;'
+			. '--wp-admin-theme-color--rgb:' . $rgb . ' !important;'
+			. '--wp-admin-theme-color-darker-10:' . $darker_10 . ' !important;'
+			. '--wp-admin-theme-color-darker-10--rgb:' . $rgb_darker10 . ' !important;'
+			. '--wp-admin-theme-color-darker-20:' . $darker_20 . ' !important;'
+			. '--wp-admin-theme-color-darker-20--rgb:' . $rgb_darker20 . ' !important;'
+			. '}';
 
 	}
 
