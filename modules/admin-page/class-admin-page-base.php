@@ -277,7 +277,7 @@ class Admin_Page_Base_Module extends Base_Module {
 	public function content_type_metabox( $post ) {
 
 		$metabox = require __DIR__ . '/templates/metaboxes/content-type.php';
-		$metabox( $post );
+		$metabox( $this, $post );
 
 	}
 
