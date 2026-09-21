@@ -304,7 +304,21 @@
 		var oxygenEditor = findHtmlEl("#ct_views_cpt");
 		var normalEditor = findHtmlEl("#postdivrich");
 
+		/**
+		 * The block (Gutenberg) editor's own visual canvas. This CPT is
+		 * registered with `show_in_rest` true, so `#postdivrich` (classic
+		 * editor) never actually exists here — the block editor canvas is
+		 * what needs hiding/showing instead, or switching to "HTML Editor"
+		 * leaves it visible underneath the HTML field as blank space.
+		 * Different WP versions have used different class names for this
+		 * container, so try each known one.
+		 */
+		var blockEditorCanvas = findHtmlEl(
+			".edit-post-visual-editor, .editor-visual-editor, .block-editor-iframe__container"
+		);
+
 		if (value === "html") {
+			if (blockEditorCanvas) blockEditorCanvas.style.display = "none";
 			document.body.classList.add("ats-use-html-editor");
 			document.body.classList.remove("ats-use-default-editor");
 
@@ -331,6 +345,7 @@
 				}
 			}
 		} else {
+			if (blockEditorCanvas) blockEditorCanvas.style.display = "";
 			document.body.classList.remove("ats-use-html-editor");
 			document.body.classList.add("ats-use-default-editor");
 

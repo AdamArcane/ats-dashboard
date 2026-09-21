@@ -106,6 +106,8 @@ class Admin_Page_Module extends \ATSDash\AdminPage\Admin_Page_Base_Module {
 	 */
 	public function register_meta_boxes() {
 
+		parent::register_meta_boxes();
+
 		add_meta_box(
 			'ats-roles-metabox',
 			__( 'User Role Access', 'ats-dashboard' ),
