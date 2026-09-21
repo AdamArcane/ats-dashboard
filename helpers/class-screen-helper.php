@@ -134,6 +134,18 @@ class Screen_Helper {
 	}
 
 	/**
+	 * Check if current screen is the widget settings page.
+	 *
+	 * @return boolean
+	 */
+	public function is_widget_settings() {
+
+		$current_screen = get_current_screen();
+		return is_null( $current_screen ) ? false : ( 'arcane-tech_page_ats_widget_settings' === $current_screen->id ? true : false );
+
+	}
+
+	/**
 	 * Check if current screen is tools page.
 	 *
 	 * @return boolean

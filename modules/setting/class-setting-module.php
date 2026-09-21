@@ -273,6 +273,25 @@ class Setting_Module extends Base_Module {
 			array( $this, 'submenu_page_content' )
 		);
 
+		add_submenu_page(
+			'ats_settings',
+			__( 'Widget Settings', 'ats-dashboard' ),
+			__( 'Widget Settings', 'ats-dashboard' ),
+			apply_filters( 'ats_settings_capability', 'manage_options' ),
+			'ats_widget_settings',
+			array( $this, 'widget_settings_page_content' )
+		);
+
+	}
+
+	/**
+	 * Widget settings page content.
+	 */
+	public function widget_settings_page_content() {
+
+		$template = require __DIR__ . '/templates/widget-settings-template.php';
+		$template();
+
 	}
 
 	/**

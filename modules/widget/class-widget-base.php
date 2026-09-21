@@ -38,7 +38,9 @@ class Widget_Base_Module extends Base_Module {
 	public function setup() {
 
 		add_action( 'init', array( $this, 'register_post_type' ) );
-		add_action( 'admin_menu', array( $this, 'remove_add_widget_submenu' ), 999 );
+		add_action( 'admin_menu', array( $this, 'remove_widget_submenus' ), 999 );
+		add_action( 'admin_notices', array( $this, 'widget_list_tab_bar' ) );
+		add_filter( 'submenu_file', array( $this, 'highlight_submenu' ), 10, 2 );
 		add_filter( 'post_updated_messages', array( $this, 'update_messages' ) );
 		add_filter( 'manage_ats_widgets_posts_columns', array( $this, 'set_columns' ) );
 		add_action( 'manage_ats_widgets_posts_custom_column', array( $this, 'column_content' ), 10, 2 );
@@ -71,10 +73,63 @@ class Widget_Base_Module extends Base_Module {
 	}
 
 	/**
-	 * Remove the duplicate Add Dashboard Widget submenu item.
+	 * Remove the "Add New" and "Dashboard Widgets" list submenu items.
+	 *
+	 * The widgets list is only reachable via the tab bar shared with the
+	 * Widget Settings page, not its own sidebar entry.
 	 */
-	public function remove_add_widget_submenu() {
+	public function remove_widget_submenus() {
 		remove_submenu_page( 'ats_settings', 'post-new.php?post_type=ats_widgets' );
+		remove_submenu_page( 'ats_settings', 'edit.php?post_type=ats_widgets' );
+	}
+
+	/**
+	 * Render the shared "Widget Settings" / "Dashboard Widgets" tab bar above
+	 * the native widgets list table, with a custom "Add New" button in place
+	 * of the one WordPress core would normally render (hidden via CSS).
+	 */
+	public function widget_list_tab_bar() {
+
+		if ( ! $this->screen()->is_widget_list() ) {
+			return;
+		}
+
+		$template = require __DIR__ . '/templates/widget-list-tab-bar.php';
+		$template();
+
+	}
+
+	/**
+	 * Fix sidebar highlighting for the widgets list screen.
+	 *
+	 * wp-admin/edit.php hardcodes $parent_file to its own post-type slug and
+	 * never checks the CPT's show_in_menu string, unlike post.php/post-new.php
+	 * which resolve it correctly. That mismatch means the "Arcane Tech" submenu
+	 * doesn't render expanded while on the widgets list. Same fix pattern as
+	 * Admin_Page_Base::highlight_submenu().
+	 *
+	 * @param string $submenu_file The submenu file.
+	 * @param string $parent_file  The parent menu file.
+	 *
+	 * @return string The submenu file.
+	 */
+	public function highlight_submenu( $submenu_file, $parent_file ) {
+
+		global $current_screen;
+		global $parent_file;
+
+		if (
+			in_array( $current_screen->base, array( 'post', 'edit' ), true )
+			&& 'ats_widgets' === $current_screen->post_type
+		) {
+
+			$parent_file  = 'ats_settings';
+			$submenu_file = 'edit.php?post_type=ats_widgets';
+
+		}
+
+		return $submenu_file;
+
 	}
 
 	/**

@@ -16,10 +16,6 @@ return function () {
 			'active' => true,
 		),
 		array(
-			'id'   => 'widgets',
-			'text' => __( 'Dashboard Widgets', 'ats-dashboard' ),
-		),
-		array(
 			'id'     => 'page-builder-dashboard',
 			'text'   => __( 'Page Builder Dashboard', 'ats-dashboard' ),
 		),
@@ -84,21 +80,6 @@ return function () {
 					</div>
 
 					<?php do_action( 'ats_after_general_panel' ); ?>
-
-						<div class="atsui-admin-panel ats-widgets-panel">
-							<div class="atsui is-grouped">
-								<?php do_settings_sections( 'ats-widget-settings' ); ?>
-							</div>
-
-							<div class="atsui">
-								<?php do_settings_sections( 'ats-widget-styling-settings' ); ?>
-							</div>
-							<div class="atsui">
-								<?php do_settings_sections( 'ats-welcome-panel-settings' ); ?>
-							</div>
-						</div>
-
-					<?php do_action( 'ats_after_widgets_panel' ); ?>
 
 					<div class="atsui-admin-panel ats-page-builder-dashboard-panel">
 						<div class="atsui">

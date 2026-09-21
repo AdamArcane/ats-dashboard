@@ -82,12 +82,26 @@
 	 * Setup the tabs navigation for settings page.
 	 */
 	function setupTabsNavigation() {
+		// A tab bar can mix #hash-routed panel tabs (shown/hidden on one page)
+		// with plain real-link tabs to a separate page (e.g. the "Dashboard
+		// Widgets" tab on the Widget Settings page). Only the hash tabs get
+		// panel-toggle behavior; real links just navigate normally.
+		function isHashLink(link) {
+			const href = link ? link.getAttribute("href") : "";
+			return !!href && href.charAt(0) === "#";
+		}
+
 		$(".atsui-tab-nav-item").on("click", function () {
+			const link = this.querySelector("a");
+
+			if (!isHashLink(link)) {
+				return;
+			}
+
 			$(".atsui-tab-nav-item").removeClass("active");
 			$(this).addClass("active");
 
-			const link = this.querySelector("a");
-			const hashValue = link?.href.substring(link.href.indexOf("#") + 1) ?? "";
+			const hashValue = link.getAttribute("href").substring(1);
 
 			setRefererValue(hashValue);
 
@@ -96,18 +110,17 @@
 		});
 
 		window.addEventListener("load", function () {
-			var hashValue = window.location.hash.substr(1);
+			var firstHashLink = document.querySelector(
+				'.atsui-tab-nav-item a[href^="#"]'
+			);
 
-			if (!hashValue) {
-				var firstTabLink = document.querySelector(
-					".atsui-tab-nav-item a"
-				);
-				hashValue = firstTabLink
-					? firstTabLink.href.substring(
-							firstTabLink.href.indexOf("#") + 1
-					  )
-					: "";
+			if (!firstHashLink) {
+				return;
 			}
+
+			var hashValue =
+				window.location.hash.substr(1) ||
+				firstHashLink.getAttribute("href").substring(1);
 
 			setRefererValue(hashValue);
 

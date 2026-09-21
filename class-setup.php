@@ -340,7 +340,8 @@ class Setup {
 			'toplevel_page_ats_settings',
 			'arcane-tech_page_ats_login_redirect',
 			'arcane-tech_page_ats_admin_menu',
-			'arcane-tech_page_ats_admin_bar'
+			'arcane-tech_page_ats_admin_bar',
+			'arcane-tech_page_ats_widget_settings'
 		);
 
 		$screen = get_current_screen();

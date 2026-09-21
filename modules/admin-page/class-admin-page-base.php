@@ -68,6 +68,7 @@ class Admin_Page_Base_Module extends Base_Module {
 
 		add_action( 'admin_menu', array( $this, 'submenu_page' ) );
 		add_filter( 'submenu_file', array( $this, 'highlight_submenu' ), 10, 2 );
+		add_action( 'admin_notices', array( $this, 'admin_page_list_header' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
@@ -186,6 +187,22 @@ class Admin_Page_Base_Module extends Base_Module {
 		}
 
 		return __DIR__ . '/templates/edit-page.php';
+
+	}
+
+	/**
+	 * Render a styled header above the native Admin Pages list table, with a
+	 * custom "Add New" button in place of the one WordPress core would
+	 * normally render (hidden via CSS), matching the Dashboard Widgets list.
+	 */
+	public function admin_page_list_header() {
+
+		if ( ! $this->screen()->is_admin_page_list() ) {
+			return;
+		}
+
+		$template = require __DIR__ . '/templates/admin-page-list-header.php';
+		$template();
 
 	}
 

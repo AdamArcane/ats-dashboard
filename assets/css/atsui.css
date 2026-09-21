@@ -756,3 +756,21 @@
 	right: auto;
 	left: 20px;
 }
+
+/* Dashboard Widgets list: hide WordPress core's native heading and "Add New"
+   button in favor of the tab bar + custom Add button we inject above the list
+   table (see modules/widget/templates/widget-list-tab-bar.php).
+   Note: native files like edit.php compute the body class from $pagenow
+   ("edit-php"), not from current_screen->id ("edit-ats_widgets") the way
+   admin.php?page=X pages do, so we scope by the post-type class instead. */
+body.edit-php.post-type-ats_widgets .wp-heading-inline,
+body.edit-php.post-type-ats_widgets .page-title-action,
+body.edit-php.post-type-ats_admin_page .wp-heading-inline,
+body.edit-php.post-type-ats_admin_page .page-title-action {
+	display: none;
+}
+
+.atsui-list-actions {
+	margin-bottom: 20px;
+	text-align: right;
+}

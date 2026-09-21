@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 return function ( $module ) {
 
-	if ( $module->screen()->is_settings() ) {
+	if ( $module->screen()->is_settings() || $module->screen()->is_widget_settings() ) {
 
 		// Color pickers.
 		wp_enqueue_style( 'wp-color-picker' );
