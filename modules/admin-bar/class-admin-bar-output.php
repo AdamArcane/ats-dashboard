@@ -10,7 +10,7 @@ namespace ATSDash\AdminBar;
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use ATSDash\Base\Base_Output;
-use ATSDash\AdminBar\Admin_Bar_Module;
+use ATSDash\AdminBar\Admin_Bar_Base_Module;
 use ATSDash\Helpers\Multisite_Helper;
 use ATSDash\Helpers\Placeholder_Helper;
 
@@ -113,7 +113,7 @@ class Admin_Bar_Output extends Base_Output {
 			switch_to_blog( $blueprint );
 		}
 
-		$module = new Admin_Bar_Module();
+		$module = new Admin_Bar_Base_Module();
 
 		// This $existing_menu doesn't have effect with blog switching.
 		$existing_menu = $wp_admin_bar->get_nodes();

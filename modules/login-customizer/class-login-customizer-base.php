@@ -10,6 +10,7 @@ namespace ATSDash\LoginCustomizer;
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use ATSDash\Base\Base_Module;
+use ATSDash\Helpers\Multisite_Helper;
 
 /**
  * Class to setup login customizer module.
@@ -119,9 +120,15 @@ class Login_Customizer_Base_Module extends Base_Module {
 		add_action( 'customize_preview_init', array( $this, 'preview_scripts' ) );
 		add_action( 'login_enqueue_scripts', array( $this, 'login_scripts' ), 99 );
 
+		add_filter( 'ats_login_customizer_control_file_paths', array( $this, 'modify_control_files' ) );
+		add_filter( 'ats_login_customizer_default_logo_height', array( $this, 'default_logo_height' ) );
+
 		// The module output.
 		require_once __DIR__ . '/class-login-customizer-base-output.php';
 		Login_Customizer_Base_Output::init();
+
+		require_once __DIR__ . '/class-login-customizer-output.php';
+		Login_Customizer_Output::init();
 
 	}
 
@@ -368,11 +375,16 @@ class Login_Customizer_Base_Module extends Base_Module {
 		$asset_version = ATS_DASHBOARD_PLUGIN_VERSION . '.10';
 		wp_enqueue_script( 'ats-login-customizer-control', $this->url . '/assets/js/controls.js', array( 'customize-controls' ), $asset_version, true );
 
-
 		wp_localize_script(
 			'customize-controls',
 			'atsLoginCustomizer',
 			$this->create_js_object()
+		);
+
+		wp_add_inline_script(
+			'ats-login-customizer-control',
+			'!function(){var e=function(){if(window.atsLoginCustomizer&&atsLoginCustomizer.loginPageUrl&&wp.customize.previewer){wp.customize.previewer.previewUrl.set(atsLoginCustomizer.loginPageUrl);}};wp.customize.bind("ready",e);wp.customize.bind("preview-ready",e);}();',
+			'after'
 		);
 
 	}
@@ -436,6 +448,53 @@ class Login_Customizer_Base_Module extends Base_Module {
 	public function login_scripts() {
 
 		wp_enqueue_script( 'ats-login-page', $this->url . '/assets/js/login-page.js', array(), ATS_DASHBOARD_PLUGIN_VERSION, true );
+
+	}
+
+	/**
+	 * Change the default logo height value of login customizer
+	 *
+	 * @param string|int $height The logo height value.
+	 * @return string|int The logo height value.
+	 */
+	public function default_logo_height( $height ) {
+
+		$ms_helper       = new Multisite_Helper();
+		$blueprint_login = array();
+
+		if ( $ms_helper->needs_to_switch_blog() ) {
+			global $blueprint;
+
+			$blueprint_login = get_blog_option( $blueprint, 'ats_login', array() );
+			$height          = ! empty( $blueprint_login ) && isset( $blueprint_login['logo_height'] ) ? $blueprint_login['logo_height'] : '90%';
+		}
+
+		return $height;
+
+	}
+
+	/**
+	 * Modify existing ats control files.
+	 *
+	 * @param array $files Associative array containing "section -> file" pairs.
+	 * @return array $files
+	 */
+	public function modify_control_files( $files ) {
+
+		/**
+		 * We use "*_pro" here because the basic name is already used by the free version.
+		 * For instance, the "bg" and "layout" is already used in the free version.
+		 *
+		 * Previously (v <= 3.6.3 Free version and v <= 3.6.2 PRO version),
+		 * the "bg" & "layout" in the free version were overriden by the pro version.
+		 *
+		 * Now, we change the behavior.
+		 * The PRO version should just extend the free version instead of replacing it.
+		 * This is due to our effort to migrate Erident Login users to ats.
+		 */
+		$files['layout_pro'] = __DIR__ . '/sections/layout.php';
+
+		return $files;
 
 	}
 

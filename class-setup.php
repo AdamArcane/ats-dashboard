@@ -423,7 +423,7 @@ class Setup {
 
 		$modules['ATSDash\\Feature\\Feature_Module']              = __DIR__ . '/modules/feature/class-feature-module.php';
 		$modules['ATSDash\\Setting\\Setting_Module']              = __DIR__ . '/modules/setting/class-setting-module.php';
-		$modules['ATSDash\\Widget\\Widget_Module']                = __DIR__ . '/modules/widget/class-widget-module.php';
+		$modules['ATSDash\\Widget\\Widget_Base_Module']           = __DIR__ . '/modules/widget/class-widget-base.php';
 		$modules['ATSDash\\BlockTemplate\\Block_Template_Module'] = __DIR__ . '/modules/block-template/class-block-template-module.php';
 		$modules['ATSDash\\Tool\\Tool_Module']                    = __DIR__ . '/modules/tool/class-tool-module.php';
 
@@ -434,7 +434,7 @@ class Setup {
 		}
 
 		if ( isset( $saved_modules['login_customizer'] ) && 'true' === $saved_modules['login_customizer'] ) {
-			$modules['ATSDash\\LoginCustomizer\\Login_Customizer_Module'] = __DIR__ . '/modules/login-customizer/class-login-customizer-module.php';
+			$modules['ATSDash\\LoginCustomizer\\Login_Customizer_Base_Module'] = __DIR__ . '/modules/login-customizer/class-login-customizer-base.php';
 		}
 
 		if ( isset( $saved_modules['login_redirect'] ) && 'true' === $saved_modules['login_redirect'] ) {
@@ -446,7 +446,7 @@ class Setup {
 		}
 
 		if ( isset( $saved_modules['admin_pages'] ) && 'true' === $saved_modules['admin_pages'] ) {
-			$modules['ATSDash\\AdminPage\\Admin_Page_Module'] = __DIR__ . '/modules/admin-page/class-admin-page-module.php';
+			$modules['ATSDash\\AdminPage\\Admin_Page_Base_Module'] = __DIR__ . '/modules/admin-page/class-admin-page-base.php';
 		}
 
 		if ( isset( $saved_modules['admin_menu_editor'] ) && 'true' === $saved_modules['admin_menu_editor'] ) {
@@ -454,7 +454,7 @@ class Setup {
 		}
 
 		if ( isset( $saved_modules['admin_bar_editor'] ) && 'true' === $saved_modules['admin_bar_editor'] ) {
-			$modules['ATSDash\\AdminBar\\Admin_Bar_Module'] = __DIR__ . '/modules/admin-bar/class-admin-bar-module.php';
+			$modules['ATSDash\\AdminBar\\Admin_Bar_Base_Module'] = __DIR__ . '/modules/admin-bar/class-admin-bar-base.php';
 		}
 
 		if ( isset( $saved_modules['notice_bell'] ) && 'true' === $saved_modules['notice_bell'] ) {

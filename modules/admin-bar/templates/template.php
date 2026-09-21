@@ -7,13 +7,13 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-use ATSDash\AdminBar\Admin_Bar_Module;
+use ATSDash\AdminBar\Admin_Bar_Base_Module;
 use ATSDash\Vars;
 
 /**
- * This function is being called in class-admin-bar-module.php.
+ * This function is being called in class-admin-bar-base.php.
  *
- * @param Admin_Bar_Module $module
+ * @param Admin_Bar_Base_Module $module
  */
 return function ( $module ) {
 

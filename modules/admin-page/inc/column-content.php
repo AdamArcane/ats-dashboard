@@ -5,14 +5,14 @@
  * @package ATS_Dashboard
  */
 
-use ATSDash\AdminPage\Admin_Page_Module;
+use ATSDash\AdminPage\Admin_Page_Base_Module;
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 /**
  * Setup column content on admin page list screen.
  *
- * @param Admin_Page_Module $module The module class instance.
+ * @param Admin_Page_Base_Module $module The module class instance.
  * @param string            $column The column name.
  * @param int               $post_id The post ID.
  */
