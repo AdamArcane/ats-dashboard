@@ -243,6 +243,7 @@ class Setup {
 			'ats_login',
 			'ats_login_redirect',
 			'ats_integrations',
+			'ats_email_notifications',
 			'ats_import',
 			'ats_modules',
 			'ats_recent_admin_menu',
@@ -378,14 +379,15 @@ class Setup {
 	public function saved_modules() {
 
 		$defaults = array(
-			'white_label'       => 'true',
-			'login_customizer'  => 'true',
-			'login_redirect'    => 'true',
-			'admin_pages'       => 'true',
-			'admin_menu_editor' => 'true',
-			'admin_bar_editor'  => 'true',
-			'integrations'      => 'true',
-			'notice_bell'       => 'true',
+			'white_label'          => 'true',
+			'login_customizer'     => 'true',
+			'login_redirect'       => 'true',
+			'admin_pages'          => 'true',
+			'admin_menu_editor'    => 'true',
+			'admin_bar_editor'     => 'true',
+			'integrations'         => 'true',
+			'notice_bell'          => 'true',
+			'email_notifications'  => 'true',
 		);
 
 		$saved_modules = get_option( 'ats_modules', $defaults );
@@ -456,6 +458,10 @@ class Setup {
 
 		if ( isset( $saved_modules['notice_bell'] ) && 'true' === $saved_modules['notice_bell'] ) {
 			$modules['ATSDash\\NoticeBell\\Notice_Bell_Module'] = __DIR__ . '/modules/notice-bell/class-notice-bell-module.php';
+		}
+
+		if ( isset( $saved_modules['email_notifications'] ) && 'true' === $saved_modules['email_notifications'] ) {
+			$modules['ATSDash\\EmailNotifications\\Email_Notifications_Module'] = __DIR__ . '/modules/email-notifications/class-email-notifications-module.php';
 		}
 
 		$ms_helper = new Multisite_Helper();

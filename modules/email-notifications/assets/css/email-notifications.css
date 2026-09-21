@@ -1,0 +1,28 @@
+.ats-email-notifications-page .wp-editor-wrap {
+	max-width: 720px;
+}
+
+.ats-email-notifications-page .description {
+	margin-top: 6px;
+}
+
+.ats-email-notifications-logo-field {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.ats-email-notifications-logo-field .ats-email-notifications-logo-upload {
+	flex: 1 1 260px;
+}
+
+.ats-email-notifications-logo-preview {
+	max-width: 48px;
+	max-height: 48px;
+	height: auto;
+	border: 1px solid #dcdcde;
+	border-radius: 2px;
+	padding: 2px;
+	background: #fff;
+}

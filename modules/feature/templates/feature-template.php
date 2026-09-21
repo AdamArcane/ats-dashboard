@@ -61,6 +61,12 @@ return function () {
 			'text'    => __( 'Collect admin notices from WordPress & other plugins into a notification bell in the toolbar instead of cluttering every screen.', 'ats-dashboard' ),
 			'feature' => 'notice_bell',
 		),
+		array(
+			'title'   => __( 'Email Notifications', 'ats-dashboard' ),
+			'img'     => ATS_DASHBOARD_PLUGIN_URL . '/modules/feature/assets/img/email-notifications.svg',
+			'text'    => __( 'Customize the branded template & content used for automated emails like the new user welcome email.', 'ats-dashboard' ),
+			'feature' => 'email_notifications',
+		),
 	)
 
 	?>
