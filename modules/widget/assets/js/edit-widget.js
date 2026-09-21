@@ -1,10 +1,44 @@
 (function ($) {
+	var htmlCodeEditor = null;
+
 	function init() {
 		setupWidgetTypeFields();
 		setupWidgetRoles();
 		setupVideoThumbnail();
 		setupCustomRecipient();
 		setupContactForm();
+		setupHtmlCodeEditor();
+	}
+
+	/**
+	 * Set up CodeMirror (line numbers, HTML syntax highlighting, HTMLHint
+	 * error checking) on the HTML widget's content field.
+	 */
+	function setupHtmlCodeEditor() {
+		var el = document.getElementById( "ats_html" );
+		if ( ! el || ! window.wp || ! wp.codeEditor ) return;
+
+		// Guard against this script running more than once on the page (e.g.
+		// a "pro" build enqueuing the same file under a second handle) —
+		// initializing CodeMirror twice on one textarea doubles the editor.
+		if ( el.dataset.atsCodemirrorInitialized ) return;
+		el.dataset.atsCodemirrorInitialized = "1";
+
+		var editorSettings = wp.codeEditor.defaultSettings
+			? _.clone( wp.codeEditor.defaultSettings )
+			: {};
+
+		editorSettings.codemirror = _.extend( {}, editorSettings.codemirror, {
+			indentUnit: 4,
+			tabSize: 4,
+			mode: "htmlmixed",
+		} );
+
+		htmlCodeEditor = wp.codeEditor.initialize( el, editorSettings );
+
+		setTimeout( function () {
+			htmlCodeEditor.codemirror.refresh();
+		}, 300 );
 	}
 
 	/**
@@ -23,6 +57,14 @@
 
 			$fields.removeClass( 'is-active' );
 			$fields.filter( '[data-type="' + selectedType + '"]' ).addClass( 'is-active' );
+
+			// CodeMirror measures itself at init time — if the HTML field was
+			// hidden then, it renders collapsed until refreshed while visible.
+			if ( "html" === selectedType && htmlCodeEditor ) {
+				setTimeout( function () {
+					htmlCodeEditor.codemirror.refresh();
+				}, 10 );
+			}
 		}
 
 		$type.on( 'change', updateFields );

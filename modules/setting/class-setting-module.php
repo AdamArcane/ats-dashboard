@@ -416,9 +416,57 @@ class Setting_Module extends Base_Module {
 		);
 
 		add_settings_field(
+			'ats-header-background-color-field',
+			__( 'Header Background Color', 'ats-dashboard' ),
+			array( $this, 'header_background_color_field' ),
+			'ats-widget-styling-settings',
+			'ats-styling-section'
+		);
+
+		add_settings_field(
 			'ats-headline-color-field',
-			__( 'Headline Color', 'ats-dashboard' ),
+			__( 'Header Text Color', 'ats-dashboard' ),
 			array( $this, 'headline_color_field' ),
+			'ats-widget-styling-settings',
+			'ats-styling-section'
+		);
+
+		add_settings_field(
+			'ats-border-color-field',
+			__( 'Border Color', 'ats-dashboard' ),
+			array( $this, 'border_color_field' ),
+			'ats-widget-styling-settings',
+			'ats-styling-section'
+		);
+
+		add_settings_field(
+			'ats-border-radius-field',
+			__( 'Border Radius', 'ats-dashboard' ),
+			array( $this, 'border_radius_field' ),
+			'ats-widget-styling-settings',
+			'ats-styling-section'
+		);
+
+		add_settings_field(
+			'ats-body-background-color-field',
+			__( 'Body Background Color', 'ats-dashboard' ),
+			array( $this, 'body_background_color_field' ),
+			'ats-widget-styling-settings',
+			'ats-styling-section'
+		);
+
+		add_settings_field(
+			'ats-link-color-field',
+			__( 'Link Color', 'ats-dashboard' ),
+			array( $this, 'link_color_field' ),
+			'ats-widget-styling-settings',
+			'ats-styling-section'
+		);
+
+		add_settings_field(
+			'ats-remove-widget-shadow-field',
+			__( 'Remove Box Shadow', 'ats-dashboard' ),
+			array( $this, 'remove_widget_shadow_field' ),
 			'ats-widget-styling-settings',
 			'ats-styling-section'
 		);
@@ -537,6 +585,16 @@ class Setting_Module extends Base_Module {
 			$output['custom_css'] = $content_helper->sanitize_css( $output['custom_css'] );
 		}
 
+		foreach ( array( 'icon_color', 'headline_color', 'header_background_color', 'border_color', 'body_background_color', 'link_color' ) as $color_field ) {
+			if ( isset( $output[ $color_field ] ) ) {
+				$output[ $color_field ] = sanitize_hex_color( $output[ $color_field ] );
+			}
+		}
+
+		if ( isset( $output['border_radius'] ) ) {
+			$output['border_radius'] = min( 50, max( 0, absint( $output['border_radius'] ) ) );
+		}
+
 		if ( ! empty( $output['welcome_panel_is_default'] ) ) {
 			unset( $output['welcome_panel_content'] );
 			unset( $output['welcome_panel_is_default'] );
@@ -605,6 +663,66 @@ class Setting_Module extends Base_Module {
 	public function headline_color_field() {
 
 		$field = require __DIR__ . '/templates/fields/headline-color.php';
+		$field();
+
+	}
+
+	/**
+	 * Header background color field.
+	 */
+	public function header_background_color_field() {
+
+		$field = require __DIR__ . '/templates/fields/header-background-color.php';
+		$field();
+
+	}
+
+	/**
+	 * Border color field.
+	 */
+	public function border_color_field() {
+
+		$field = require __DIR__ . '/templates/fields/border-color.php';
+		$field();
+
+	}
+
+	/**
+	 * Border radius field.
+	 */
+	public function border_radius_field() {
+
+		$field = require __DIR__ . '/templates/fields/border-radius.php';
+		$field();
+
+	}
+
+	/**
+	 * Body background color field.
+	 */
+	public function body_background_color_field() {
+
+		$field = require __DIR__ . '/templates/fields/body-background-color.php';
+		$field();
+
+	}
+
+	/**
+	 * Link color field.
+	 */
+	public function link_color_field() {
+
+		$field = require __DIR__ . '/templates/fields/link-color.php';
+		$field();
+
+	}
+
+	/**
+	 * Remove widget box shadow field.
+	 */
+	public function remove_widget_shadow_field() {
+
+		$field = require __DIR__ . '/templates/fields/remove-widget-shadow.php';
 		$field();
 
 	}

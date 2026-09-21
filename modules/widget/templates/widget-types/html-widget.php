@@ -22,7 +22,7 @@ return function () {
 				<h2><?php esc_html_e( 'HTML', 'ats-dashboard' ); ?></h2>
 			</div>
 			<div class="inside">
-				<textarea class="widefat textarea" name="ats_html"><?php echo esc_textarea( wp_unslash( $content ) ); ?></textarea>
+				<textarea id="ats_html" class="widefat textarea ats-html-code-editor" name="ats_html" rows="15"><?php echo esc_textarea( wp_unslash( $content ) ); ?></textarea>
 			</div>
 		</div>
 
