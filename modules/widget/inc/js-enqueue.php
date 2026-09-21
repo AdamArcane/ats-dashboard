@@ -13,6 +13,9 @@ return function ( $module ) {
 		// Select2.
 		wp_enqueue_script( 'select2', ATS_DASHBOARD_PLUGIN_URL . '/assets/js/select2.min.js', array( 'jquery' ), '4.1.0-rc.0', true );
 
+		// Color picker (Icon widget's icon color field).
+		wp_enqueue_script( 'wp-color-picker' );
+
 		// Icon picker.
 		wp_enqueue_script( 'icon-picker', ATS_DASHBOARD_PLUGIN_URL . '/assets/js/icon-picker.js', array( 'jquery' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
 
@@ -23,7 +26,7 @@ return function ( $module ) {
 		wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
 
 		// Edit widget.
-		wp_enqueue_script( 'ats-edit-widget', $module->url . '/assets/js/edit-widget.js', array( 'jquery', 'wp-escape-html' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
+		wp_enqueue_script( 'ats-edit-widget', $module->url . '/assets/js/edit-widget.js', array( 'jquery', 'wp-escape-html', 'wp-color-picker' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
 
 		do_action( 'ats_edit_widget_scripts' );
 

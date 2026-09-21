@@ -275,8 +275,8 @@ class Setting_Module extends Base_Module {
 
 		add_submenu_page(
 			'ats_settings',
-			__( 'Widget Settings', 'ats-dashboard' ),
-			__( 'Widget Settings', 'ats-dashboard' ),
+			__( 'Dashboard Widgets', 'ats-dashboard' ),
+			__( 'Dashboard Widgets', 'ats-dashboard' ),
 			apply_filters( 'ats_settings_capability', 'manage_options' ),
 			'ats_widget_settings',
 			array( $this, 'widget_settings_page_content' )
@@ -356,7 +356,7 @@ class Setting_Module extends Base_Module {
 		);
 
 		// Widget sections.
-		add_settings_section( 'ats-widgets-section', __( 'WordPress Dashboard Widgets', 'ats-dashboard' ), '', 'ats-widget-settings' );
+		add_settings_section( 'ats-widgets-section', __( 'Dashboard Widgets', 'ats-dashboard' ), '', 'ats-widget-settings' );
 		add_settings_section( 'ats-3rd-party-widgets-section', __( '3rd Party Widgets', 'ats-dashboard' ), '', 'ats-widget-settings' );
 
 		// Widget styling section.
@@ -408,9 +408,9 @@ class Setting_Module extends Base_Module {
 
 		// Widget styling fields.
 		add_settings_field(
-			'ats-icon-color-field',
-			__( 'Icon/Text Color', 'ats-dashboard' ),
-			array( $this, 'icon_color_field' ),
+			'ats-body-text-color-field',
+			__( 'Body Text Color', 'ats-dashboard' ),
+			array( $this, 'body_text_color_field' ),
 			'ats-widget-styling-settings',
 			'ats-styling-section'
 		);
@@ -585,7 +585,7 @@ class Setting_Module extends Base_Module {
 			$output['custom_css'] = $content_helper->sanitize_css( $output['custom_css'] );
 		}
 
-		foreach ( array( 'icon_color', 'headline_color', 'header_background_color', 'border_color', 'body_background_color', 'link_color' ) as $color_field ) {
+		foreach ( array( 'body_text_color', 'headline_color', 'header_background_color', 'border_color', 'body_background_color', 'link_color' ) as $color_field ) {
 			if ( isset( $output[ $color_field ] ) ) {
 				$output[ $color_field ] = sanitize_hex_color( $output[ $color_field ] );
 			}
@@ -648,11 +648,11 @@ class Setting_Module extends Base_Module {
 	}
 
 	/**
-	 * Icon color field.
+	 * Body text color field.
 	 */
-	public function icon_color_field() {
+	public function body_text_color_field() {
 
-		$field = require __DIR__ . '/templates/fields/icon-color.php';
+		$field = require __DIR__ . '/templates/fields/body-text-color.php';
 		$field();
 
 	}

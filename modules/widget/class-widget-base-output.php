@@ -208,12 +208,16 @@ class Widget_Base_Output extends Base_Output {
 					$link = str_replace( './wp-admin/', './', $link );
 				}
 
+				$icon_color = get_post_meta( $post_id, 'ats_icon_color', true );
+				$icon_style = $icon_color ? ' style="color: ' . esc_attr( $icon_color ) . ';"' : '';
+
 				$output = sprintf(
-					'<a href="%1$s" target="%2$s"><i class="%3$s"></i></a>',
+					'<a href="%1$s" target="%2$s"><i class="%3$s"%4$s></i></a>',
 					// We don't use esc_url() here since $link can be a relative path.
 					esc_attr( $link ),
 					esc_attr( $target ),
-					esc_attr( $icon )
+					esc_attr( $icon ),
+					$icon_style
 				);
 
 				if ( $tooltip ) {
@@ -224,6 +228,10 @@ class Widget_Base_Output extends Base_Output {
 						esc_html( $tooltip )
 					);
 				}
+			} elseif ( 'rss' === $widget_type ) {
+
+				$output = $this->render_rss_widget( $post_id );
+
 			}
 
 			$output_args = array(
@@ -308,6 +316,137 @@ class Widget_Base_Output extends Base_Output {
 		$str = apply_filters( 'ats_widgets_convert_placeholder_tags', $str );
 
 		return $str;
+
+	}
+
+	/**
+	 * Render the RSS feed widget's dashboard output.
+	 *
+	 * @param int $post_id The widget's post id.
+	 *
+	 * @return string The rendered HTML.
+	 */
+	public function render_rss_widget( $post_id ) {
+
+		$feed_url = get_post_meta( $post_id, 'ats_rss_feed_url', true );
+
+		if ( ! $feed_url ) {
+			return '<p>' . esc_html__( 'No feed URL configured.', 'ats-dashboard' ) . '</p>';
+		}
+
+		if ( ! function_exists( 'fetch_feed' ) ) {
+			require_once ABSPATH . WPINC . '/feed.php';
+		}
+
+		$feed = fetch_feed( $feed_url );
+
+		if ( is_wp_error( $feed ) ) {
+			return '<p>' . esc_html__( 'Unable to load this feed right now.', 'ats-dashboard' ) . '</p>';
+		}
+
+		$max_items      = (int) get_post_meta( $post_id, 'ats_rss_max_items', true );
+		$max_items      = $max_items ? $max_items : 5;
+		$show_images    = (bool) get_post_meta( $post_id, 'ats_rss_show_images', true );
+		$show_excerpt   = (bool) get_post_meta( $post_id, 'ats_rss_show_excerpt', true );
+		$excerpt_length = (int) get_post_meta( $post_id, 'ats_rss_excerpt_length', true );
+		$excerpt_length = $excerpt_length ? $excerpt_length : 20;
+		$show_author    = (bool) get_post_meta( $post_id, 'ats_rss_show_author', true );
+		$show_date      = (bool) get_post_meta( $post_id, 'ats_rss_show_date', true );
+		$target         = get_post_meta( $post_id, 'ats_rss_new_tab', true ) ? ' target="_blank" rel="noopener noreferrer"' : '';
+
+		$items = $feed->get_items( 0, $max_items );
+
+		if ( empty( $items ) ) {
+			return '<p>' . esc_html__( 'This feed has no items.', 'ats-dashboard' ) . '</p>';
+		}
+
+		$output = '<ul class="ats-rss-wrapper">';
+
+		foreach ( $items as $item ) {
+
+			$title = $item->get_title();
+			$title = $title ? $title : __( '(no title)', 'ats-dashboard' );
+			$link  = $item->get_permalink();
+
+			$output .= '<li class="ats-rss-item">';
+
+			if ( $show_images ) {
+				$image_url = $this->get_rss_item_image( $item );
+
+				if ( $image_url ) {
+					$output .= '<div class="ats-rss-item-image"><img src="' . esc_url( $image_url ) . '" alt=""></div>';
+				}
+			}
+
+			$output .= '<div class="ats-rss-item-content">';
+			$output .= '<a class="ats-rss-item-title" href="' . esc_url( $link ) . '"' . $target . '>' . esc_html( $title ) . '</a>';
+
+			$meta = array();
+
+			if ( $show_author && $item->get_author() ) {
+				$meta[] = esc_html( $item->get_author()->get_name() );
+			}
+
+			if ( $show_date && $item->get_date( 'U' ) ) {
+				$meta[] = esc_html( date_i18n( get_option( 'date_format' ), $item->get_date( 'U' ) ) );
+			}
+
+			if ( ! empty( $meta ) ) {
+				$output .= '<div class="ats-rss-item-meta">' . implode( ' &middot; ', $meta ) . '</div>';
+			}
+
+			if ( $show_excerpt ) {
+				$excerpt = wp_strip_all_tags( $item->get_description() );
+				$excerpt = wp_trim_words( $excerpt, $excerpt_length );
+
+				if ( $excerpt ) {
+					$output .= '<div class="ats-rss-item-excerpt">' . esc_html( $excerpt ) . '</div>';
+				}
+			}
+
+			$output .= '</div>'; // .ats-rss-item-content
+			$output .= '</li>';
+
+		}
+
+		$output .= '</ul>';
+
+		return $output;
+
+	}
+
+	/**
+	 * Try to resolve a feed item's image, checking its enclosure first and
+	 * falling back to the first <img> found in its content.
+	 *
+	 * @param SimplePie_Item $item The feed item.
+	 *
+	 * @return string The image url, or an empty string if none was found.
+	 */
+	public function get_rss_item_image( $item ) {
+
+		$enclosure = $item->get_enclosure();
+
+		if ( $enclosure ) {
+
+			$thumbnail = $enclosure->get_thumbnail();
+
+			if ( $thumbnail ) {
+				return $thumbnail;
+			}
+
+			if ( $enclosure->get_link() && $enclosure->get_type() && 0 === strpos( $enclosure->get_type(), 'image/' ) ) {
+				return $enclosure->get_link();
+			}
+		}
+
+		$content = $item->get_content();
+
+		if ( $content && preg_match( '/<img[^>]+src=["\']([^"\']+)["\']/i', $content, $matches ) ) {
+			return $matches[1];
+		}
+
+		return '';
 
 	}
 

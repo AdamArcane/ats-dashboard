@@ -37,7 +37,7 @@ return function () {
 
 					<div>
 						<span class="title">
-							<?php esc_html_e( 'Widget Settings', 'ats-dashboard' ); ?>
+							<?php esc_html_e( 'Dashboard Widgets', 'ats-dashboard' ); ?>
 						</span>
 						<p class="subtitle"><?php esc_html_e( 'Configure the Dashboard Widgets module.', 'ats-dashboard' ); ?></p>
 					</div>

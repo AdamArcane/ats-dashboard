@@ -189,3 +189,61 @@ textarea.ats-form-widget-input {
 	border-width: 0;
 	box-shadow: none;
 }
+
+/* RSS Feed widget */
+.ats-rss-wrapper {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ats-rss-item {
+	display: flex;
+	gap: 12px;
+	padding: 12px 0;
+	border-bottom: 1px solid #eee;
+}
+
+.ats-rss-item:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+.ats-rss-item:first-child {
+	padding-top: 0;
+}
+
+.ats-rss-item-image {
+	flex: 0 0 64px;
+}
+
+.ats-rss-item-image img {
+	width: 64px;
+	height: 64px;
+	object-fit: cover;
+	border-radius: 4px;
+	display: block;
+}
+
+.ats-rss-item-content {
+	flex: 1;
+	min-width: 0;
+}
+
+.ats-rss-item-title {
+	display: block;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.ats-rss-item-meta {
+	margin-top: 2px;
+	font-size: 12px;
+	opacity: 0.7;
+}
+
+.ats-rss-item-excerpt {
+	margin-top: 4px;
+	font-size: 13px;
+	opacity: 0.85;
+}

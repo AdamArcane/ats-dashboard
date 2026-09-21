@@ -21,6 +21,9 @@ return function ( $module ) {
 		// Select2.
 		wp_enqueue_style( 'select2', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/select2.min.css', array(), '4.1.0-rc.0' );
 
+		// Color picker (Icon widget's icon color field).
+		wp_enqueue_style( 'wp-color-picker' );
+
 		// Icon picker.
 		wp_enqueue_style( 'icon-picker', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/icon-picker.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
 

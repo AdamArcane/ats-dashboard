@@ -8,6 +8,20 @@
 		setupCustomRecipient();
 		setupContactForm();
 		setupHtmlCodeEditor();
+		setupColorFields();
+	}
+
+	/**
+	 * Set up the color picker on any `.ats-color-field` inputs (e.g. the
+	 * Icon widget's icon color field).
+	 */
+	function setupColorFields() {
+		var fields = document.querySelectorAll( ".ats-color-field" );
+		if ( ! fields.length ) return;
+
+		fields.forEach( function ( el ) {
+			$( el ).wpColorPicker( { defaultColor: el.dataset.default } );
+		} );
 	}
 
 	/**

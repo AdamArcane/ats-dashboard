@@ -47,6 +47,14 @@ return function () {
 					<label for="ats_icon"><?php esc_html_e( 'Select Icon', 'ats-dashboard' ); ?></label>
 					<input type="text" class="icon-picker" data-width="100%" name="ats_icon" id="ats_icon" value="<?php echo esc_attr( $stored_meta ? $stored_meta : 'dashicons dashicons-menu' ); ?>" placeholder="dashicons dashicons-menu" />
 				</div>
+				<div class="ats-metabox-field">
+					<label for="ats_icon_color"><?php esc_html_e( 'Icon Color', 'ats-dashboard' ); ?></label>
+					<?php
+					$icon_color = get_post_meta( $post->ID, 'ats_icon_color', true );
+					$icon_color = $icon_color ? $icon_color : '#555555';
+					?>
+					<input type="text" name="ats_icon_color" id="ats_icon_color" value="<?php echo esc_attr( $icon_color ); ?>" class="ats-color-field" data-default="#555555" />
+				</div>
 			</div>
 		</div>
 

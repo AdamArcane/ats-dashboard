@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 $settings                 = get_option( 'ats_settings' );
-$icon_color               = isset( $settings['icon_color'] ) ? $settings['icon_color'] : '#555555';
+$body_text_color          = isset( $settings['body_text_color'] ) ? $settings['body_text_color'] : '#3c434a';
 $headline_color           = isset( $settings['headline_color'] ) ? $settings['headline_color'] : '#23282d';
 $header_background_color  = isset( $settings['header_background_color'] ) ? $settings['header_background_color'] : '#ffffff';
 $border_color             = isset( $settings['border_color'] ) ? $settings['border_color'] : '#c3c4c7';
@@ -18,24 +18,16 @@ $link_color               = isset( $settings['link_color'] ) ? $settings['link_c
 $remove_widget_shadow     = isset( $settings['remove_widget_shadow'] );
 ?>
 
-<?php if ( $icon_color && '#555555' !== $icon_color ) : ?>
+<?php /* Icon color is now a per-widget field on the Icon Widget's own edit
+screen (see templates/widget-types/icon-widget.php), applied via inline style
+at render time — it only ever applied to that one widget type anyway. */ ?>
 
-	[id*='ms-ats'] .fa,
-	[id*='ms-ats'] .fas,
-	[id*='ms-ats'] .fab,
-	[id*='ms-ats'] .far,
-	[id*='ms-ats'] .dashicons,
+<?php if ( $body_text_color && '#3c434a' !== $body_text_color ) : ?>
+
 	.ats-content-wrapper,
-	.ats-html-wrapper {
-		color: <?php echo esc_attr( $icon_color ); ?>;
-	}
-
-	[id*='ms-ats'] .fa:hover,
-	[id*='ms-ats'] .fas:hover,
-	[id*='ms-ats'] .fab:hover,
-	[id*='ms-ats'] .far:hover,
-	[id*='ms-ats'] .dashicons:hover {
-		color: <?php echo esc_attr( $icon_color ); ?>;
+	.ats-html-wrapper,
+	.ats-rss-wrapper {
+		color: <?php echo esc_attr( $body_text_color ); ?>;
 	}
 
 <?php endif; ?>
@@ -106,7 +98,8 @@ custom header background color shows square corners against the rounded box. */ 
 <?php if ( $link_color && '#2271b1' !== $link_color ) : ?>
 
 	.ats-content-wrapper a,
-	.ats-html-wrapper a {
+	.ats-html-wrapper a,
+	.ats-rss-wrapper a {
 		color: <?php echo esc_attr( $link_color ); ?>;
 	}
 

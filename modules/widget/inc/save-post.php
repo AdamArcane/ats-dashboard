@@ -41,6 +41,10 @@ return function ( $post_id ) {
 			update_post_meta( $post_id, 'ats_icon_key', sanitize_text_field( $_POST['ats_icon'] ) );
 		}
 
+		if ( isset( $_POST['ats_icon_color'] ) ) {
+			update_post_meta( $post_id, 'ats_icon_color', sanitize_hex_color( $_POST['ats_icon_color'] ) );
+		}
+
 		if ( isset( $_POST['ats_tooltip'] ) ) {
 			update_post_meta( $post_id, 'ats_tooltip', sanitize_textarea_field( $_POST['ats_tooltip'] ) );
 		}
@@ -64,6 +68,23 @@ return function ( $post_id ) {
 		// HTML widget.
 		if ( isset( $_POST['ats_html'] ) ) {
 			update_post_meta( $post_id, 'ats_html', wp_kses_post( wp_unslash( $_POST['ats_html'] ) ) );
+		}
+
+		// RSS feed widget.
+		if ( isset( $_POST['ats_rss_feed_url'] ) ) {
+			update_post_meta( $post_id, 'ats_rss_feed_url', esc_url_raw( $_POST['ats_rss_feed_url'] ) );
+		}
+
+		if ( isset( $_POST['ats_rss_max_items'] ) ) {
+			update_post_meta( $post_id, 'ats_rss_max_items', min( 20, max( 1, absint( $_POST['ats_rss_max_items'] ) ) ) );
+		}
+
+		if ( isset( $_POST['ats_rss_excerpt_length'] ) ) {
+			update_post_meta( $post_id, 'ats_rss_excerpt_length', min( 100, max( 5, absint( $_POST['ats_rss_excerpt_length'] ) ) ) );
+		}
+
+		foreach ( array( 'ats_rss_show_images', 'ats_rss_show_excerpt', 'ats_rss_show_author', 'ats_rss_show_date', 'ats_rss_new_tab' ) as $rss_checkbox ) {
+			update_post_meta( $post_id, $rss_checkbox, isset( $_POST[ $rss_checkbox ] ) && $_POST[ $rss_checkbox ] ? '1' : '' );
 		}
 	}
 

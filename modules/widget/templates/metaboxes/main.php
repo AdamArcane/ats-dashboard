@@ -14,6 +14,7 @@ return function () {
 		'icon' => __( 'Icon Widget', 'ats-dashboard' ),
 		'text' => __( 'Text Widget', 'ats-dashboard' ),
 		'html' => __( 'HTML Widget', 'ats-dashboard' ),
+		'rss'  => __( 'RSS Feed Widget', 'ats-dashboard' ),
 	);
 
 	$widget_types = apply_filters( 'ats_widget_types', $widget_types );

@@ -53,6 +53,7 @@ class Widget_Base_Module extends Base_Module {
 		add_action( 'ats_widget_metabox', array( $this, 'html_widget' ) );
 		add_action( 'ats_widget_metabox', array( $this, 'video_widget' ) );
 		add_action( 'ats_widget_metabox', array( $this, 'form_widget' ) );
+		add_action( 'ats_widget_metabox', array( $this, 'rss_widget' ) );
 
 		add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
@@ -288,6 +289,16 @@ class Widget_Base_Module extends Base_Module {
 	}
 
 	/**
+	 * Add the RSS feed widget.
+	 */
+	public function rss_widget() {
+
+		$widget = require __DIR__ . '/templates/widget-types/rss-widget.php';
+		$widget();
+
+	}
+
+	/**
 	 * Define the video widget.
 	 */
 	public function video_widget() {
@@ -507,6 +518,8 @@ class Widget_Base_Module extends Base_Module {
 			$content = __( 'Contact Form', 'ats-dashboard' );
 		} elseif ( 'video' === $widget_type ) {
 			$content = __( 'Video', 'ats-dashboard' );
+		} elseif ( 'rss' === $widget_type ) {
+			$content = __( 'RSS Feed', 'ats-dashboard' );
 		}
 
 		return $content;
