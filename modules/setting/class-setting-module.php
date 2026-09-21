@@ -46,6 +46,7 @@ class Setting_Module extends Base_Module {
 		// WordPress computes a mismatched internal hookname for that submenu
 		// (see get_plugin_page_hookname()) and the page 404s.
 		add_action( 'admin_menu', array( $this, 'submenu_page' ), 1 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'top_level_menu_icon_style' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 
@@ -260,7 +261,7 @@ class Setting_Module extends Base_Module {
 			apply_filters( 'ats_settings_capability', 'manage_options' ),
 			'ats_settings',
 			array( $this, 'submenu_page_content' ),
-			'dashicons-move'
+			ATS_DASHBOARD_PLUGIN_URL . '/assets/img/logo-icon.png'
 		);
 
 		add_submenu_page(
@@ -270,6 +271,23 @@ class Setting_Module extends Base_Module {
 			apply_filters( 'ats_settings_capability', 'manage_options' ),
 			'ats_settings',
 			array( $this, 'submenu_page_content' )
+		);
+
+	}
+
+	/**
+	 * Force the top-level menu icon to the standard WP admin menu icon size.
+	 *
+	 * WordPress core only auto-scales SVG background-image menu icons; a raster
+	 * <img> icon (like ours) renders at its native pixel size, so it needs an
+	 * explicit size rule. Attached to the always-loaded 'admin-menu' handle so
+	 * it applies on every admin screen, not just this plugin's own pages.
+	 */
+	public function top_level_menu_icon_style() {
+
+		wp_add_inline_style(
+			'admin-menu',
+			'#adminmenu .wp-menu-image img[src*="logo-icon"] { width: 20px; height: 20px; padding: 7px 0 0; }'
 		);
 
 	}
