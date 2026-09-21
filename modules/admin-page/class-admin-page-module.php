@@ -284,6 +284,7 @@ class Admin_Page_Module extends \ATSDash\AdminPage\Admin_Page_Base_Module {
 		<style class="ats-admin-page-frontend-inline-styles">
 			html, body {
 				overflow: hidden !important;
+				background: transparent !important;
 			}
 		</style>
 

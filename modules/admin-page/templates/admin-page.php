@@ -54,12 +54,13 @@ $custom_css = $post->custom_css;
 	<?php endif; ?>
 
 	<?php
-		if ( 'html' === $post->content_type ) {
-			echo wp_kses_post( $post->html_content );
-		} else {
-			echo wp_kses_post( apply_filters( 'the_content', $post->post_content ) );
-		}
-
+	/**
+	 * Renders the page content (HTML content, or the active page builder's
+	 * output — Elementor, Divi, Beaver, Brizy, Bricks, Oxygen, Breakdance,
+	 * blocks, or the plain `the_content` fallback).
+	 *
+	 * @see \ATSDash\AdminPage\Admin_Page_Output::output_content()
+	 */
 	do_action( 'ats_admin_page_content_output', $post, $editor, $from_multisite );
 	?>
 </div>

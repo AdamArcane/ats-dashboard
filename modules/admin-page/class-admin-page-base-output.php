@@ -76,21 +76,16 @@ class Admin_Page_Base_Output extends Base_Output {
 
 	/**
 	 * Setup menu.
+	 *
+	 * Registration itself happens via the `ats_admin_page_setup_menu` hook —
+	 * `Admin_Page_Output::setup_menu()` (modules/admin-page/class-admin-page-output.php)
+	 * is always the one listening (it's a strict superset: same parent/submenu
+	 * registration, plus multisite blueprint handling), so this method must
+	 * not *also* call `prepare_menu()` directly — doing both registered every
+	 * admin page's menu page (and its render callback) twice.
 	 */
 	public function setup_menu() {
 
-			$parent_pages  = $this->get_posts( 'parent' );
-			$submenu_pages = $this->get_posts( 'submenu' );
-
-			if ( ! empty( $parent_pages ) ) {
-				$this->prepare_menu( $parent_pages );
-			}
-
-			if ( ! empty( $submenu_pages ) ) {
-				$this->prepare_menu( $submenu_pages );
-			}
-
-		// Hook for the pro version to run setup_menu.
 		do_action( 'ats_admin_page_setup_menu', $this );
 
 	}
@@ -111,10 +106,6 @@ class Admin_Page_Base_Output extends Base_Output {
 				'post_status'    => 'publish',
 				'posts_per_page' => -1,
 				'meta_query'     => array(
-					array(
-						'key'   => 'ats_is_active',
-						'value' => 1,
-					),
 					array(
 						'key'   => 'ats_menu_type',
 						'value' => $menu_type,

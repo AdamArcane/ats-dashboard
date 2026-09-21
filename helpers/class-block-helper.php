@@ -123,7 +123,7 @@ class Block_Helper {
 
 		<iframe src="<?php echo esc_url( $post_url ); ?>" width="100%"
 				id="ats-admin-page-iframe"
-				style="position: relative; min-height: 500px; border: 0; margin: 0; padding: 0; overflow: hidden !important;"></iframe>
+				style="position: relative; min-height: 500px; border: 0; margin: 0; padding: 0; overflow: hidden !important; background: transparent;"></iframe>
 
 		<?php
 

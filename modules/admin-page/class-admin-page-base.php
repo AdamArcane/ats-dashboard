@@ -75,8 +75,6 @@ class Admin_Page_Base_Module extends Base_Module {
 		add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
 
-		add_action( 'wp_ajax_ats_admin_page_change_active_status', array( $this, 'change_active_status' ) );
-
 		// The module output.
 		require_once __DIR__ . '/class-admin-page-base-output.php';
 		Admin_Page_Base_Output::init();
@@ -139,7 +137,7 @@ class Admin_Page_Base_Module extends Base_Module {
 			'type'        => __( 'Content Type', 'ats-dashboard' ),
 			'parent_menu' => __( 'Parent Menu', 'ats-dashboard' ),
 			'roles'       => __( 'User Roles', 'ats-dashboard' ),
-			'is_active'   => __( 'Active', 'ats-dashboard' ),
+			'status'      => __( 'Status', 'ats-dashboard' ),
 		);
 
 	}
@@ -258,7 +256,6 @@ class Admin_Page_Base_Module extends Base_Module {
 	 */
 	public function register_meta_boxes() {
 
-		add_meta_box( 'ats-active-status-metabox', __( 'Active', 'ats-dashboard' ), array( $this, 'active_status_metabox' ), 'ats_admin_page', 'side', 'high' );
 		add_meta_box( 'ats-content-type-metabox', __( 'Content Type', 'ats-dashboard' ), array( $this, 'content_type_metabox' ), 'ats_admin_page', 'side', 'high' );
 		add_meta_box( 'ats-menu-metabox', __( 'Menu Attributes', 'ats-dashboard' ), array( $this, 'menu_metabox' ), 'ats_admin_page', 'side' );
 
@@ -269,18 +266,6 @@ class Admin_Page_Base_Module extends Base_Module {
 		add_meta_box( 'ats-html-metabox', __( 'HTML', 'ats-dashboard' ), array( $this, 'html_metabox' ), 'ats_admin_page', 'normal', 'high' );
 		add_meta_box( 'ats-display-metabox', __( 'Display Options', 'ats-dashboard' ), array( $this, 'display_metabox' ), 'ats_admin_page', 'normal' );
 		add_meta_box( 'ats-advanced-metabox', __( 'Advanced', 'ats-dashboard' ), array( $this, 'advanced_metabox' ), 'ats_admin_page', 'normal' );
-
-	}
-
-	/**
-	 * Active status metabox.
-	 *
-	 * @param WP_Post $post The WP_Post object.
-	 */
-	public function active_status_metabox( $post ) {
-
-		$metabox = require __DIR__ . '/templates/metaboxes/active-status.php';
-		$metabox( $post );
 
 	}
 
@@ -368,16 +353,6 @@ class Admin_Page_Base_Module extends Base_Module {
 
 		$save_widget = require __DIR__ . '/inc/save-post.php';
 		$save_widget( $this, $post_id );
-
-	}
-
-	/**
-	 * Ajax handler of admin page's active status change.
-	 */
-	public function change_active_status() {
-
-		$ajax = require __DIR__ . '/ajax/change-active-status.php';
-		$ajax();
 
 	}
 

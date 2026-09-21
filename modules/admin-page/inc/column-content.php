@@ -22,28 +22,17 @@ return function ( $module, $column, $post_id ) {
 
 	switch ( $column ) {
 
-		case 'is_active':
-			$is_active = get_post_meta( $post_id, 'ats_is_active', true );
-			?>
+		case 'status':
+			$post_status        = get_post_status( $post_id );
+			$post_status_object = get_post_status_object( $post_status );
+			$label              = $post_status_object ? $post_status_object->label : ucfirst( $post_status );
 
-			<div class="heatbox-wrap status-switch">
-				<label for="ats_is_active_<?php echo esc_attr( $post_id ); ?>" class="toggle-switch">
-					<input
-						type="checkbox"
-						name="ats_is_active"
-						id="ats_is_active_<?php echo esc_attr( $post_id ); ?>"
-						value="1"
-						data-nonce="<?php echo esc_attr( wp_create_nonce( 'ats_admin_page_' . $post_id . '_change_active_status' ) ); ?>"
-						data-post-id="<?php echo esc_attr( $post_id ); ?>"
-						<?php checked( $is_active, 1 ); ?>
-					/>
-					<div class="switch-track">
-						<div class="switch-thumb"></div>
-					</div>
-				</label>
-			</div>
+			echo esc_html( $label );
 
-			<?php
+			if ( 'publish' === $post_status && ! $menu_type ) {
+				echo '<br><span class="description">' . esc_html__( 'Menu Type not set — won\'t appear in the menu.', 'ats-dashboard' ) . '</span>';
+			}
+
 			break;
 
 		case 'parent_menu':
