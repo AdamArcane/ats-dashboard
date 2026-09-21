@@ -357,7 +357,6 @@ class Setting_Module extends Base_Module {
 
 		// Widget sections.
 		add_settings_section( 'ats-widgets-section', __( 'Dashboard Widgets', 'ats-dashboard' ), '', 'ats-widget-settings' );
-		add_settings_section( 'ats-3rd-party-widgets-section', __( '3rd Party Widgets', 'ats-dashboard' ), '', 'ats-widget-settings' );
 
 		// Widget styling section.
 		add_settings_section( 'ats-styling-section', __( 'Dashboard Widget Styling', 'ats-dashboard' ), '', 'ats-widget-styling-settings' );
@@ -396,14 +395,6 @@ class Setting_Module extends Base_Module {
 			array( $this, 'remove_individual_widgets_field' ),
 			'ats-widget-settings',
 			'ats-widgets-section'
-		);
-
-		add_settings_field(
-			'remove-3rd-party-widgets',
-			__( 'Remove 3rd Party Widgets', 'ats-dashboard' ),
-			array( $this, 'remove_3rd_party_widgets_field' ),
-			'ats-widget-settings',
-			'ats-3rd-party-widgets-section'
 		);
 
 		// Widget styling fields.
@@ -620,19 +611,6 @@ class Setting_Module extends Base_Module {
 	public function remove_individual_widgets_field() {
 
 		$field = require __DIR__ . '/templates/fields/remove-individual-widgets.php';
-		$field();
-
-	}
-
-	/**
-	 * Remove 3rd party widgets field.
-	 */
-	public function remove_3rd_party_widgets_field() {
-
-		$template = __DIR__ . '/templates/fields/remove-3rd-party-widgets.php';
-		$template = apply_filters( 'ats_remove_3rd_party_widgets_field_path', $template );
-		$field    = require $template;
-
 		$field();
 
 	}

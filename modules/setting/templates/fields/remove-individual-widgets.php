@@ -27,7 +27,7 @@ return function () {
 
 		<?php
 		$widget_helper = new Widget_Helper();
-		$widgets       = $widget_helper->get_default();
+		$widgets       = array_merge( $widget_helper->get_default(), $widget_helper->get_3rd_party() );
 
 		foreach ( $widgets as $id => $widget ) {
 
