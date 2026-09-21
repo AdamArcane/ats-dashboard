@@ -20,14 +20,11 @@ return function () {
 			'text'   => __( 'General Template', 'ats-dashboard' ),
 			'active' => true,
 		),
+		array(
+			'id'   => 'emails',
+			'text' => __( 'Emails', 'ats-dashboard' ),
+		),
 	);
-
-	foreach ( $types as $email_key => $email_type ) {
-		$tab_menus[] = array(
-			'id'   => $email_key,
-			'text' => $email_type['label'],
-		);
-	}
 	?>
 
 	<div class="wrap heatbox-wrap ats-email-notifications-page">
@@ -79,33 +76,22 @@ return function () {
 					</div>
 				</div>
 
-				<?php foreach ( $types as $email_key => $email_type ) : ?>
-					<div class="heatbox-admin-panel ats-<?php echo esc_attr( $email_key ); ?>-panel">
-						<div class="heatbox">
-
-							<?php
-							$preview_url = wp_nonce_url(
-								add_query_arg(
-									array(
-										'action' => 'ats_preview_notification_email',
-										'email'  => $email_key,
-									),
-									admin_url( 'admin-post.php' )
-								),
-								'ats_preview_notification_email'
-							);
-							?>
-
-							<p>
-								<a href="<?php echo esc_url( $preview_url ); ?>" target="_blank" rel="noopener noreferrer" class="button button-secondary">
-									<?php esc_html_e( 'Preview With Sample Data', 'ats-dashboard' ); ?>
-								</a>
-							</p>
-
-							<?php do_settings_sections( 'ats-email-notifications-' . $email_key . '-settings' ); ?>
-						</div>
+				<div class="heatbox-admin-panel ats-emails-panel">
+					<div class="heatbox">
+						<?php
+						$emails_list = require __DIR__ . '/partials/emails-list.php';
+						$emails_list( $module, $types );
+						?>
 					</div>
-				<?php endforeach; ?>
+				</div>
+
+				<?php
+				// Rendered inside the form (not after it) so each popup's
+				// subject/heading/body/button fields still POST with the
+				// rest of the settings when "Save Changes" is clicked.
+				$modals = require __DIR__ . '/partials/email-modals.php';
+				$modals( $module, $types );
+				?>
 
 				<?php submit_button( '', 'button button-primary button-larger' ); ?>
 

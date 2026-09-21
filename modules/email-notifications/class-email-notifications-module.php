@@ -134,29 +134,165 @@ class Email_Notifications_Module extends Base_Module {
 	}
 
 	/**
+	 * Get the scope buckets emails are grouped under on the "Emails" tab.
+	 *
+	 * @return array Scope key => label.
+	 */
+	public function get_email_scopes() {
+
+		return array(
+			'user'  => __( 'User-Facing', 'ats-dashboard' ),
+			'admin' => __( 'Admin-Facing', 'ats-dashboard' ),
+		);
+
+	}
+
+	/**
 	 * Get the notification emails this module ships with.
 	 *
 	 * Each entry describes one editable email so the settings page, the
 	 * sanitizer, and the output class can all loop over the same list
 	 * instead of hardcoding "welcome" in three places. Add a new array
-	 * entry here (plus a matching `add_filter()` in
+	 * entry here (plus a matching set of `add_filter()` calls in
 	 * Email_Notifications_Output::setup()) to make another email editable.
+	 *
+	 * `subject_supported`/`heading_supported`/`button_supported` control
+	 * which fields render for a type — some core emails don't expose a
+	 * separate subject filter, so there's nothing to save there.
+	 * `body_format` is 'html' (wrapped in the branded template, WYSIWYG
+	 * body) for every type except `email_change`, which WordPress core
+	 * only ever sends as plain text with no way to force an HTML
+	 * Content-Type header, so it stays a plain textarea.
 	 *
 	 * @return array
 	 */
 	public function get_email_types() {
 
 		$types = array(
-			'welcome' => array(
-				'label'       => __( 'Welcome Email', 'ats-dashboard' ),
-				'description' => __( 'Sent when a new user is added to the site (wp_new_user_notification_email).', 'ats-dashboard' ),
-				'tags'        => array( '{first_name}', '{display_name}', '{site_name}', '{site_url}', '{action_url}', '{support_email}', '{support_url}' ),
-				'defaults'    => array(
-					'enabled'     => '1',
+			'welcome'             => array(
+				'scope'             => 'user',
+				'label'             => __( 'Welcome / New User Notification', 'ats-dashboard' ),
+				'description'       => __( 'Sent to a new user when their account is created.', 'ats-dashboard' ),
+				'hook_reference'    => 'wp_new_user_notification_email',
+				'tags'              => array( '{first_name}', '{display_name}', '{site_name}', '{site_url}', '{action_url}', '{support_email}', '{support_url}' ),
+				'subject_supported' => true,
+				'heading_supported' => true,
+				'button_supported'  => true,
+				'body_format'       => 'html',
+				'defaults'          => array(
+					'enabled'     => '0',
 					'subject'     => __( "You've been added to {site_name}", 'ats-dashboard' ),
 					'heading'     => __( 'Hi {first_name},', 'ats-dashboard' ),
 					'body'        => '<p>' . __( "You've been given access to <a href=\"{site_url}\">{site_name}</a>. You can use your account to log in and manage the site's content.", 'ats-dashboard' ) . '</p><p>' . __( 'Click the button below to set your password and get started. This link expires in 24 hours.', 'ats-dashboard' ) . '</p>',
 					'button_text' => __( 'Set Your Password', 'ats-dashboard' ),
+				),
+			),
+			'password_reset'      => array(
+				'scope'             => 'user',
+				'label'             => __( 'Password Reset Request', 'ats-dashboard' ),
+				'description'       => __( 'Sent when a user requests a password reset link.', 'ats-dashboard' ),
+				'hook_reference'    => 'retrieve_password_notification_email',
+				'tags'              => array( '{display_name}', '{site_name}', '{site_url}', '{action_url}' ),
+				'subject_supported' => true,
+				'heading_supported' => true,
+				'button_supported'  => true,
+				'body_format'       => 'html',
+				'defaults'          => array(
+					'enabled'     => '0',
+					'subject'     => __( '[{site_name}] Password Reset', 'ats-dashboard' ),
+					'heading'     => __( 'Hi {display_name},', 'ats-dashboard' ),
+					'body'        => '<p>' . __( 'Someone requested a password reset for your account. If this was you, click the button below to choose a new password. This link expires soon, and if you did not request this, you can safely ignore this email.', 'ats-dashboard' ) . '</p>',
+					'button_text' => __( 'Reset Password', 'ats-dashboard' ),
+				),
+			),
+			'email_change'        => array(
+				'scope'             => 'user',
+				'label'             => __( 'Email Address Change Confirmation', 'ats-dashboard' ),
+				'description'       => __( "Sent to a user's new email address to confirm a change made from their profile. WordPress always sends this one as plain text, and the subject line can't be customized, so only the body below is editable — it must keep the {action_url} tag or the confirmation link will be missing.", 'ats-dashboard' ),
+				'hook_reference'    => 'new_user_email_content',
+				'tags'              => array( '{display_name}', '{new_email}', '{site_name}', '{site_url}', '{action_url}' ),
+				'subject_supported' => false,
+				'heading_supported' => false,
+				'button_supported'  => false,
+				'body_format'       => 'text',
+				'defaults'          => array(
+					'enabled'     => '0',
+					'subject'     => '',
+					'heading'     => '',
+					'body'        => __( "Howdy {display_name},\n\nYou recently requested to have the email address on your account changed to {new_email}.\n\nIf this is correct, please click on the following link to confirm the change:\n{action_url}\n\nYou can safely ignore and delete this email if you did not request this.\n\nRegards,\nAll at {site_name}\n{site_url}", 'ats-dashboard' ),
+					'button_text' => '',
+				),
+			),
+			'admin_new_user'      => array(
+				'scope'             => 'admin',
+				'label'             => __( 'New User Registered (Admin Copy)', 'ats-dashboard' ),
+				'description'       => __( 'Sent to the site admin email when a new user account is created.', 'ats-dashboard' ),
+				'hook_reference'    => 'wp_new_user_notification_email_admin',
+				'tags'              => array( '{display_name}', '{user_login}', '{user_email}', '{site_name}', '{site_url}', '{action_url}' ),
+				'subject_supported' => true,
+				'heading_supported' => true,
+				'button_supported'  => true,
+				'body_format'       => 'html',
+				'defaults'          => array(
+					'enabled'     => '0',
+					'subject'     => __( '[{site_name}] New User Registration', 'ats-dashboard' ),
+					'heading'     => __( 'New User Registered', 'ats-dashboard' ),
+					'body'        => '<p>' . __( 'A new user account was just created on {site_name}.', 'ats-dashboard' ) . '</p><p>' . __( 'Name: {display_name}<br>Username: {user_login}<br>Email: {user_email}', 'ats-dashboard' ) . '</p>',
+					'button_text' => __( 'View User Profile', 'ats-dashboard' ),
+				),
+			),
+			'password_changed'    => array(
+				'scope'             => 'admin',
+				'label'             => __( 'Password Changed Notification', 'ats-dashboard' ),
+				'description'       => __( "Sent to the site admin when a user's password changes.", 'ats-dashboard' ),
+				'hook_reference'    => 'wp_password_change_notification_email',
+				'tags'              => array( '{display_name}', '{user_login}', '{site_name}', '{site_url}', '{action_url}' ),
+				'subject_supported' => true,
+				'heading_supported' => true,
+				'button_supported'  => true,
+				'body_format'       => 'html',
+				'defaults'          => array(
+					'enabled'     => '0',
+					'subject'     => __( '[{site_name}] Password Changed', 'ats-dashboard' ),
+					'heading'     => __( 'Password Changed', 'ats-dashboard' ),
+					'body'        => '<p>' . __( 'The password for {display_name} ({user_login}) on {site_name} was just changed.', 'ats-dashboard' ) . '</p><p>' . __( "If you didn't expect this, please review the account.", 'ats-dashboard' ) . '</p>',
+					'button_text' => __( 'View User Profile', 'ats-dashboard' ),
+				),
+			),
+			'comment_moderation'  => array(
+				'scope'             => 'admin',
+				'label'             => __( 'Comment Awaiting Moderation', 'ats-dashboard' ),
+				'description'       => __( 'Sent to the site admin when a new comment needs approval.', 'ats-dashboard' ),
+				'hook_reference'    => 'comment_moderation_subject / comment_moderation_text',
+				'tags'              => array( '{comment_author}', '{post_title}', '{site_name}', '{site_url}', '{action_url}' ),
+				'subject_supported' => true,
+				'heading_supported' => true,
+				'button_supported'  => true,
+				'body_format'       => 'html',
+				'defaults'          => array(
+					'enabled'     => '0',
+					'subject'     => __( '[{site_name}] Please moderate: "{post_title}"', 'ats-dashboard' ),
+					'heading'     => __( 'A Comment Is Awaiting Moderation', 'ats-dashboard' ),
+					'body'        => '<p>' . __( 'A new comment from {comment_author} on "{post_title}" is waiting for your approval.', 'ats-dashboard' ) . '</p>',
+					'button_text' => __( 'Moderate Comments', 'ats-dashboard' ),
+				),
+			),
+			'comment_notification' => array(
+				'scope'             => 'admin',
+				'label'             => __( 'New Comment Notification', 'ats-dashboard' ),
+				'description'       => __( "Sent to a post's author when a new comment is published on it.", 'ats-dashboard' ),
+				'hook_reference'    => 'comment_notification_subject / comment_notification_text',
+				'tags'              => array( '{comment_author}', '{post_title}', '{site_name}', '{site_url}', '{action_url}' ),
+				'subject_supported' => true,
+				'heading_supported' => true,
+				'button_supported'  => true,
+				'body_format'       => 'html',
+				'defaults'          => array(
+					'enabled'     => '0',
+					'subject'     => __( '[{site_name}] Comment: "{post_title}"', 'ats-dashboard' ),
+					'heading'     => __( 'New Comment', 'ats-dashboard' ),
+					'body'        => '<p>' . __( '{comment_author} left a new comment on "{post_title}".', 'ats-dashboard' ) . '</p>',
+					'button_text' => __( 'View Comment', 'ats-dashboard' ),
 				),
 			),
 		);
@@ -183,19 +319,34 @@ class Email_Notifications_Module extends Base_Module {
 		add_settings_field( 'support-url', __( 'Support URL', 'ats-dashboard' ), array( $this, 'support_url_field' ), 'ats-email-notifications-global-settings', 'ats-email-notifications-global-section' );
 		add_settings_field( 'footer-text', __( 'Footer Text', 'ats-dashboard' ), array( $this, 'footer_text_field' ), 'ats-email-notifications-global-settings', 'ats-email-notifications-global-section' );
 
-		// One section + set of fields per editable email type.
+		/**
+		 * One section + set of fields per editable email type. The
+		 * "Enabled" checkbox is deliberately not registered as a settings
+		 * field here — it's rendered directly in the "Emails" tab's table
+		 * row (see templates/partials/email-row.php) so it's visible
+		 * without opening that email's popup, but it still saves under the
+		 * same `ats_email_notifications[emails][KEY][enabled]` name.
+		 */
 		foreach ( $this->get_email_types() as $email_key => $email_type ) {
 
-			$page = 'ats-email-notifications-' . $email_key . '-settings';
+			$page    = 'ats-email-notifications-' . $email_key . '-settings';
+			$section = 'ats-email-notifications-' . $email_key . '-section';
 
-			add_settings_section( 'ats-email-notifications-' . $email_key . '-section', '', array( $this, 'email_type_tags_notice' ), $page );
+			add_settings_section( $section, '', array( $this, 'email_type_tags_notice' ), $page );
 
-			add_settings_field( $email_key . '-enabled', __( 'Enabled', 'ats-dashboard' ), array( $this, 'email_enabled_field' ), $page, 'ats-email-notifications-' . $email_key . '-section', array( 'email_key' => $email_key ) );
-			add_settings_field( $email_key . '-subject', __( 'Subject', 'ats-dashboard' ), array( $this, 'email_subject_field' ), $page, 'ats-email-notifications-' . $email_key . '-section', array( 'email_key' => $email_key ) );
-			add_settings_field( $email_key . '-heading', __( 'Heading', 'ats-dashboard' ), array( $this, 'email_heading_field' ), $page, 'ats-email-notifications-' . $email_key . '-section', array( 'email_key' => $email_key ) );
-			add_settings_field( $email_key . '-body', __( 'Body', 'ats-dashboard' ), array( $this, 'email_body_field' ), $page, 'ats-email-notifications-' . $email_key . '-section', array( 'email_key' => $email_key ) );
-			add_settings_field( $email_key . '-button-text', __( 'Button Text', 'ats-dashboard' ), array( $this, 'email_button_text_field' ), $page, 'ats-email-notifications-' . $email_key . '-section', array( 'email_key' => $email_key ) );
+			if ( ! empty( $email_type['subject_supported'] ) ) {
+				add_settings_field( $email_key . '-subject', __( 'Subject', 'ats-dashboard' ), array( $this, 'email_subject_field' ), $page, $section, array( 'email_key' => $email_key ) );
+			}
 
+			if ( ! empty( $email_type['heading_supported'] ) ) {
+				add_settings_field( $email_key . '-heading', __( 'Heading', 'ats-dashboard' ), array( $this, 'email_heading_field' ), $page, $section, array( 'email_key' => $email_key ) );
+			}
+
+			add_settings_field( $email_key . '-body', __( 'Body', 'ats-dashboard' ), array( $this, 'email_body_field' ), $page, $section, array( 'email_key' => $email_key ) );
+
+			if ( ! empty( $email_type['button_supported'] ) ) {
+				add_settings_field( $email_key . '-button-text', __( 'Button Text', 'ats-dashboard' ), array( $this, 'email_button_text_field' ), $page, $section, array( 'email_key' => $email_key ) );
+			}
 		}
 
 	}
@@ -232,12 +383,14 @@ class Email_Notifications_Module extends Base_Module {
 
 			$email = isset( $emails[ $email_key ] ) && is_array( $emails[ $email_key ] ) ? $emails[ $email_key ] : array();
 
+			$body_is_html = 'text' !== ( isset( $email_type['body_format'] ) ? $email_type['body_format'] : 'html' );
+
 			$sanitized['emails'][ $email_key ] = array(
 				'enabled'     => ! empty( $email['enabled'] ) ? '1' : '0',
-				'subject'     => isset( $email['subject'] ) ? sanitize_text_field( $email['subject'] ) : '',
-				'heading'     => isset( $email['heading'] ) ? sanitize_text_field( $email['heading'] ) : '',
-				'body'        => isset( $email['body'] ) ? wp_kses_post( $email['body'] ) : '',
-				'button_text' => isset( $email['button_text'] ) ? sanitize_text_field( $email['button_text'] ) : '',
+				'subject'     => ! empty( $email_type['subject_supported'] ) && isset( $email['subject'] ) ? sanitize_text_field( $email['subject'] ) : '',
+				'heading'     => ! empty( $email_type['heading_supported'] ) && isset( $email['heading'] ) ? sanitize_text_field( $email['heading'] ) : '',
+				'body'        => isset( $email['body'] ) ? ( $body_is_html ? wp_kses_post( $email['body'] ) : sanitize_textarea_field( $email['body'] ) ) : '',
+				'button_text' => ! empty( $email_type['button_supported'] ) && isset( $email['button_text'] ) ? sanitize_text_field( $email['button_text'] ) : '',
 			);
 
 		}
@@ -341,14 +494,19 @@ class Email_Notifications_Module extends Base_Module {
 	}
 
 	/**
-	 * Email enabled field.
+	 * Render the "override this email" toggle for one email type.
 	 *
-	 * @param array $args Field args, includes the email_key.
+	 * Called directly from the "Emails" tab's table row (rather than
+	 * through the Settings API) so it's visible without opening that
+	 * email's popup — it still outputs the same
+	 * `ats_email_notifications[emails][KEY][enabled]` checkbox.
+	 *
+	 * @param string $email_key The email type key.
 	 */
-	public function email_enabled_field( $args ) {
+	public function render_email_enabled_toggle( $email_key ) {
 
 		$field = require __DIR__ . '/templates/fields/email-enabled.php';
-		$field( $args['email_key'] );
+		$field( $email_key );
 
 	}
 

@@ -26,3 +26,99 @@
 	padding: 2px;
 	background: #fff;
 }
+
+/* Emails table */
+
+.ats-email-notifications-table {
+	border-collapse: collapse;
+}
+
+.ats-email-notifications-table thead th {
+	padding: 10px 12px;
+	background: #f6f7f7;
+}
+
+.ats-email-notifications-table td {
+	padding: 12px;
+	vertical-align: middle;
+}
+
+.ats-email-notifications-table .description {
+	margin: 4px 0 0;
+}
+
+.ats-email-notifications-status-cell,
+.ats-email-notifications-actions-cell {
+	white-space: nowrap;
+	width: 1%;
+}
+
+/* Popup */
+
+.ats-email-notifications-modal {
+	display: none;
+}
+
+.ats-email-notifications-modal.is-open {
+	display: block;
+}
+
+.ats-email-notifications-modal-backdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.6);
+	z-index: 100000;
+}
+
+.ats-email-notifications-modal-dialog {
+	position: fixed;
+	top: 5vh;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 90%;
+	max-width: 720px;
+	max-height: 90vh;
+	background: #fff;
+	border-radius: 4px;
+	box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+	z-index: 100001;
+	display: flex;
+	flex-direction: column;
+}
+
+.ats-email-notifications-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px 24px;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.ats-email-notifications-modal-header h2 {
+	margin: 0;
+}
+
+.ats-email-notifications-modal-close {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 24px;
+	line-height: 1;
+	padding: 0;
+	color: #50575e;
+}
+
+.ats-email-notifications-modal-body {
+	padding: 24px;
+	overflow-y: auto;
+}
+
+.ats-email-notifications-modal-footer {
+	padding: 12px 24px;
+	border-top: 1px solid #dcdcde;
+	text-align: right;
+}
+
+.ats-email-notifications-modal .wp-editor-wrap {
+	max-width: 100%;
+}

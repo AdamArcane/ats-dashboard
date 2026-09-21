@@ -15,6 +15,96 @@
 		setupColorFields();
 		setupTabsNavigation();
 		setupLogoUpload();
+		setupEmailModals();
+	}
+
+	/**
+	 * Setup the "Edit" popups on the Emails tab: open/close, and lazily
+	 * init/tear down that email's TinyMCE editor so it's never initialized
+	 * while its popup is hidden (it would render at zero height).
+	 */
+	function setupEmailModals() {
+		const editButtons = document.querySelectorAll(".ats-email-notifications-edit");
+		if (!editButtons.length) return;
+
+		let openModal = null;
+
+		function initEditor(modal) {
+			const wrap = modal.querySelector(".ats-email-notifications-editor-wrap");
+			if (!wrap || typeof wp === "undefined" || !wp.editor) return;
+
+			const editorId = wrap.dataset.editorId;
+			if (!editorId || wrap.dataset.initialized) return;
+
+			wp.editor.initialize(editorId, {
+				tinymce: {
+					toolbar1: "bold,italic,link,unlink,bullist,numlist,blockquote,undo,redo",
+					toolbar2: "",
+				},
+				quicktags: true,
+			});
+
+			wrap.dataset.initialized = "1";
+		}
+
+		function removeEditor(modal) {
+			const wrap = modal.querySelector(".ats-email-notifications-editor-wrap");
+			if (!wrap || typeof wp === "undefined" || !wp.editor || !wrap.dataset.initialized) return;
+
+			wp.editor.remove(wrap.dataset.editorId);
+			delete wrap.dataset.initialized;
+		}
+
+		function openModalEl(modal) {
+			if (!modal) return;
+
+			if (openModal && openModal !== modal) {
+				closeModalEl(openModal);
+			}
+
+			modal.classList.add("is-open");
+			openModal = modal;
+
+			// wp.editor.initialize needs the textarea visible to size the
+			// iframe correctly, so wait a tick after the modal is shown.
+			window.setTimeout(function () {
+				initEditor(modal);
+			}, 0);
+		}
+
+		function closeModalEl(modal) {
+			if (!modal) return;
+
+			removeEditor(modal);
+			modal.classList.remove("is-open");
+
+			if (openModal === modal) {
+				openModal = null;
+			}
+		}
+
+		editButtons.forEach(function (button) {
+			button.addEventListener("click", function () {
+				const modal = document.getElementById(button.dataset.modalTarget);
+				openModalEl(modal);
+			});
+		});
+
+		document.querySelectorAll(".ats-email-notifications-modal").forEach(function (modal) {
+			modal
+				.querySelectorAll(".ats-email-notifications-modal-close, .ats-email-notifications-modal-backdrop")
+				.forEach(function (closer) {
+					closer.addEventListener("click", function () {
+						closeModalEl(modal);
+					});
+				});
+		});
+
+		document.addEventListener("keydown", function (e) {
+			if (e.key === "Escape" && openModal) {
+				closeModalEl(openModal);
+			}
+		});
 	}
 
 	/**
