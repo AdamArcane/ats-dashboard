@@ -41,7 +41,11 @@ class Setting_Module extends Base_Module {
 	 */
 	public function setup() {
 
-		add_action( 'admin_menu', array( $this, 'submenu_page' ) );
+		// Priority 1: must register the top-level "ats_settings" page before any
+		// other module's add_submenu_page( 'ats_settings', ... ) call, otherwise
+		// WordPress computes a mismatched internal hookname for that submenu
+		// (see get_plugin_page_hookname()) and the page 404s.
+		add_action( 'admin_menu', array( $this, 'submenu_page' ), 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 
@@ -135,8 +139,8 @@ class Setting_Module extends Base_Module {
 		public function site_owner_role_panel() {
 			?>
 
-			<div class="heatbox-admin-panel ats-site-owner-role-panel">
-				<div class="heatbox">
+			<div class="atsui-admin-panel ats-site-owner-role-panel">
+				<div class="atsui">
 					<?php do_settings_sections( 'ats-site-owner-role-settings' ); ?>
 				</div>
 			</div>
@@ -242,12 +246,25 @@ class Setting_Module extends Base_Module {
 		}
 
 	/**
-	 * Add submenu page.
+	 * Add the top-level "Arcane Tech" menu page, landing on Settings.
+	 *
+	 * Also register a "Settings" submenu entry pointing at the same slug,
+	 * so it's listed under the top-level item (matches how WordPress core
+	 * does it for Settings > General).
 	 */
 	public function submenu_page() {
 
+		add_menu_page(
+			__( 'Settings', 'ats-dashboard' ),
+			_x( 'Arcane Tech', 'Admin Menu text', 'ats-dashboard' ),
+			apply_filters( 'ats_settings_capability', 'manage_options' ),
+			'ats_settings',
+			array( $this, 'submenu_page_content' ),
+			'dashicons-move'
+		);
+
 		add_submenu_page(
-			'edit.php?post_type=ats_widgets',
+			'ats_settings',
 			__( 'Settings', 'ats-dashboard' ),
 			__( 'Settings', 'ats-dashboard' ),
 			apply_filters( 'ats_settings_capability', 'manage_options' ),

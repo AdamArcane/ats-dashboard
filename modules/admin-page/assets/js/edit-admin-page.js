@@ -57,7 +57,7 @@
 		if (postboxContainers.length) {
 			postboxContainers.forEach(function (postboxContainer) {
 				if (postboxContainer instanceof HTMLElement) {
-					postboxContainer.classList.add("heatbox-wrap");
+					postboxContainer.classList.add("atsui-wrap");
 				}
 			});
 		}

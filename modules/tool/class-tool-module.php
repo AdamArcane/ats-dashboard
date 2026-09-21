@@ -77,7 +77,7 @@ class Tool_Module extends Base_Module {
 	 */
 	public function submenu_page() {
 
-		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'Tools', 'ats-dashboard' ), __( 'Tools', 'ats-dashboard' ), apply_filters( 'ats_tools_capability', 'manage_options' ), 'ats_tools', array( $this, 'submenu_page_content' ) );
+		add_submenu_page( 'ats_settings', __( 'Tools', 'ats-dashboard' ), __( 'Tools', 'ats-dashboard' ), apply_filters( 'ats_tools_capability', 'manage_options' ), 'ats_tools', array( $this, 'submenu_page_content' ) );
 
 	}
 

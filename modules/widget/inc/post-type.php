@@ -12,7 +12,6 @@ return function () {
 	$labels = array(
 		'name'               => _x( 'Dashboard Widgets', 'Post type general name', 'ats-dashboard' ),
 		'singular_name'      => _x( 'Dashboard Widget', 'Post type singular name', 'ats-dashboard' ),
-		'menu_name'          => _x( 'Arcane Tech', 'Admin Menu text', 'ats-dashboard' ),
 		'name_admin_bar'     => _x( 'Dashboard Widget', 'Add New on Toolbar', 'ats-dashboard' ),
 		'add_new'            => __( 'Add New', 'ats-dashboard' ),
 		'add_new_item'       => __( 'Add Dashboard Widget', 'ats-dashboard' ),
@@ -47,10 +46,10 @@ return function () {
 	// Arguments.
 	$args = array(
 		'labels'             => $labels,
-		'menu_icon'          => 'dashicons-move',
 		'publicly_queryable' => false,
 		'show_ui'            => true,
-		'show_in_menu'       => true,
+		// Nest under the top-level "Arcane Tech" > Settings page instead of creating its own top-level menu.
+		'show_in_menu'       => 'ats_settings',
 		'query_var'          => false,
 		'rewrite'            => false,
 		'map_meta_cap'       => false,

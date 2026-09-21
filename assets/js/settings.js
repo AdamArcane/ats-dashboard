@@ -82,8 +82,8 @@
 	 * Setup the tabs navigation for settings page.
 	 */
 	function setupTabsNavigation() {
-		$(".heatbox-tab-nav-item").on("click", function () {
-			$(".heatbox-tab-nav-item").removeClass("active");
+		$(".atsui-tab-nav-item").on("click", function () {
+			$(".atsui-tab-nav-item").removeClass("active");
 			$(this).addClass("active");
 
 			const link = this.querySelector("a");
@@ -91,7 +91,7 @@
 
 			setRefererValue(hashValue);
 
-			$(".ats-settings-form .heatbox-admin-panel").css("display", "none");
+			$(".ats-settings-form .atsui-admin-panel").css("display", "none");
 			$(".ats-settings-form .ats-" + hashValue + "-panel").css(
 				"display",
 				"block"
@@ -102,15 +102,15 @@
 			var hashValue = window.location.hash.substr(1);
 
 			if (!hashValue) {
-				hashValue = "widgets";
+				hashValue = "general";
 			}
 
 			setRefererValue(hashValue);
 
-			$(".heatbox-tab-nav-item").removeClass("active");
-			$(".heatbox-tab-nav-item." + hashValue + "-panel").addClass("active");
+			$(".atsui-tab-nav-item").removeClass("active");
+			$(".atsui-tab-nav-item." + hashValue + "-panel").addClass("active");
 
-			$(".ats-settings-form .heatbox-admin-panel").css("display", "none");
+			$(".ats-settings-form .atsui-admin-panel").css("display", "none");
 			$(".ats-settings-form .ats-" + hashValue + "-panel").css(
 				"display",
 				"block"

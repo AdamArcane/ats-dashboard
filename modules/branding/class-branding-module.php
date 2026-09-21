@@ -120,7 +120,7 @@ class Branding_Module extends Base_Module {
 	 */
 	public function submenu_page() {
 
-		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'Admin Customization', 'ats-dashboard' ), __( 'Customization', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_branding', array( $this, 'submenu_page_content' ) );
+		add_submenu_page( 'ats_settings', __( 'Admin Customization', 'ats-dashboard' ), __( 'Customization', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_branding', array( $this, 'submenu_page_content' ) );
 
 	}
 

@@ -11,11 +11,11 @@ $manage_url = admin_url( 'edit.php?post_type=ats_block_template' );
 $new_url    = admin_url( 'post-new.php?post_type=ats_block_template' );
 ?>
 
-<div class="heatbox ats-block-editor-template-metabox">
+<div class="atsui ats-block-editor-template-metabox">
 
 	<h2><?php esc_html_e( 'Block Editor Templates', 'ats-dashboard' ); ?></h2>
 
-	<div class="heatbox-content">
+	<div class="atsui-content">
 		<p>
 			<?php esc_html_e( 'Create a Block Editor Template to use Gutenberg for your Page Builder Dashboard.', 'ats-dashboard' ); ?>
 		</p>

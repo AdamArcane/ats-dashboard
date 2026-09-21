@@ -156,7 +156,7 @@ class Setup {
 	public function action_links( $links ) {
 
 		$multisite_settings = array();
-		$settings           = array( '<a href="' . admin_url( 'edit.php?post_type=ats_widgets&page=ats_settings' ) . '">' . __( 'Settings', 'ats-dashboard' ) . '</a>' );
+		$settings           = array( '<a href="' . admin_url( 'admin.php?page=ats_settings' ) . '">' . __( 'Settings', 'ats-dashboard' ) . '</a>' );
 
 		if ( apply_filters( 'ats_ms_support', false ) ) {
 			$multisite_settings = is_multisite() ? array( '<a href="' . network_admin_url( 'settings.php?page=ats-dashboard-multisite' ) . '">' . __( 'Network Settings', 'ats-dashboard' ) . '</a>' ) : array();
@@ -333,14 +333,14 @@ class Setup {
 		}
 
 		$screens = array(
-			'ats_widgets_page_ats_features',
-			'ats_widgets_page_ats-license',
-			'ats_widgets_page_ats_tools',
-			'ats_widgets_page_ats_branding',
-			'ats_widgets_page_ats_settings',
-			'ats_widgets_page_ats_login_redirect',
-			'ats_widgets_page_ats_admin_menu',
-			'ats_widgets_page_ats_admin_bar'
+			'arcane-tech_page_ats_features',
+			'arcane-tech_page_ats-license',
+			'arcane-tech_page_ats_tools',
+			'arcane-tech_page_ats_branding',
+			'toplevel_page_ats_settings',
+			'arcane-tech_page_ats_login_redirect',
+			'arcane-tech_page_ats_admin_menu',
+			'arcane-tech_page_ats_admin_bar'
 		);
 
 		$screen = get_current_screen();
@@ -349,7 +349,7 @@ class Setup {
 			return $classes;
 		}
 
-		$classes .= ' heatbox-admin has-header';
+		$classes .= ' atsui-admin has-header';
 
 		return $classes;
 
@@ -502,7 +502,7 @@ class Setup {
 
 	/**
 	 * Build the CSS custom properties that let the plugin's own admin UI
-	 * (heatbox forms, previews, and any core UI that already reads WP's
+	 * (atsui forms, previews, and any core UI that already reads WP's
 	 * theme color variable) follow the configured branding accent color
 	 * instead of WordPress' default admin blue.
 	 *

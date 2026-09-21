@@ -14,8 +14,8 @@ return function ( $module ) {
 		// Color pickers.
 		wp_enqueue_style( 'wp-color-picker' );
 
-		// Heatbox.
-		wp_enqueue_style( 'heatbox', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/heatbox.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
+		// Atsui.
+		wp_enqueue_style( 'atsui', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/atsui.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
 
 		// Settings page.
 		wp_enqueue_style( 'ats-settings', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/settings.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );

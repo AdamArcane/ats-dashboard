@@ -74,7 +74,7 @@ class Widget_Base_Module extends Base_Module {
 	 * Remove the duplicate Add Dashboard Widget submenu item.
 	 */
 	public function remove_add_widget_submenu() {
-		remove_submenu_page( 'edit.php?post_type=ats_widgets', 'post-new.php?post_type=ats_widgets' );
+		remove_submenu_page( 'ats_settings', 'post-new.php?post_type=ats_widgets' );
 	}
 
 	/**

@@ -35,18 +35,17 @@ return function () {
 	$pages     = Integrations_Module::tab_pages();
 	?>
 
-	<div class="wrap heatbox-wrap ats-integrations-page">
+	<div class="wrap atsui-wrap ats-integrations-page">
 
-		<div class="heatbox-header heatbox-has-tab-nav heatbox-margin-bottom">
+		<div class="atsui-header atsui-has-tab-nav atsui-margin-bottom">
 
-			<div class="heatbox-container heatbox-container-center">
+			<div class="atsui-container atsui-container-center">
 
 				<div class="logo-container">
 
 					<div>
 						<span class="title">
 							<?php echo esc_html( get_admin_page_title() ); ?>
-ats
 						</span>
 						<p class="subtitle"><?php esc_html_e( 'View data pushed from MainWP and other third-party integrations, with manual override options.', 'ats-dashboard' ); ?></p>
 					</div>
@@ -58,9 +57,9 @@ ats
 				</div>
 
 				<nav>
-					<ul class="heatbox-tab-nav">
+					<ul class="atsui-tab-nav">
 						<?php foreach ( $tab_menus as $tab ) : ?>
-							<li class="heatbox-tab-nav-item <?php echo esc_attr( $tab['id'] ); ?>-panel">
+							<li class="atsui-tab-nav-item <?php echo esc_attr( $tab['id'] ); ?>-panel">
 								<a href="#<?php echo esc_attr( $tab['id'] ); ?>"><?php echo esc_html( $tab['text'] ); ?></a>
 							</li>
 						<?php endforeach; ?>
@@ -73,7 +72,7 @@ ats
 
 		<form method="post" action="options.php" class="ats-integrations-form">
 
-			<div class="heatbox-container heatbox-container-center">
+			<div class="atsui-container atsui-container-center">
 
 				<h1 style="display: none;"></h1>
 
@@ -81,8 +80,8 @@ ats
 
 				<div>
 					<?php foreach ( $pages as $tab_id => $page_slug ) : ?>
-						<div class="heatbox-admin-panel ats-<?php echo esc_attr( $tab_id ); ?>-panel">
-							<div class="heatbox">
+						<div class="atsui-admin-panel ats-<?php echo esc_attr( $tab_id ); ?>-panel">
+							<div class="atsui">
 								<?php do_settings_sections( $page_slug ); ?>
 							</div>
 						</div>

@@ -112,9 +112,9 @@ class Admin_Menu_Module extends Base_Module {
 		}
 		?>
 
-		<div class="heatbox ats-notice-metabox is-warning">
+		<div class="atsui ats-notice-metabox is-warning">
 			<h2><?php _e( 'Non-Blueprint Notice', 'welome-email-editor' ); ?></h2>
-			<div class="heatbox-content">
+			<div class="atsui-content">
 				<?php
 				$description  = __( '<strong>Caution:</strong> If the Admin Menu Editor is configured on a subsite, the blueprint settings for this feature will no longer be inherited.', 'ats-dashboard' ) . '<br><br>';
 				$description .= __( 'To inherit the blueprint configuration again for the Admin Menu Editor, please <strong>reset all menus</strong> (button below).', 'ats-dashboard' );
@@ -141,9 +141,9 @@ class Admin_Menu_Module extends Base_Module {
 		}
 		?>
 
-		<div class="heatbox ats-notice-metabox is-info">
+		<div class="atsui ats-notice-metabox is-info">
 			<h2><?php _e( 'Super Admin Notice', 'welome-email-editor' ); ?></h2>
-			<div class="heatbox-content">
+			<div class="atsui-content">
 				<?php
 				$description = '<strong>' . __( 'Info:', 'ats-dashboard' ) . '</strong>';
 				$description = $description . ' ' . __( 'Changes made to the <strong>Admin Menu</strong> will not affect super admins. Super admins will always see the full admin bar for maximum control.', 'ats-dashboard' );
@@ -182,7 +182,7 @@ class Admin_Menu_Module extends Base_Module {
 	 */
 	public function submenu_page() {
 
-		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'Admin Menu Editor', 'ats-dashboard' ), __( 'Admin Menu Editor', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_admin_menu', array( $this, 'submenu_page_content' ) );
+		add_submenu_page( 'ats_settings', __( 'Admin Menu Editor', 'ats-dashboard' ), __( 'Admin Menu Editor', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_admin_menu', array( $this, 'submenu_page_content' ) );
 
 	}
 

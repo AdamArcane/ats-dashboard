@@ -10,18 +10,17 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 return function () {
 	?>
 
-	<div class="wrap heatbox-wrap ats-tools-page">
+	<div class="wrap atsui-wrap ats-tools-page">
 
-		<div class="heatbox-header heatbox-margin-bottom">
+		<div class="atsui-header atsui-margin-bottom">
 
-			<div class="heatbox-container heatbox-container-center">
+			<div class="atsui-container atsui-container-center">
 
 				<div class="logo-container">
 
 					<div>
 						<span class="title">
 							<?php echo esc_html( get_admin_page_title() ); ?>
-ats
 						</span>
 						<p class="subtitle"><?php esc_html_e( 'Export & import the ATS Dashboard settings.', 'ats-dashboard' ); ?></p>
 					</div>
@@ -36,7 +35,7 @@ ats
 
 		</div>
 
-		<div class="heatbox-container heatbox-container-center">
+		<div class="atsui-container atsui-container-center">
 
 			<h1 style="display: none;"></h1>
 
@@ -44,7 +43,7 @@ ats
 
 			<div class="ats-tools-container">
 
-				<div class="heatbox">
+				<div class="atsui">
 					<form method="post" action="options.php">
 					<?php
 					settings_fields( 'ats-export-group' );
@@ -54,7 +53,7 @@ ats
 					</form>
 				</div>
 
-				<div class="heatbox">
+				<div class="atsui">
 					<form method="post" action="options.php" enctype="multipart/form-data">
 					<?php
 					settings_fields( 'ats-import-group' );

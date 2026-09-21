@@ -71,11 +71,11 @@ return function () {
 
 	?>
 
-	<div class="wrap heatbox-wrap ats-features-page">
+	<div class="wrap atsui-wrap ats-features-page">
 
-		<div class="heatbox-header heatbox-margin-bottom">
+		<div class="atsui-header atsui-margin-bottom">
 
-			<div class="heatbox-container heatbox-container-center">
+			<div class="atsui-container atsui-container-center">
 
 				<div class="logo-container">
 
@@ -98,7 +98,7 @@ return function () {
 
 		<form method="post" action="options.php">
 
-			<div class="heatbox-container heatbox-container-center">
+			<div class="atsui-container atsui-container-center">
 
 				<h1 style="display: none;"></h1>
 
@@ -106,14 +106,14 @@ return function () {
 
 				<?php foreach ( $features as $feature ) { ?>
 
-					<div class="heatbox">
+					<div class="atsui">
 
 						<h2>
 							<img src="<?php echo esc_url( $feature['img'] ); ?>" alt="<?php echo esc_attr( $feature['title'] ); ?>">
 							<?php echo esc_html( $feature['title'] ); ?>
 						</h2>
 
-							<div class="heatbox-content">
+							<div class="atsui-content">
 								<p>
 									<?php echo wp_kses_post( $feature['text'] ); ?>
 								</p>

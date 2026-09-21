@@ -19,7 +19,7 @@
 	 */
 	function onShowElements() {
 		window.addEventListener("load", function () {
-			$(".heatbox-admin-panel").css("display", "block");
+			$(".atsui-admin-panel").css("display", "block");
 		});
 	}
 

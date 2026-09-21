@@ -78,7 +78,7 @@ class Feature_Module extends Base_Module {
 	 */
 	public function submenu_page() {
 
-		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'Modules', 'ats-dashboard' ), __( 'Modules', 'ats-dashboard' ), apply_filters( 'ats_modules_capability', 'manage_options' ), 'ats_features', array( $this, 'submenu_page_content' ) );
+		add_submenu_page( 'ats_settings', __( 'Modules', 'ats-dashboard' ), __( 'Modules', 'ats-dashboard' ), apply_filters( 'ats_modules_capability', 'manage_options' ), 'ats_features', array( $this, 'submenu_page_content' ) );
 
 	}
 

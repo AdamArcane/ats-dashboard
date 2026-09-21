@@ -194,7 +194,7 @@ class Admin_Page_Base_Module extends Base_Module {
 	 */
 	public function submenu_page() {
 
-		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'Admin Pages', 'ats-dashboard' ), __( 'Admin Pages', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'edit.php?post_type=ats_admin_page' );
+		add_submenu_page( 'ats_settings', __( 'Admin Pages', 'ats-dashboard' ), __( 'Admin Pages', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'edit.php?post_type=ats_admin_page' );
 
 	}
 
@@ -222,7 +222,7 @@ class Admin_Page_Base_Module extends Base_Module {
 			) && 'ats_admin_page' === $current_screen->post_type
 		) {
 
-			$parent_file  = 'edit.php?post_type=ats_widgets';
+			$parent_file  = 'ats_settings';
 			$submenu_file = 'edit.php?post_type=ats_admin_page';
 
 		}

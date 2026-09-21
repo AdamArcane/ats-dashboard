@@ -29,11 +29,11 @@ foreach ( $saved_menu as $identifier => $menu_item ) {
 }
 ?>
 
-<div class="wrap heatbox-wrap ats-admin-menu ats-menu-builder-editor-page">
+<div class="wrap atsui-wrap ats-admin-menu ats-menu-builder-editor-page">
 
-	<div class="heatbox-header heatbox-margin-bottom">
+	<div class="atsui-header atsui-margin-bottom">
 
-		<div class="heatbox-container heatbox-container-center">
+		<div class="atsui-container atsui-container-center">
 
 			<div class="logo-container">
 
@@ -55,19 +55,19 @@ foreach ( $saved_menu as $identifier => $menu_item ) {
 
 	</div>
 
-	<div class="heatbox-container heatbox-container-center">
+	<div class="atsui-container atsui-container-center">
 		<h1 style="display: none;"></h1>
 	</div>
 
-	<div class="heatbox-container heatbox-container-center heatbox-column-container">
+	<div class="atsui-container atsui-container-center atsui-column-container">
 
-		<div class="heatbox-main">
+		<div class="atsui-main">
 
 			
 
 			<form action="options.php" method="post" class="ats-menu-builder--edit-form">
 
-				<div class="heatbox ats-menu-builder-box">
+				<div class="atsui ats-menu-builder-box">
 
 					<div class="ats-menu-builder-box--header">
 						<h2 class="ats-menu-builder-box--title">
@@ -171,7 +171,7 @@ foreach ( $saved_menu as $identifier => $menu_item ) {
 						</div><!-- .ats-menu-builder--tab-content -->
 					</div><!-- .ats-menu-builder--user-tabs -->
 
-					<div class="heatbox-footer">
+					<div class="atsui-footer">
 						<?php do_action( 'ats_admin_menu_form_footer' ); ?>
 					</div>
 
@@ -180,14 +180,14 @@ foreach ( $saved_menu as $identifier => $menu_item ) {
 			</form>
 		</div>
 
-		<div class="heatbox-sidebar">
-			<div class="heatbox tags-heatbox">
+		<div class="atsui-sidebar">
+			<div class="atsui tags-atsui">
 				<h2>
 					<?php esc_html_e( 'Placeholder Tags', 'ats-dashboard' ); ?>
 					<span class="action-status">📋 Copied</span>
 				</h2>
 
-				<div class="heatbox-content">
+				<div class="atsui-content">
 					<p>
 						<?php esc_html_e( 'Use the placeholder tags below to display certain information dynamically.', 'ats-dashboard' ); ?>
 						<br><strong><?php esc_html_e( '(Click to copy)', 'ats-dashboard' ); ?></strong>

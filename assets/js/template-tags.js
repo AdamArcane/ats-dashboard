@@ -4,7 +4,7 @@
 	function init() {
 		patchWpMetabox();
 
-		const metabox = document.querySelector(".tags-heatbox");
+		const metabox = document.querySelector(".tags-atsui");
 		if (!metabox) return;
 
 		const tags = metabox.querySelectorAll("code");
@@ -21,7 +21,7 @@
 		if (metaboxById) {
 			const styleTag = document.createElement("style");
 			styleTag.innerHTML = `
-				.tags-heatbox, .tags-heatbox * {
+				.tags-atsui, .tags-atsui * {
 					box-sizing: border-box;
 				}
 
@@ -31,13 +31,13 @@
 			`;
 			document.head.appendChild(styleTag);
 
-			metaboxById.classList.add("heatbox");
-			metaboxById.classList.add("tags-heatbox");
+			metaboxById.classList.add("atsui");
+			metaboxById.classList.add("tags-atsui");
 
 			const metaboxContent = metaboxById.querySelector(".inside");
 
 			if (metaboxContent) {
-				metaboxContent.classList.add("heatbox-content");
+				metaboxContent.classList.add("atsui-content");
 			}
 		}
 	}
@@ -57,7 +57,7 @@
 		// Copy value to clipboard.
 		await copyToClipboard(value);
 
-		const notice = document.querySelector(".tags-heatbox .action-status");
+		const notice = document.querySelector(".tags-atsui .action-status");
 		if (!notice) return;
 
 		notice.classList.add("is-shown");

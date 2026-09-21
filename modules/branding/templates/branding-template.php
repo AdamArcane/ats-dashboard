@@ -10,18 +10,17 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 return function () {
 	?>
 
-	<div class="wrap heatbox-wrap ats-branding-page">
+	<div class="wrap atsui-wrap ats-branding-page">
 
-		<div class="heatbox-header heatbox-margin-bottom">
+		<div class="atsui-header atsui-margin-bottom">
 
-			<div class="heatbox-container heatbox-container-center">
+			<div class="atsui-container atsui-container-center">
 
 				<div class="logo-container">
 
 					<div>
 						<span class="title">
 							<?php echo esc_html( get_admin_page_title() ); ?>
-ats
 						</span>
 						<p class="subtitle"><?php esc_html_e( 'Customization options admin area.', 'ats-dashboard' ); ?></p>
 					</div>
@@ -38,32 +37,32 @@ ats
 
 		<form method="post" action="options.php">
 
-			<div class="heatbox-container heatbox-container-center">
+			<div class="atsui-container atsui-container-center">
 
 				<h1 style="display: none;"></h1>
 
 				<?php settings_fields( 'ats-branding-group' ); ?>
 
-				<div class="heatbox">
+				<div class="atsui">
 					<?php do_settings_sections( 'ats-branding-settings' ); ?>
 				</div>
 
 				<?php do_action( 'ats_after_branding_layout_metabox' ); ?>
 
-				<div class="heatbox">
+				<div class="atsui">
 					<?php do_settings_sections( 'ats-darkmode-settings' ); ?>
 				</div>
 
 				<?php do_action( 'ats_after_darkmode_metabox' ); ?>
 
-				<div class="heatbox">
+				<div class="atsui">
 					<?php
 					do_settings_sections( 'ats-admin-colors-settings' );
 
 				
 						?>
 
-						<div class="heatbox-overlay"></div>
+						<div class="atsui-overlay"></div>
 
 					
 					<p>
@@ -75,21 +74,21 @@ ats
 
 				<?php do_action( 'ats_after_admin_colors_metabox' ); ?>
 
-				<div class="heatbox">
+				<div class="atsui">
 					<?php
 					do_settings_sections( 'ats-admin-logo-settings' );
 
 				
 						?>
 
-						<div class="heatbox-overlay"></div>
+						<div class="atsui-overlay"></div>
 
 					
 				</div>
 
 				<?php do_action( 'ats_after_admin_logo_metabox' ); ?>
 
-				<div class="heatbox">
+				<div class="atsui">
 					<?php do_settings_sections( 'ats-branding-misc-settings' ); ?>
 				</div>
 

@@ -190,8 +190,8 @@
 	 * Setup the tabs navigation for the email notifications page.
 	 */
 	function setupTabsNavigation() {
-		$(".ats-email-notifications-page .heatbox-tab-nav-item").on("click", function () {
-			$(".ats-email-notifications-page .heatbox-tab-nav-item").removeClass("active");
+		$(".ats-email-notifications-page .atsui-tab-nav-item").on("click", function () {
+			$(".ats-email-notifications-page .atsui-tab-nav-item").removeClass("active");
 			$(this).addClass("active");
 
 			const link = this.querySelector("a");
@@ -199,7 +199,7 @@
 
 			setRefererValue(hashValue);
 
-			$(".ats-email-notifications-form .heatbox-admin-panel").css("display", "none");
+			$(".ats-email-notifications-form .atsui-admin-panel").css("display", "none");
 			$(".ats-email-notifications-form .ats-" + hashValue + "-panel").css("display", "block");
 		});
 
@@ -212,10 +212,10 @@
 
 			setRefererValue(hashValue);
 
-			$(".ats-email-notifications-page .heatbox-tab-nav-item").removeClass("active");
-			$(".ats-email-notifications-page .heatbox-tab-nav-item." + hashValue + "-panel").addClass("active");
+			$(".ats-email-notifications-page .atsui-tab-nav-item").removeClass("active");
+			$(".ats-email-notifications-page .atsui-tab-nav-item." + hashValue + "-panel").addClass("active");
 
-			$(".ats-email-notifications-form .heatbox-admin-panel").css("display", "none");
+			$(".ats-email-notifications-form .atsui-admin-panel").css("display", "none");
 			$(".ats-email-notifications-form .ats-" + hashValue + "-panel").css("display", "block");
 		});
 	}

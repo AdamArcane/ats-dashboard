@@ -16,13 +16,13 @@ $roles_obj = new \WP_Roles();
 $roles     = $roles_obj->role_names;
 ?>
 
-<div class="heatbox admin-bar-visibility-box">
+<div class="atsui admin-bar-visibility-box">
 
 	<h2>
 		<?php esc_html_e( 'Visibility', 'ats-dashboard' ); ?>
 	</h2>
 
-	<div class="heatbox-content">
+	<div class="atsui-content">
 		<h3><?php esc_html_e( 'Remove Admin Bar for:', 'ats-dashboard' ); ?></h3>
 		<div class="field">
 			<label for="remove_by_roles" class="label select2-label">
@@ -47,7 +47,7 @@ $roles     = $roles_obj->role_names;
 		</div>
 	</div>
 
-	<div class="heatbox-footer">
+	<div class="atsui-footer">
 		<div class="field">
 			<button type="button" class="button button-primary button-larger js-save-remove-admin-bar">
 				<?php esc_html_e( 'Save Changes', 'ats-dashboard' ); ?>

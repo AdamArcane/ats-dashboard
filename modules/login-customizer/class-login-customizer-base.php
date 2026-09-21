@@ -133,7 +133,7 @@ class Login_Customizer_Base_Module extends Base_Module {
 
 		global $submenu;
 
-		$ats_slug = 'edit.php?post_type=ats_widgets';
+		$ats_slug = 'ats_settings';
 
 		// It's not set for users like subscribers with lower capabilities so this will throw an error if we don't check.
 		if ( ! isset( $submenu[ $ats_slug ] ) ) {
@@ -355,7 +355,7 @@ class Login_Customizer_Base_Module extends Base_Module {
 	 */
 	public function control_styles() {
 
-		wp_enqueue_style( 'heatbox', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/heatbox.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
+		wp_enqueue_style( 'atsui', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/atsui.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
 		wp_enqueue_style( 'ats-login-customizer', $this->url . '/assets/css/controls.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
 
 	}

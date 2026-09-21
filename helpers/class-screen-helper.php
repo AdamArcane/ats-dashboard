@@ -69,7 +69,7 @@ class Screen_Helper {
 	public function is_features() {
 
 		$current_screen = get_current_screen();
-		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_features' === $current_screen->id ? true : false );
+		return is_null( $current_screen ) ? false : ( 'arcane-tech_page_ats_features' === $current_screen->id ? true : false );
 
 	}
 
@@ -81,7 +81,7 @@ class Screen_Helper {
 	public function is_settings() {
 
 		$current_screen = get_current_screen();
-		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_settings' === $current_screen->id ? true : false );
+		return is_null( $current_screen ) ? false : ( 'toplevel_page_ats_settings' === $current_screen->id ? true : false );
 
 	}
 
@@ -93,7 +93,7 @@ class Screen_Helper {
 	public function is_branding() {
 
 		$current_screen = get_current_screen();
-		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_branding' === $current_screen->id ? true : false );
+		return is_null( $current_screen ) ? false : ( 'arcane-tech_page_ats_branding' === $current_screen->id ? true : false );
 
 	}
 
@@ -105,7 +105,7 @@ class Screen_Helper {
 	public function is_login_redirect() {
 
 		$current_screen = get_current_screen();
-		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_login_redirect' === $current_screen->id ? true : false );
+		return is_null( $current_screen ) ? false : ( 'arcane-tech_page_ats_login_redirect' === $current_screen->id ? true : false );
 
 	}
 
@@ -117,7 +117,7 @@ class Screen_Helper {
 	public function is_email_notifications() {
 
 		$current_screen = get_current_screen();
-		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_email_notifications' === $current_screen->id ? true : false );
+		return is_null( $current_screen ) ? false : ( 'arcane-tech_page_ats_email_notifications' === $current_screen->id ? true : false );
 
 	}
 
@@ -129,7 +129,7 @@ class Screen_Helper {
 	public function is_integrations() {
 
 		$current_screen = get_current_screen();
-		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_integrations' === $current_screen->id ? true : false );
+		return is_null( $current_screen ) ? false : ( 'arcane-tech_page_ats_integrations' === $current_screen->id ? true : false );
 
 	}
 
@@ -141,7 +141,7 @@ class Screen_Helper {
 	public function is_tools() {
 
 		$current_screen = get_current_screen();
-		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_tools' === $current_screen->id ? true : false );
+		return is_null( $current_screen ) ? false : ( 'arcane-tech_page_ats_tools' === $current_screen->id ? true : false );
 
 	}
 
@@ -189,7 +189,7 @@ class Screen_Helper {
 	public function is_admin_menu() {
 
 		$current_screen = get_current_screen();
-		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_admin_menu' === $current_screen->id ? true : false );
+		return is_null( $current_screen ) ? false : ( 'arcane-tech_page_ats_admin_menu' === $current_screen->id ? true : false );
 
 	}
 
@@ -201,7 +201,7 @@ class Screen_Helper {
 	public function is_admin_bar() {
 
 		$current_screen = get_current_screen();
-		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_admin_bar' === $current_screen->id ? true : false );
+		return is_null( $current_screen ) ? false : ( 'arcane-tech_page_ats_admin_bar' === $current_screen->id ? true : false );
 
 	}
 

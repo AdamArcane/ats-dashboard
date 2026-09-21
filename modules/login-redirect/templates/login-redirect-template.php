@@ -10,18 +10,17 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 return function () {
 	?>
 
-	<div class="wrap heatbox-wrap ats-branding-page">
+	<div class="wrap atsui-wrap ats-branding-page">
 
-		<div class="heatbox-header heatbox-margin-bottom">
+		<div class="atsui-header atsui-margin-bottom">
 
-			<div class="heatbox-container heatbox-container-center">
+			<div class="atsui-container atsui-container-center">
 
 				<div class="logo-container">
 
 					<div>
 						<span class="title">
 							<?php echo esc_html( get_admin_page_title() ); ?>
-ats
 						</span>
 						<p class="subtitle"><?php esc_html_e( 'Customize login redirect settings.', 'ats-dashboard' ); ?></p>
 					</div>
@@ -38,17 +37,17 @@ ats
 
 		<form method="post" action="options.php">
 
-			<div class="heatbox-container heatbox-container-center">
+			<div class="atsui-container atsui-container-center">
 
 				<h1 style="display: none;"></h1>
 
 				<?php settings_fields( 'ats-login-redirect-group' ); ?>
 
-				<div class="heatbox">
+				<div class="atsui">
 					<?php do_settings_sections( 'ats-login-url-settings' ); ?>
 				</div>
 
-				<div class="heatbox ats-login-redirect-heatbox">
+				<div class="atsui ats-login-redirect-atsui">
 					<?php do_settings_sections( 'ats-login-redirect-settings' ); ?>
 				</div>
 

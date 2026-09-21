@@ -71,7 +71,7 @@ class Customize_Toggle_Switch_Control extends \WP_Customize_Control {
 			</div>
 			<div class="ats-customize-control--right-col">
 
-				<div class="switch-control heatbox-wrap">
+				<div class="switch-control atsui-wrap">
 					<label for="<?php echo esc_attr( $input_id ); ?>" class="toggle-switch">
 						<input
 							type="checkbox"

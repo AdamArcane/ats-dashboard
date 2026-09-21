@@ -72,7 +72,7 @@ class Integrations_Module extends Base_Module {
 	 * Add submenu page.
 	 */
 	public function submenu_page() {
-		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'Integrations', 'ats-dashboard' ), __( 'Integrations', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_integrations', array( $this, 'submenu_page_content' ) );
+		add_submenu_page( 'ats_settings', __( 'Integrations', 'ats-dashboard' ), __( 'Integrations', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_integrations', array( $this, 'submenu_page_content' ) );
 	}
 
 	/**

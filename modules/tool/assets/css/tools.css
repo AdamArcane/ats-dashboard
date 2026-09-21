@@ -5,19 +5,19 @@
 	align-items: flex-start;
 }
 
-.ats-tools-container .heatbox {
+.ats-tools-container .atsui {
 	display: flex;
 	flex-direction: column;
 	flex: 0 49%;
 	margin-right: 2%;
 }
 
-.ats-tools-container .heatbox:nth-child(even) {
+.ats-tools-container .atsui:nth-child(even) {
 	margin-right: 0;
 }
 
 @media screen and (max-width:768px) {
-	.ats-tools-container .heatbox {
+	.ats-tools-container .atsui {
 		flex: 0 100%;
 		margin-right: 0;
 	}

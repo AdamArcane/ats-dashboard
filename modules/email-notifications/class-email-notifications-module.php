@@ -75,7 +75,7 @@ class Email_Notifications_Module extends Base_Module {
 	 * Add submenu page.
 	 */
 	public function submenu_page() {
-		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'Email Notifications', 'ats-dashboard' ), __( 'Email Notifications', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_email_notifications', array( $this, 'submenu_page_content' ) );
+		add_submenu_page( 'ats_settings', __( 'Email Notifications', 'ats-dashboard' ), __( 'Email Notifications', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_email_notifications', array( $this, 'submenu_page_content' ) );
 	}
 
 	/**

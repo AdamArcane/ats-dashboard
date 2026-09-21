@@ -22,8 +22,8 @@
 	 * Setup the tabs navigation for the integrations page.
 	 */
 	function setupTabsNavigation() {
-		$(".heatbox-tab-nav-item").on("click", function () {
-			$(".heatbox-tab-nav-item").removeClass("active");
+		$(".atsui-tab-nav-item").on("click", function () {
+			$(".atsui-tab-nav-item").removeClass("active");
 			$(this).addClass("active");
 
 			const link = this.querySelector("a");
@@ -39,8 +39,8 @@
 				hashValue = "mainwp";
 			}
 
-			$(".heatbox-tab-nav-item").removeClass("active");
-			$(".heatbox-tab-nav-item." + hashValue + "-panel").addClass("active");
+			$(".atsui-tab-nav-item").removeClass("active");
+			$(".atsui-tab-nav-item." + hashValue + "-panel").addClass("active");
 
 			showPanel(hashValue);
 		});
@@ -52,7 +52,7 @@
 	 * @param {string} hashValue The tab id.
 	 */
 	function showPanel(hashValue) {
-		$(".ats-integrations-form .heatbox-admin-panel").css("display", "none");
+		$(".ats-integrations-form .atsui-admin-panel").css("display", "none");
 		$(".ats-integrations-form .ats-" + hashValue + "-panel").css(
 			"display",
 			"block"

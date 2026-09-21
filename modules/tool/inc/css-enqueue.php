@@ -11,8 +11,8 @@ return function ( $module ) {
 
 	if ( $module->screen()->is_tools() ) {
 
-		// Heatbox.
-		wp_enqueue_style( 'heatbox', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/heatbox.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
+		// Atsui.
+		wp_enqueue_style( 'atsui', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/atsui.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
 
 		// Tools page.
 		wp_enqueue_style( 'ats-tools', $module->url . '/assets/css/tools.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );

@@ -196,7 +196,7 @@ class Admin_Bar_Base_Module extends Base_Module {
 	 */
 	public function submenu_page() {
 
-		add_submenu_page( 'edit.php?post_type=ats_widgets', __( 'Admin Bar Editor', 'ats-dashboard' ), __( 'Admin Bar Editor', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_admin_bar', array( $this, 'submenu_page_content' ) );
+		add_submenu_page( 'ats_settings', __( 'Admin Bar Editor', 'ats-dashboard' ), __( 'Admin Bar Editor', 'ats-dashboard' ), apply_filters( 'ats_settings_capability', 'manage_options' ), 'ats_admin_bar', array( $this, 'submenu_page_content' ) );
 
 	}
 

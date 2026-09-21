@@ -28,8 +28,8 @@
 
 			checkboxes.on("change", function () {
 				const $checkbox = $(this);
-				const $heatbox = $checkbox.parents(".heatbox");
-				const $statusTag = $heatbox.find(".status-code");
+				const $atsui = $checkbox.parents(".atsui");
+				const $statusTag = $atsui.find(".status-code");
 				const moduleName = $checkbox.attr("name") || "";
 
 				// Update the status text immediately.
@@ -48,15 +48,15 @@
 						);
 
 				// Clear any previous error on this box.
-				$heatbox.find(".feature-save-error").remove();
+				$atsui.find(".feature-save-error").remove();
 
 				// Track this change.
 				pendingChanges[moduleName] = $checkbox.prop("checked")
 					? "true"
 					: "false";
 
-				// Show loading indicator for this heatbox.
-				showLoading($heatbox);
+				// Show loading indicator for this atsui.
+				showLoading($atsui);
 				loadingModules[moduleName] = true;
 
 				// Abort the previous in-flight request.
@@ -70,17 +70,17 @@
 			});
 
 			/**
-			 * Show the loading spinner in a heatbox's h2.
+			 * Show the loading spinner in a atsui's h2.
 			 *
-			 * @param {JQuery} $heatbox The heatbox element.
+			 * @param {JQuery} $atsui The atsui element.
 			 */
-			function showLoading($heatbox) {
-				var $indicator = $heatbox.find(".heatbox-status-indicator");
+			function showLoading($atsui) {
+				var $indicator = $atsui.find(".atsui-status-indicator");
 
 				// Create the indicator element if it doesn't exist.
 				if (!$indicator.length) {
-					$indicator = $('<span class="heatbox-status-indicator"></span>');
-					$heatbox.find("h2").append($indicator);
+					$indicator = $('<span class="atsui-status-indicator"></span>');
+					$atsui.find("h2").append($indicator);
 				}
 
 				// Reset classes and force reflow for animation restart.
@@ -88,12 +88,12 @@
 			}
 
 			/**
-			 * Show the success indicator (🚀) in a heatbox's h2.
+			 * Show the success indicator (🚀) in a atsui's h2.
 			 *
-			 * @param {JQuery} $heatbox The heatbox element.
+			 * @param {JQuery} $atsui The atsui element.
 			 */
-			function showDone($heatbox) {
-				var $indicator = $heatbox.find(".heatbox-status-indicator");
+			function showDone($atsui) {
+				var $indicator = $atsui.find(".atsui-status-indicator");
 				if (!$indicator.length) return;
 
 				$indicator.removeClass("is-loading").text("🚀");
@@ -110,31 +110,31 @@
 			}
 
 			/**
-			 * Hide the loading indicator on a heatbox.
+			 * Hide the loading indicator on a atsui.
 			 *
-			 * @param {JQuery} $heatbox The heatbox element.
+			 * @param {JQuery} $atsui The atsui element.
 			 */
-			function hideLoading($heatbox) {
-				var $indicator = $heatbox.find(".heatbox-status-indicator");
+			function hideLoading($atsui) {
+				var $indicator = $atsui.find(".atsui-status-indicator");
 				if (!$indicator.length) return;
 
 				$indicator.removeClass("is-loading is-done").text("");
 			}
 
 			/**
-			 * Show an error message in a heatbox.
+			 * Show an error message in a atsui.
 			 *
-			 * @param {JQuery} $heatbox The heatbox element.
+			 * @param {JQuery} $atsui The atsui element.
 			 * @param {string} message  The error message.
 			 */
-			function showError($heatbox, message) {
+			function showError($atsui, message) {
 				// Remove any existing error first.
-				$heatbox.find(".feature-save-error").remove();
+				$atsui.find(".feature-save-error").remove();
 
 				var $error = $('<div class="feature-save-error"></div>').text(message);
 
 				// Insert before the feature-status bar.
-				$heatbox.find(".feature-status").before($error);
+				$atsui.find(".feature-status").before($error);
 			}
 
 			/**
@@ -146,8 +146,8 @@
 				var $checkbox = checkboxes.filter('[name="' + moduleName + '"]');
 				if (!$checkbox.length) return;
 
-				var $heatbox = $checkbox.parents(".heatbox");
-				var $statusTag = $heatbox.find(".status-code");
+				var $atsui = $checkbox.parents(".atsui");
+				var $statusTag = $atsui.find(".status-code");
 
 				// Toggle back to the opposite of what we attempted.
 				var wasChecked = $checkbox.prop("checked");
@@ -195,13 +195,13 @@
 								delete pendingChanges[String(name)];
 							});
 
-							// Show success on each saved module's heatbox.
+							// Show success on each saved module's atsui.
 							$.each(changesToSend, function (name) {
 								var moduleName = String(name);
 								var $cb = checkboxes.filter('[name="' + moduleName + '"]');
 
 								if ($cb.length) {
-									var $hb = $cb.parents(".heatbox");
+									var $hb = $cb.parents(".atsui");
 									delete loadingModules[moduleName];
 									showDone($hb);
 								}
@@ -233,7 +233,7 @@
 					var $cb = checkboxes.filter('[name="' + moduleName + '"]');
 
 					if ($cb.length) {
-						var $hb = $cb.parents(".heatbox");
+						var $hb = $cb.parents(".atsui");
 						delete loadingModules[moduleName];
 						delete pendingChanges[moduleName];
 						hideLoading($hb);

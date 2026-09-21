@@ -76,24 +76,24 @@
 	display: none;
 }
 
-/* Heatbox */
-.heatbox {
+/* Atsui */
+.atsui {
 	position: relative;
 }
 
-.heatbox .checkbox-label .is-disabled {
+.atsui .checkbox-label .is-disabled {
 	opacity: 0.6;
 }
 
-.heatbox .heatbox-overlay.is-hidden {
+.atsui .atsui-overlay.is-hidden {
 	display: none;
 }
 
-.dark-mode .heatbox .heatbox-overlay {
+.dark-mode .atsui .atsui-overlay {
 	background-color: rgba(255, 255, 255, 0.75);
 }
 
-.heatbox .heatbox-overlay {
+.atsui .atsui-overlay {
 	position: absolute;
 	top: 0;
 	left: 0;

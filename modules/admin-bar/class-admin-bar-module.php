@@ -111,9 +111,9 @@ class Admin_Bar_Module extends \ATSDash\AdminBar\Admin_Bar_Base_Module {
 		}
 		?>
 
-		<div class="heatbox ats-notice-metabox is-warning">
+		<div class="atsui ats-notice-metabox is-warning">
 			<h2><?php _e( 'Non-Blueprint Notice', 'welome-email-editor' ); ?></h2>
-			<div class="heatbox-content">
+			<div class="atsui-content">
 				<?php
 				$description  = __( '<strong>Caution:</strong> If the Admin Bar Editor is configured on a subsite, the blueprint settings for this feature will no longer be inherited.', 'ats-dashboard' ) . '<br><br>';
 				$description .= __( 'To inherit the blueprint configuration again for the Admin Bar Editor, please <strong>reset admin bar editor</strong> (button below).', 'ats-dashboard' );
@@ -140,9 +140,9 @@ class Admin_Bar_Module extends \ATSDash\AdminBar\Admin_Bar_Base_Module {
 		}
 		?>
 
-		<div class="heatbox ats-notice-metabox is-info">
+		<div class="atsui ats-notice-metabox is-info">
 			<h2><?php _e( 'Super Admin Notice', 'welome-email-editor' ); ?></h2>
-			<div class="heatbox-content">
+			<div class="atsui-content">
 				<?php
 				$description = '<strong>' . __( 'Info:', 'ats-dashboard' ) . '</strong>';
 				$description = $description . ' ' . __( 'Changes made to the <strong>Admin Bar</strong> will not affect super admins. Super admins will always see the full admin bar for maximum control.', 'ats-dashboard' );

@@ -27,11 +27,11 @@ return function () {
 	);
 	?>
 
-	<div class="wrap heatbox-wrap ats-email-notifications-page">
+	<div class="wrap atsui-wrap ats-email-notifications-page">
 
-		<div class="heatbox-header heatbox-has-tab-nav heatbox-margin-bottom">
+		<div class="atsui-header atsui-has-tab-nav atsui-margin-bottom">
 
-			<div class="heatbox-container heatbox-container-center">
+			<div class="atsui-container atsui-container-center">
 
 				<div class="logo-container">
 
@@ -49,9 +49,9 @@ return function () {
 				</div>
 
 				<nav>
-					<ul class="heatbox-tab-nav">
+					<ul class="atsui-tab-nav">
 						<?php foreach ( $tab_menus as $tab ) : ?>
-							<li class="heatbox-tab-nav-item <?php echo esc_attr( $tab['id'] ); ?>-panel<?php echo ! empty( $tab['active'] ) ? ' active' : ''; ?>">
+							<li class="atsui-tab-nav-item <?php echo esc_attr( $tab['id'] ); ?>-panel<?php echo ! empty( $tab['active'] ) ? ' active' : ''; ?>">
 								<a href="#<?php echo esc_attr( $tab['id'] ); ?>"><?php echo esc_html( $tab['text'] ); ?></a>
 							</li>
 						<?php endforeach; ?>
@@ -62,7 +62,7 @@ return function () {
 
 		</div>
 
-		<div class="heatbox-container heatbox-container-center">
+		<div class="atsui-container atsui-container-center">
 
 			<h1 style="display: none;"></h1>
 
@@ -70,14 +70,14 @@ return function () {
 
 				<?php settings_fields( 'ats-email-notifications-group' ); ?>
 
-				<div class="heatbox-admin-panel ats-global-panel" style="display:block;">
-					<div class="heatbox">
+				<div class="atsui-admin-panel ats-global-panel" style="display:block;">
+					<div class="atsui">
 						<?php do_settings_sections( 'ats-email-notifications-global-settings' ); ?>
 					</div>
 				</div>
 
-				<div class="heatbox-admin-panel ats-emails-panel">
-					<div class="heatbox">
+				<div class="atsui-admin-panel ats-emails-panel">
+					<div class="atsui">
 						<?php
 						$emails_list = require __DIR__ . '/partials/emails-list.php';
 						$emails_list( $module, $types );

@@ -1,6 +1,6 @@
 (function ($) {
 	var adminMenuWrap = document.querySelector("#adminmenuwrap");
-	var heatboxOverlays = document.querySelectorAll(".heatbox-overlay");
+	var atsuiOverlays = document.querySelectorAll(".atsui-overlay");
 	var instantPreviewStyleTags = document.querySelectorAll(
 		".ats-instant-preview",
 	);
@@ -200,7 +200,7 @@
 			tag.type = "text/css";
 		});
 
-		heatboxOverlays.forEach(function (overlay) {
+		atsuiOverlays.forEach(function (overlay) {
 			overlay.classList.add("is-hidden");
 		});
 	}
@@ -212,7 +212,7 @@
 			tag.type = "text/ats";
 		});
 
-		heatboxOverlays.forEach(function (overlay) {
+		atsuiOverlays.forEach(function (overlay) {
 			overlay.classList.remove("is-hidden");
 		});
 	}

@@ -8,13 +8,13 @@
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 ?>
 
-<div class="heatbox tags-heatbox">
+<div class="atsui tags-atsui">
 	<h2>
 		<?php esc_html_e( 'Placeholder Tags', 'ats-dashboard' ); ?>
 		<span class="action-status">📋 Copied</span>
 	</h2>
 
-	<div class="heatbox-content">
+	<div class="atsui-content">
 		<p>
 			<?php esc_html_e( 'Use the placeholder tags below to display certain information dynamically.', 'ats-dashboard' ); ?>
 			<br><strong><?php esc_html_e( '(Click to copy)', 'ats-dashboard' ); ?></strong>

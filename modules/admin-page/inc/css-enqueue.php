@@ -23,8 +23,8 @@ return function ( $module ) {
 		// Icon picker.
 		wp_enqueue_style( 'icon-picker', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/icon-picker.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
 
-		// Heatbox (metabox card styling).
-		wp_enqueue_style( 'heatbox', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/heatbox.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
+		// Atsui (metabox card styling).
+		wp_enqueue_style( 'atsui', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/atsui.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
 
 		// Edit admin page.
 		wp_enqueue_style( 'ats-edit-admin-page', $module->url . '/assets/css/edit-admin-page.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
@@ -39,8 +39,8 @@ return function ( $module ) {
 			wp_enqueue_style( 'font-awesome-shims', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/v4-shims.min.css', array(), '5.14.0' );
 		}
 
-		// Heatbox.
-		wp_enqueue_style( 'heatbox', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/heatbox.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
+		// Atsui.
+		wp_enqueue_style( 'atsui', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/atsui.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
 
 		do_action( 'ats_admin_page_list_styles' );
 

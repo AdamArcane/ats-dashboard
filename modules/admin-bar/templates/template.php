@@ -43,11 +43,11 @@ return function ( $module ) {
 
 	?>
 
-	<div class="wrap heatbox-wrap ats-admin-bar ats-menu-builder-editor-page">
+	<div class="wrap atsui-wrap ats-admin-bar ats-menu-builder-editor-page">
 
-		<div class="heatbox-header heatbox-margin-bottom">
+		<div class="atsui-header atsui-margin-bottom">
 
-			<div class="heatbox-container heatbox-container-center">
+			<div class="atsui-container atsui-container-center">
 
 				<div class="logo-container">
 
@@ -68,12 +68,12 @@ return function ( $module ) {
 
 		</div>
 
-		<div class="heatbox-container heatbox-container-center">
+		<div class="atsui-container atsui-container-center">
 			<h1 style="display: none;"></h1>
 		</div>
 
-		<div class="heatbox-container heatbox-container-center heatbox-column-container">
-			<div class="heatbox-main">
+		<div class="atsui-container atsui-container-center atsui-column-container">
+			<div class="atsui-main">
 
 
 
@@ -81,7 +81,7 @@ return function ( $module ) {
 
 				<form action="options.php" method="post" class="ats-menu-builder--edit-form">
 	
-					<div class="heatbox heatbox-admin-panel ats-menu-builder-box ats-menu-builder-box-panel">
+					<div class="atsui atsui-admin-panel ats-menu-builder-box ats-menu-builder-box-panel">
 
 						<div class="ats-menu-builder-box--header">
 							<h2 class="ats-menu-builder-box--title">
@@ -102,7 +102,7 @@ return function ( $module ) {
 							</div>
 						</div>
 
-						<div class="heatbox-footer">
+						<div class="atsui-footer">
 							<?php do_action( 'ats_admin_bar_form_footer' ); ?>
 						</div>
 
@@ -110,7 +110,7 @@ return function ( $module ) {
 
 				</form>
 			</div>
-			<div class="heatbox-sidebar">
+			<div class="atsui-sidebar">
 				<?php
 				require_once __DIR__ . '/metaboxes/remove-admin-bar-metabox.php';
 				require_once __DIR__ . '/metaboxes/placeholder-tags-metabox.php';

@@ -4,20 +4,20 @@
 
 /**
  * --------------------------------------------------
- * Select2 patch for heatbox and ats metabox inside post editing screen.
+ * Select2 patch for atsui and ats metabox inside post editing screen.
  * --------------------------------------------------
  */
-.heatbox-admin .select2-results__option,
+.atsui-admin .select2-results__option,
 .ats-metabox-field .select2-results__option {
 	margin-bottom: 0;
 }
 
-.heatbox-admin > .select2-container .select2-search,
+.atsui-admin > .select2-container .select2-search,
 .ats-metabox-field > .select2-container .select2-search {
 	padding: 6px;
 }
 
-.heatbox-admin > .select2-container .select2-search__field,
+.atsui-admin > .select2-container .select2-search__field,
 .ats-metabox-field > .select2-container .select2-search__field {
 	margin-left: 0;
 	margin-right: 0;
@@ -25,17 +25,17 @@
 	line-height: normal;
 }
 
-.heatbox .select2-label,
+.atsui .select2-label,
 .ats-metabox-field .select2-label {
 	display: block;
 }
 
-.heatbox .use-select2 {
+.atsui .use-select2 {
 	position: relative;
 	width: 100%;
 }
 
-.heatbox .select2-selection--multiple,
+.atsui .select2-selection--multiple,
 .ats-metabox-field .select2-selection--multiple {
 	position: relative;
 	display: block;
@@ -45,13 +45,13 @@
 	line-height: 20px;
 }
 
-.heatbox .select2-selection--multiple .select2-selection__rendered,
+.atsui .select2-selection--multiple .select2-selection__rendered,
 .ats-metabox-field .select2-selection--multiple .select2-selection__rendered {
 	margin-top: 0;
 	margin-bottom: 0;
 }
 
-.heatbox .select2-selection--multiple .select2-selection__choice,
+.atsui .select2-selection--multiple .select2-selection__choice,
 .ats-metabox-field .select2-selection--multiple .select2-selection__choice {
 	display: inline-flex;
 	align-items: center;
@@ -61,7 +61,7 @@
 	margin-bottom: 0;
 }
 
-.heatbox .select2-selection--multiple .select2-selection__choice__remove,
+.atsui .select2-selection--multiple .select2-selection__choice__remove,
 .ats-metabox-field
 	.select2-selection--multiple
 	.select2-selection__choice__remove {
@@ -72,7 +72,7 @@
 	height: 20px;
 }
 
-.heatbox .select2-selection--multiple .select2-selection__choice__remove span,
+.atsui .select2-selection--multiple .select2-selection__choice__remove span,
 .ats-metabox-field
 	.select2-selection--multiple
 	.select2-selection__choice__remove
@@ -81,7 +81,7 @@
 	top: -1px;
 }
 
-.heatbox .select2-selection--multiple .select2-selection__choice__display,
+.atsui .select2-selection--multiple .select2-selection__choice__display,
 .ats-metabox-field
 	.select2-selection--multiple
 	.select2-selection__choice__display {
@@ -90,12 +90,12 @@
 	line-height: 1;
 }
 
-.heatbox .select2-selection--multiple .select2-search--inline,
+.atsui .select2-selection--multiple .select2-search--inline,
 .ats-metabox-field .select2-selection--multiple .select2-search--inline {
 	display: inline;
 }
 
-.heatbox
+.atsui
 	.select2-selection--multiple
 	.select2-search--inline
 	.select2-search__field,
@@ -121,7 +121,7 @@
 /**
  * Notices for metabox.
  */
-.ats-notice-metabox .heatbox-content p:last-child {
+.ats-notice-metabox .atsui-content p:last-child {
 	margin-bottom: 0;
 }
 
