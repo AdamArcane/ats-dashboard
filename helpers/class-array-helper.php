@@ -19,8 +19,6 @@ class Array_Helper {
 	 * We don't use the array_search combined with array_column method
 	 * because it doesn't work in ats admin menu module.
 	 *
-	 * @see https://stackoverflow.com/questions/8102221/php-multidimensional-array-searching-find-key-by-specific-value
-	 *
 	 * @param array  $arr The haystack array.
 	 * @param string $key The key to search in.
 	 * @param mixed  $value The value to search for.
@@ -39,9 +37,6 @@ class Array_Helper {
 
 	/**
 	 * Check if specific array key exists in multi-dimensional array.
-	 *
-	 * @see https://stackoverflow.com/questions/19420715/check-if-specific-array-key-exists-in-multidimensional-array-php#answer-19421079
-	 * Check on "Alexandre Nucera" answer.
 	 *
 	 * @param array  $arr The array.
 	 * @param string $key The key.

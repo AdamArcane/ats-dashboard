@@ -33,7 +33,7 @@ class Multisite_Helper {
 	 * @return bool
 	 */
 	public function multisite_supported() {
-		return ( $this->is_network_active() && apply_filters( 'ats_pro_ms_support', false ) ? true : false );
+		return ( $this->is_network_active() && apply_filters( 'ats_ms_support', false ) ? true : false );
 	}
 
 	/**

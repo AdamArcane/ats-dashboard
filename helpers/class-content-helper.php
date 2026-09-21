@@ -292,7 +292,7 @@ class Content_Helper extends Content_Base_Helper {
 			return;
 		}
 
-		do_action( 'ats_pro_output_builder_content', $post, $builder_name );
+		do_action( 'ats_output_builder_content', $post, $builder_name );
 
 		if ( 'elementor' === $builder_name ) {
 

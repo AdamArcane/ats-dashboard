@@ -24,10 +24,10 @@ class Branding_Helper {
 		return apply_filters(
 			'ats_branding_default_colors',
 			array(
-				'accent_color'           => '#470000',
+				'accent_color'           => '#681E1E',
 				'menu_item_color'        => '#f7f7f7',
 				'admin_bar_bg_color'     => '#260000',
-				'admin_menu_bg_color'    => '#470000',
+				'admin_menu_bg_color'    => '#2D0B0B',
 				'admin_submenu_bg_color' => '#442d2d',
 			)
 		);

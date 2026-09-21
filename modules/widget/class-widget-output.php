@@ -304,7 +304,7 @@ class Widget_Output extends Base_Output {
 			$columns['dashboard'] = $settings['dashboard_columns'];
 		}
 
-		return apply_filters( 'ats_pro_dashboard_columns', $columns );
+		return apply_filters( 'ats_dashboard_columns', $columns );
 
 	}
 
@@ -325,7 +325,7 @@ class Widget_Output extends Base_Output {
 			$columns = $settings['dashboard_columns'];
 		}
 
-		return apply_filters( 'ats_pro_dashboard_columns_layout', $columns );
+		return apply_filters( 'ats_dashboard_columns_layout', $columns );
 
 	}
 
@@ -345,7 +345,7 @@ class Widget_Output extends Base_Output {
 		}
 
 		$widget_order_user = $widget_helper->get_widget_order_user();
-		$order_option_meta = get_option( 'ats_pro_widget_order' );
+		$order_option_meta = get_option( 'ats_widget_order' );
 
 		// Stop here if no user is selected.
 		if ( ! $widget_order_user ) {
@@ -375,7 +375,7 @@ class Widget_Output extends Base_Output {
 			}
 		}
 
-		update_option( 'ats_pro_widget_order', $order_user_meta );
+		update_option( 'ats_widget_order', $order_user_meta );
 
 	}
 

@@ -21,25 +21,7 @@ use ATSDash\Helpers\Widget_Base_Helper;
  */
 class Base_Module {
 
-	/**
-	 * Get ats option data.
-	 *
-	 * @deprecated 3.7.15 Use get_option() instead.
-	 *
-	 * @param string $option_name The option name without "ats_" prefix.
-	 * @return mixed The value of ats_{$option_name}.
-	 */
-	public function option( $option_name ) {
 
-		$value = Vars::get( 'ats_' . $option_name );
-
-		if ( $value ) {
-			return $value;
-		}
-
-		return get_option( 'ats_' . $option_name, array() );
-
-	}
 
 	/**
 	 * Array helper.

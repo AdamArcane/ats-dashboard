@@ -81,8 +81,6 @@ class Content_Base_Helper {
 	/**
 	 * Strip tags and its content from the given string.
 	 *
-	 * @link https://stackoverflow.com/questions/14684077/remove-all-html-tags-from-php-string/#answer-39320168
-	 *
 	 * @param string $text The string being stripped.
 	 *
 	 * @return string The stripped string.
@@ -100,22 +98,7 @@ class Content_Base_Helper {
 
 	}
 
-	/**
-	 * Sanitize css content (not a real sanitizing).
-	 *
-	 * @deprecated 3.7.12 Use sanitize_css() instead.
-	 * @see https://github.com/WordPress/WordPress/blob/56c162fbc9867f923862f64f1b4570d885f1ff03/wp-includes/customize/class-wp-customize-custom-css-setting.php#L157
-	 *
-	 * @param string $text The string being sanitized.
-	 * @return string The sanitized string.
-	 */
-	public function sanitize_css_content( $text ) {
-
-		return $this->sanitize_css( $text );
-
-	}
-
-	/**
+		/**
 	 * Sanitize css.
 	 *
 	 * @param string $text The string being sanitized.

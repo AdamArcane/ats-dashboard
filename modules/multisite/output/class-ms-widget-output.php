@@ -120,8 +120,8 @@ class Ms_Widget_Output extends Base_Output {
 
 		add_action( 'wp_dashboard_setup', array( self::get_instance(), 'remove_dashboard_widgets' ), 100 );
 		add_action( 'wp_dashboard_setup', array( self::get_instance(), 'add_dashboard_widgets' ) );
-		add_filter( 'ats_pro_dashboard_columns', array( self::get_instance(), 'dashboard_columns' ) );
-		add_filter( 'ats_pro_dashboard_columns_layout', array( self::get_instance(), 'dashboard_columns_layout' ) );
+		add_filter( 'ats_dashboard_columns', array( self::get_instance(), 'dashboard_columns' ) );
+		add_filter( 'ats_dashboard_columns_layout', array( self::get_instance(), 'dashboard_columns_layout' ) );
 		add_action( 'admin_init', array( self::get_instance(), 'update_widget_order' ), 15 );
 		add_action( 'user_register', array( self::get_instance(), 'update_widget_order' ) );
 
@@ -274,7 +274,7 @@ class Ms_Widget_Output extends Base_Output {
 
 		$widget_helper     = new \ATSDash\Helpers\Widget_Helper();
 		$widget_order_user = $widget_helper->get_widget_order_user( true );
-		$order_option_meta = get_option( 'ats_pro_widget_order' );
+		$order_option_meta = get_option( 'ats_widget_order' );
 
 		// Stop here if global widget order is not defined.
 		if ( ! $widget_order_user ) {
@@ -304,7 +304,7 @@ class Ms_Widget_Output extends Base_Output {
 			}
 		}
 
-		update_option( 'ats_pro_widget_order', $order_user_meta );
+		update_option( 'ats_widget_order', $order_user_meta );
 
 	}
 

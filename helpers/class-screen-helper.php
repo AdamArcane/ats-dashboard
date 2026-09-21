@@ -194,30 +194,6 @@ class Screen_Helper {
 	}
 
 	/**
-	 * Check if current screen is plugin onboarding page.
-	 *
-	 * @return boolean
-	 */
-	public function is_plugin_onboarding() {
-
-		$current_screen = get_current_screen();
-		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_plugin_onboarding' === $current_screen->id ? true : false );
-
-	}
-
-	/**
-	 * Check if current screen is wizard page.
-	 *
-	 * @return boolean
-	 */
-	public function is_wizard() {
-
-		$current_screen = get_current_screen();
-		return is_null( $current_screen ) ? false : ( 'ats_widgets_page_ats_onboarding_wizard' === $current_screen->id ? true : false );
-
-	}
-
-	/**
 	 * Check if current screen is block editor page.
 	 *
 	 * @return boolean

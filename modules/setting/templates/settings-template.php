@@ -44,7 +44,7 @@ return function () {
 					<div>
 						<span class="title">
 							<?php esc_html_e( 'Arcane Tech', 'ats-dashboard' ); ?>
-							<span class="version"><?php echo esc_html( ATS_DASHBOARD_PLUGIN_VERSION ); ?></span>
+ats
 						</span>
 						<p class="subtitle"><?php esc_html_e( 'Dashboard Settings.', 'ats-dashboard' ); ?></p>
 					</div>

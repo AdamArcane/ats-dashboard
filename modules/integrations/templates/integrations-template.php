@@ -46,7 +46,7 @@ return function () {
 					<div>
 						<span class="title">
 							<?php echo esc_html( get_admin_page_title() ); ?>
-							<span class="version"><?php echo esc_html( ATS_DASHBOARD_PLUGIN_VERSION ); ?></span>
+ats
 						</span>
 						<p class="subtitle"><?php esc_html_e( 'View data pushed from MainWP and other third-party integrations, with manual override options.', 'ats-dashboard' ); ?></p>
 					</div>

@@ -209,6 +209,18 @@ class Admin_Page_Base_Output extends Base_Output {
 					}
 				);
 			}
+		} elseif ( 'none' === $menu_type ) {
+			// Registers the page without attaching it to any menu, so it stays reachable by URL only.
+			add_submenu_page(
+				null,
+				$menu_title,
+				$menu_title,
+				'read',
+				$screen_id,
+				function () use ( $post, $from_multisite ) {
+					$this->render_admin_page( $post, $from_multisite );
+				}
+			);
 		} else {
 			add_submenu_page(
 				$menu_parent,

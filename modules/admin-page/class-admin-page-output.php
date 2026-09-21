@@ -93,9 +93,11 @@ class Admin_Page_Output extends Base_Output {
 
 		$parent_pages  = $output_class->get_posts( 'parent' );
 		$submenu_pages = $output_class->get_posts( 'submenu' );
+		$hidden_pages  = $output_class->get_posts( 'none' );
 
 		$ms_parent_pages  = array();
 		$ms_submenu_pages = array();
+		$ms_hidden_pages  = array();
 
 		if ( $ms_helper->needs_to_switch_blog() ) {
 			global $blueprint;
@@ -104,6 +106,7 @@ class Admin_Page_Output extends Base_Output {
 
 			$ms_parent_pages  = $output_class->get_posts( 'parent' );
 			$ms_submenu_pages = $output_class->get_posts( 'submenu' );
+			$ms_hidden_pages  = $output_class->get_posts( 'none' );
 
 			restore_current_blog();
 		}
@@ -122,6 +125,14 @@ class Admin_Page_Output extends Base_Output {
 
 		if ( ! empty( $ms_submenu_pages ) ) {
 			$output_class->prepare_menu( $ms_submenu_pages, true );
+		}
+
+		if ( ! empty( $hidden_pages ) ) {
+			$output_class->prepare_menu( $hidden_pages );
+		}
+
+		if ( ! empty( $ms_hidden_pages ) ) {
+			$output_class->prepare_menu( $ms_hidden_pages, true );
 		}
 
 	}

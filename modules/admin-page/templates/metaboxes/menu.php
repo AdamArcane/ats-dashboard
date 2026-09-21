@@ -27,6 +27,9 @@ return function ( $module, $post ) {
 			<option value="submenu" <?php selected( $menu_type, 'submenu' ); ?>>
 				<?php esc_html_e( 'Submenu', 'ats-dashboard' ); ?>
 			</option>
+			<option value="none" <?php selected( $menu_type, 'none' ); ?>>
+				<?php esc_html_e( 'Not Shown in Menu', 'ats-dashboard' ); ?>
+			</option>
 		</select>
 	</div>
 

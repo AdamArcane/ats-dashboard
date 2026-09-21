@@ -76,7 +76,6 @@ return function () {
 					<div>
 						<span class="title">
 							<?php echo esc_html( get_admin_page_title() ); ?>
-							<span class="version"><?php echo esc_html( ATS_DASHBOARD_PLUGIN_VERSION ); ?></span>
 						</span>
 						<p class="subtitle"><?php esc_html_e( 'Enable/disable ATS Dashboard features.', 'ats-dashboard' ); ?></p>
 					</div>

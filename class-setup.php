@@ -58,7 +58,7 @@ class Setup {
 		$GLOBALS['blueprint'] = $blueprint ? (int) $blueprint : 0;
 
 		// Enable multisite support.
-		add_filter( 'ats_pro_ms_support', '__return_true' );
+		add_filter( 'ats_ms_support', '__return_true' );
 
 		require __DIR__ . '/helpers/class-multisite-helper.php';
 
@@ -68,7 +68,6 @@ class Setup {
 		register_deactivation_hook( ATS_DASHBOARD_PLUGIN_FILE, array( $this, 'deactivation' ) );
 
 		add_action( 'plugins_loaded', array( $this, 'load_modules' ), 20 );
-		add_action( 'plugins_loaded', array( $this, 'load_plugin_onboarding_module' ), 20 );
 
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'init', array( $this, 'register_action_links' ) );
@@ -109,7 +108,7 @@ class Setup {
 		require __DIR__ . '/modules/branding/class-branding-base-output.php';
 		require __DIR__ . '/modules/login-customizer/class-login-customizer-base.php';
 
-		// Pro helper classes.
+		// helper classes.
 		require __DIR__ . '/helpers/class-video-helper.php';
 		require __DIR__ . '/helpers/class-content-helper.php';
 		require __DIR__ . '/helpers/class-widget-helper.php';
@@ -159,7 +158,7 @@ class Setup {
 		$multisite_settings = array();
 		$settings           = array( '<a href="' . admin_url( 'edit.php?post_type=ats_widgets&page=ats_settings' ) . '">' . __( 'Settings', 'ats-dashboard' ) . '</a>' );
 
-		if ( apply_filters( 'ats_pro_ms_support', false ) ) {
+		if ( apply_filters( 'ats_ms_support', false ) ) {
 			$multisite_settings = is_multisite() ? array( '<a href="' . network_admin_url( 'settings.php?page=ats-dashboard-multisite' ) . '">' . __( 'Network Settings', 'ats-dashboard' ) . '</a>' ) : array();
 		}
 
@@ -172,10 +171,6 @@ class Setup {
 	 */
 	public function on_plugin_activation() {
 
-		// Stop if this is activation from Erident's migration to ATS.
-		if ( get_option( 'ats_migration_from_erident' ) ) {
-			return;
-		}
 
 		// We bail out early in multisite because this function will still be called in the main site.
 		if ( is_multisite() ) {
@@ -253,12 +248,12 @@ class Setup {
 			'ats_recent_admin_menu',
 			'ats_admin_menu',
 			'ats_admin_bar',
-			'ats_pro_widget_order',
+			'ats_widget_order',
 			'ats_multisite_exclude',
 			'ats_multisite_widget_order',
 			'ats_multisite_capability',
-			'ats_pro_site_url',
-			'ats_pro_plugin_activated',
+			'ats_site_url',
+			'ats_plugin_activated',
 			'ats_block_template_flush_rewrite_rules',
 			'ats_compat_widget_type',
 			'ats_compat_widget_status',
@@ -266,8 +261,6 @@ class Setup {
 			'ats_compat_delete_login_customizer_page',
 			'ats_compat_settings_meta',
 			'ats_compat_old_option',
-			'ats_migration_from_erident',
-			'ats_referred_by_kirki',
 			'ats_login_customizer_flush_url',
 			'review_notice_dismissed',
 			'ats_install_date',
@@ -298,9 +291,9 @@ class Setup {
 			update_option( 'ats_plugin_activated', 1 );
 		}
 
-		if ( ! get_option( 'ats_pro_plugin_activated' ) ) {
-			update_option( 'ats_pro_site_url', $_SERVER['SERVER_NAME'] );
-			update_option( 'ats_pro_plugin_activated', 1 );
+		if ( ! get_option( 'ats_plugin_activated' ) ) {
+			update_option( 'ats_site_url', $_SERVER['SERVER_NAME'] );
+			update_option( 'ats_plugin_activated', 1 );
 		}
 
 	}
@@ -346,8 +339,7 @@ class Setup {
 			'ats_widgets_page_ats_settings',
 			'ats_widgets_page_ats_login_redirect',
 			'ats_widgets_page_ats_admin_menu',
-			'ats_widgets_page_ats_admin_bar',
-			'ats_widgets_page_ats_plugin_onboarding',
+			'ats_widgets_page_ats_admin_bar'
 		);
 
 		$screen = get_current_screen();
@@ -490,33 +482,6 @@ class Setup {
 
 	}
 
-	/**
-	 * Load plugin onboarding module.
-	 */
-	public function load_plugin_onboarding_module() {
-
-		$need_setup = false;
-		$referrer   = '';
-
-		// Erident's migration takes the highest priority.
-		if ( get_option( 'ats_migration_from_erident' ) ) {
-			$need_setup = true;
-			$referrer   = 'erident';
-		} elseif ( get_option( 'ats_referred_by_kirki' ) ) {
-			$need_setup = true;
-			$referrer   = 'kirki';
-		}
-		// In the future, we might allow ats to be installed from other plugins as well.
-
-		if ( ! $need_setup ) {
-			return;
-		}
-
-		require_once __DIR__ . '/modules/plugin-onboarding/class-plugin-onboarding-module.php';
-		$module = new PluginOnboarding\Plugin_Onboarding_Module();
-		$module->setup( $referrer );
-
-	}
 
 	/**
 	 * Enqueue admin styles.
