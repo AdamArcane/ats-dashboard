@@ -8,11 +8,25 @@
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 return function () {
+
+	$branding_tab_menus = array(
+		array(
+			'id'     => 'customization',
+			'text'   => __( 'Branding', 'ats-dashboard' ),
+			'active' => true,
+		),
+		array(
+			'id'   => 'custom-css',
+			'text' => __( 'Custom CSS', 'ats-dashboard' ),
+		),
+	);
+
+	$branding_tab_menus = apply_filters( 'ats_branding_tab_menus', $branding_tab_menus );
 	?>
 
 	<div class="wrap atsui-wrap ats-branding-page">
 
-		<div class="atsui-header atsui-margin-bottom">
+		<div class="atsui-header atsui-has-tab-nav atsui-margin-bottom">
 
 			<div class="atsui-container atsui-container-center">
 
@@ -31,74 +45,105 @@ return function () {
 
 				</div>
 
+				<nav>
+					<ul class="atsui-tab-nav">
+						<?php foreach ( $branding_tab_menus as $tab ) : ?>
+
+							<li class="atsui-tab-nav-item <?php echo esc_attr( $tab['id'] ); ?>-panel">
+								<a href="#<?php echo esc_attr( $tab['id'] ); ?>"><?php echo esc_html( $tab['text'] ); ?></a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</nav>
+
 			</div>
 
 		</div>
 
-		<form method="post" action="options.php">
+		<div class="atsui-container atsui-container-center">
 
-			<div class="atsui-container atsui-container-center">
+			<h1 style="display: none;"></h1>
 
-				<h1 style="display: none;"></h1>
+			<div class="atsui-admin-panel ats-customization-panel">
 
-				<?php settings_fields( 'ats-branding-group' ); ?>
+				<form method="post" action="options.php">
 
-				<div class="atsui">
-					<?php do_settings_sections( 'ats-branding-settings' ); ?>
-				</div>
+					<?php settings_fields( 'ats-branding-group' ); ?>
 
-				<?php do_action( 'ats_after_branding_layout_metabox' ); ?>
+					<div class="atsui">
+						<?php do_settings_sections( 'ats-branding-settings' ); ?>
+					</div>
 
-				<div class="atsui">
-					<?php do_settings_sections( 'ats-darkmode-settings' ); ?>
-				</div>
+					<?php do_action( 'ats_after_branding_layout_metabox' ); ?>
 
-				<?php do_action( 'ats_after_darkmode_metabox' ); ?>
+					<div class="atsui">
+						<?php do_settings_sections( 'ats-darkmode-settings' ); ?>
+					</div>
 
-				<div class="atsui">
-					<?php
-					do_settings_sections( 'ats-admin-colors-settings' );
+					<?php do_action( 'ats_after_darkmode_metabox' ); ?>
 
-				
-						?>
+					<div class="atsui">
+						<?php
+						do_settings_sections( 'ats-admin-colors-settings' );
 
-						<div class="atsui-overlay"></div>
 
-					
-					<p>
-						<button type="button" class="button button-secondary" id="ats-reset-branding-colors">
-							<?php esc_html_e( 'Reset to defaults', 'ats-dashboard' ); ?>
-						</button>
-					</p>
-				</div>
+							?>
 
-				<?php do_action( 'ats_after_admin_colors_metabox' ); ?>
+							<div class="atsui-overlay"></div>
 
-				<div class="atsui">
-					<?php
-					do_settings_sections( 'ats-admin-logo-settings' );
 
-				
-						?>
+						<p>
+							<button type="button" class="button button-secondary" id="ats-reset-branding-colors">
+								<?php esc_html_e( 'Reset to defaults', 'ats-dashboard' ); ?>
+							</button>
+						</p>
+					</div>
 
-						<div class="atsui-overlay"></div>
+					<?php do_action( 'ats_after_admin_colors_metabox' ); ?>
 
-					
-				</div>
+					<div class="atsui">
+						<?php
+						do_settings_sections( 'ats-admin-logo-settings' );
 
-				<?php do_action( 'ats_after_admin_logo_metabox' ); ?>
 
-				<div class="atsui">
-					<?php do_settings_sections( 'ats-branding-misc-settings' ); ?>
-				</div>
+							?>
 
-				<?php do_action( 'ats_after_branding_misc_metabox' ); ?>
+							<div class="atsui-overlay"></div>
 
-				<?php submit_button( '', 'button button-primary button-larger' ); ?>
+
+					</div>
+
+					<?php do_action( 'ats_after_admin_logo_metabox' ); ?>
+
+					<div class="atsui">
+						<?php do_settings_sections( 'ats-branding-misc-settings' ); ?>
+					</div>
+
+					<?php do_action( 'ats_after_branding_misc_metabox' ); ?>
+
+					<?php submit_button( '', 'button button-primary button-larger' ); ?>
+
+				</form>
 
 			</div>
 
-		</form>
+			<div class="atsui-admin-panel ats-custom-css-panel">
+
+				<form method="post" action="options.php">
+
+					<?php settings_fields( 'ats-settings-group' ); ?>
+
+					<div class="atsui">
+						<?php do_settings_sections( 'ats-custom-css-settings' ); ?>
+					</div>
+
+					<?php submit_button( '', 'button button-primary button-larger' ); ?>
+
+				</form>
+
+			</div>
+
+		</div>
 
 	</div>
 

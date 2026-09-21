@@ -14,6 +14,10 @@ return function ( $module ) {
 	if ( $is_branding_page ) {
 
 		wp_enqueue_script( 'wp-color-picker' );
+
+		// CodeMirror, for the Custom CSS tab.
+		wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
+
 		wp_enqueue_script( 'ats-settings', ATS_DASHBOARD_PLUGIN_URL . '/assets/js/settings.js', array( 'jquery', 'wp-color-picker' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
 
 		// Branding settings.

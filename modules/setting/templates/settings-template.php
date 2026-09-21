@@ -22,11 +22,6 @@ return function () {
 		array(
 			'id'     => 'page-builder-dashboard',
 			'text'   => __( 'Page Builder Dashboard', 'ats-dashboard' ),
-			'is_pro' => true,
-		),
-		array(
-			'id'   => 'custom-css',
-			'text' => __( 'Custom CSS', 'ats-dashboard' ),
 		),
 	);
 
@@ -98,7 +93,6 @@ return function () {
 							<div class="atsui">
 								<?php do_settings_sections( 'ats-widget-styling-settings' ); ?>
 							</div>
-
 							<div class="atsui">
 								<?php do_settings_sections( 'ats-welcome-panel-settings' ); ?>
 							</div>
@@ -112,12 +106,6 @@ return function () {
 						</div>
 
 						<?php do_action( 'ats_after_page_builder_dashboard_metabox' ); ?>
-					</div>
-
-					<div class="atsui-admin-panel ats-custom-css-panel">
-						<div class="atsui">
-							<?php do_settings_sections( 'ats-custom-css-settings' ); ?>
-						</div>
 					</div>
 
 					<?php do_action( 'ats_after_custom_panel' ); ?>

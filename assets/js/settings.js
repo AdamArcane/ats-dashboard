@@ -91,18 +91,22 @@
 
 			setRefererValue(hashValue);
 
-			$(".ats-settings-form .atsui-admin-panel").css("display", "none");
-			$(".ats-settings-form .ats-" + hashValue + "-panel").css(
-				"display",
-				"block"
-			);
+			$(".atsui-admin-panel").css("display", "none");
+			$(".ats-" + hashValue + "-panel").css("display", "block");
 		});
 
 		window.addEventListener("load", function () {
 			var hashValue = window.location.hash.substr(1);
 
 			if (!hashValue) {
-				hashValue = "general";
+				var firstTabLink = document.querySelector(
+					".atsui-tab-nav-item a"
+				);
+				hashValue = firstTabLink
+					? firstTabLink.href.substring(
+							firstTabLink.href.indexOf("#") + 1
+					  )
+					: "";
 			}
 
 			setRefererValue(hashValue);
@@ -110,11 +114,8 @@
 			$(".atsui-tab-nav-item").removeClass("active");
 			$(".atsui-tab-nav-item." + hashValue + "-panel").addClass("active");
 
-			$(".ats-settings-form .atsui-admin-panel").css("display", "none");
-			$(".ats-settings-form .ats-" + hashValue + "-panel").css(
-				"display",
-				"block"
-			);
+			$(".atsui-admin-panel").css("display", "none");
+			$(".ats-" + hashValue + "-panel").css("display", "block");
 		});
 	}
 
