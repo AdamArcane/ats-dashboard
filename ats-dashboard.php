@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 // Constants.
 define( 'ATS_DASHBOARD_PLUGIN_DIR', rtrim( plugin_dir_path( __FILE__ ), '/' ) );
 define( 'ATS_DASHBOARD_PLUGIN_URL', rtrim( plugin_dir_url( __FILE__ ), '/' ) );
-define( 'ATS_DASHBOARD_PLUGIN_VERSION', '1.0.1' );
+define( 'ATS_DASHBOARD_PLUGIN_VERSION', '1.0.2' );
 define( 'ATS_DASHBOARD_PLUGIN_FILE', plugin_basename( __FILE__ ) );
 define( 'ATS_DASHBOARD_DEFAULT_LOGO_URL', 'https://cdn-r2.arcanetechct.com/LogoWideTransparent.png' );
 

@@ -392,6 +392,7 @@ class Setup {
 			'admin_menu_editor' => 'true',
 			'admin_bar_editor'  => 'true',
 			'integrations'      => 'true',
+			'notice_bell'       => 'true',
 		);
 
 		$saved_modules = get_option( 'ats_modules', $defaults );
@@ -458,6 +459,10 @@ class Setup {
 
 		if ( isset( $saved_modules['admin_bar_editor'] ) && 'true' === $saved_modules['admin_bar_editor'] ) {
 			$modules['ATSDash\\AdminBar\\Admin_Bar_Module'] = __DIR__ . '/modules/admin-bar/class-admin-bar-module.php';
+		}
+
+		if ( isset( $saved_modules['notice_bell'] ) && 'true' === $saved_modules['notice_bell'] ) {
+			$modules['ATSDash\\NoticeBell\\Notice_Bell_Module'] = __DIR__ . '/modules/notice-bell/class-notice-bell-module.php';
 		}
 
 		$ms_helper = new Multisite_Helper();

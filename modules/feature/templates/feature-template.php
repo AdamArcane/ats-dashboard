@@ -55,6 +55,12 @@ return function () {
 			'text'    => __( 'View data pushed from MainWP (site ID, hosting, CRM status) and other third-party integrations, with manual override options.', 'ats-dashboard' ),
 			'feature' => 'integrations',
 		),
+		array(
+			'title'   => __( 'Notice Bell', 'ats-dashboard' ),
+			'img'     => ATS_DASHBOARD_PLUGIN_URL . '/modules/feature/assets/img/notice-bell.svg',
+			'text'    => __( 'Collect admin notices from WordPress & other plugins into a notification bell in the toolbar instead of cluttering every screen.', 'ats-dashboard' ),
+			'feature' => 'notice_bell',
+		),
 	)
 
 	?>
