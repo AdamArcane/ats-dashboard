@@ -51,8 +51,7 @@ class Setting_Module extends Base_Module {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 
 		add_action( 'admin_init', array( $this, 'add_settings' ) );
-			add_action( 'admin_init', array( $this, 'pro_setting_fields' ) );
-			add_action( 'ats_after_page_builder_dashboard_metabox', array( $this, 'block_editor_template_metabox' ) );
+		add_action( 'ats_after_page_builder_dashboard_metabox', array( $this, 'block_editor_template_metabox' ) );
 
 		// Site Owner role: settings tab wiring + role sync.
 		add_filter( 'ats_setting_tab_menus', array( $this, 'add_site_owner_role_tab' ) );
@@ -229,18 +228,7 @@ class Setting_Module extends Base_Module {
 			$field( $role_key );
 		}
 
-		/**
-		 * Add dashboard columns and widget order fields.
-		 */
-		public function pro_setting_fields() {
-			add_settings_field( 'column-settings', __( 'Dashboard Columns', 'ats-dashboard' ), array( $this, 'widget_columns_field' ), 'ats-general-settings', 'ats-general-section' );
-
-			$ms_helper = new Multisite_Helper();
-			if ( ! $ms_helper->is_network_active() ) {
-				add_settings_field( 'widget-order', __( 'Order Widgets by', 'ats-dashboard' ), array( $this, 'widgets_order_field' ), 'ats-general-settings', 'ats-general-section' );
-			}
-		}
-
+	
 		/**
 		 * Render the block editor template info metabox.
 		 */
@@ -523,6 +511,31 @@ class Setting_Module extends Base_Module {
 			'ats-general-section'
 		);
 
+		add_settings_field(
+			'remove-howdy-text-settings',
+			__( 'Remove Howdy Text', 'ats-dashboard' ),
+			array( $this, 'remove_howdy_text_field' ),
+			'ats-general-settings',
+			'ats-general-section'
+		);
+
+		add_settings_field( 'column-settings', 
+			__( 'Dashboard Columns', 'ats-dashboard' ), 
+			array( $this, 'widget_columns_field' ), 
+			'ats-general-settings', 
+			'ats-general-section' 
+			);
+
+		$ms_helper = new Multisite_Helper();
+		if ( ! $ms_helper->is_network_active() ) {
+			add_settings_field( 'widget-order', 
+				__( 'Order Widgets by', 'ats-dashboard' ), 
+				array( $this, 'widgets_order_field' ), 
+				'ats-general-settings', 
+				'ats-general-section' 
+			);
+		}
+
 		$remove_fa_description = '<p class="description">' . __( 'Use only if your icons are not displayed correctly.', 'ats-dashboard' ) . '</p>';
 
 		// Misc fields.
@@ -570,6 +583,7 @@ class Setting_Module extends Base_Module {
 			'ats-custom-css-settings',
 			'ats-custom-css-section'
 		);
+
 
 	}
 
@@ -783,6 +797,16 @@ class Setting_Module extends Base_Module {
 	public function howdy_text_field() {
 
 		$field = require __DIR__ . '/templates/fields/howdy-text.php';
+		$field();
+
+	}
+
+	/**
+	 * Remove Howdy text field.
+	 */
+	public function remove_howdy_text_field() {
+
+		$field = require __DIR__ . '/templates/fields/remove-howdy-text.php';
 		$field();
 
 	}

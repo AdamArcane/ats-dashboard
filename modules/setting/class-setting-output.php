@@ -144,7 +144,30 @@ class Setting_Output extends Base_Output {
 			return;
 		}
 
-		$GLOBALS['title'] = $settings['dashboard_headline'];
+		$GLOBALS['title'] = $this->replace_headline_placeholders( $settings['dashboard_headline'] );
+
+	}
+
+	/**
+	 * Replace supported placeholders in the custom dashboard headline with the
+	 * current user's/site's actual values.
+	 *
+	 * @param string $headline The raw headline, possibly containing placeholders.
+	 *
+	 * @return string The headline with placeholders replaced.
+	 */
+	public function replace_headline_placeholders( $headline ) {
+
+		$user = wp_get_current_user();
+
+		$replacements = array(
+			'{site_name}'    => get_bloginfo( 'name' ),
+			'{display_name}' => $user->display_name,
+			'{first_name}'   => $user->first_name ? $user->first_name : $user->display_name,
+			'{username}'     => $user->user_login,
+		);
+
+		return str_replace( array_keys( $replacements ), array_values( $replacements ), $headline );
 
 	}
 
@@ -157,7 +180,7 @@ class Setting_Output extends Base_Output {
 
 		$settings = get_option( 'ats_settings' );
 
-		if ( empty( $settings['howdy_text'] ) ) {
+		if ( empty( $settings['remove_howdy_text'] ) && empty( $settings['howdy_text'] ) ) {
 			return;
 		}
 
@@ -167,7 +190,11 @@ class Setting_Output extends Base_Output {
 			return;
 		}
 
-		$my_account->title = str_ireplace( 'Howdy', esc_html( $settings['howdy_text'] ), $my_account->title );
+		if ( ! empty( $settings['remove_howdy_text'] ) ) {
+			$my_account->title = preg_replace( '/Howdy,\s*/i', '', $my_account->title );
+		} else {
+			$my_account->title = str_ireplace( 'Howdy', esc_html( $settings['howdy_text'] ), $my_account->title );
+		}
 
 		$wp_admin_bar->remove_node( 'my-account' );
 
