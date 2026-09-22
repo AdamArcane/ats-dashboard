@@ -248,6 +248,16 @@ class Admin_Page_Base_Output extends Base_Output {
 					return;
 				}
 
+				// WordPress's own get_admin_page_title() can't resolve a title
+				// for a "Not Shown in Menu" page (registered via
+				// add_submenu_page( null, ... ), so it never appears in $menu
+				// or $submenu for it to find) — it returns the still-empty
+				// global $title, and admin-header.php then does
+				// strip_tags( $title ), throwing a "passing null" deprecation
+				// notice. Set it ourselves so core finds it already resolved.
+				global $title;
+				$title = $post->post_title;
+
 				if ( $post->remove_admin_notices ) {
 					remove_all_actions( 'admin_notices' );
 				}

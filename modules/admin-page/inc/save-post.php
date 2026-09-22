@@ -49,7 +49,7 @@ return function ( $module, $post_id ) {
 
 	// HTML content.
 	if ( isset( $_POST['ats_html_content'] ) ) {
-		update_post_meta( $post_id, 'ats_html_content', wp_kses_post( wp_unslash( $_POST['ats_html_content'] ) ) );
+		update_post_meta( $post_id, 'ats_html_content', wp_kses( wp_unslash( $_POST['ats_html_content'] ), $module->content()->get_admin_page_html_allowed_tags() ) );
 	}
 
 	// Display options.

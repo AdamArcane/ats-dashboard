@@ -70,6 +70,14 @@ return function ( $post_id ) {
 			update_post_meta( $post_id, 'ats_html', wp_kses_post( wp_unslash( $_POST['ats_html'] ) ) );
 		}
 
+		// Custom CSS (applies to any widget type).
+		if ( isset( $_POST['ats_custom_css'] ) ) {
+			// Stored as raw CSS text, never as HTML, so tags are stripped rather
+			// than allow-listed — this also blocks breaking out of the eventual
+			// <style> tag it's printed inside (e.g. `</style><script>`).
+			update_post_meta( $post_id, 'ats_custom_css', wp_strip_all_tags( wp_unslash( $_POST['ats_custom_css'] ) ) );
+		}
+
 		// RSS feed widget.
 		if ( isset( $_POST['ats_rss_feed_url'] ) ) {
 			update_post_meta( $post_id, 'ats_rss_feed_url', esc_url_raw( $_POST['ats_rss_feed_url'] ) );

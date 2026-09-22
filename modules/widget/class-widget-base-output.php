@@ -47,6 +47,14 @@ class Widget_Base_Output extends Base_Output {
 	public $placeholder_values;
 
 	/**
+	 * Per-widget custom CSS, collected while adding dashboard widgets and
+	 * printed as part of the aggregated dashboard stylesheet.
+	 *
+	 * @var array
+	 */
+	public $custom_css = array();
+
+	/**
 	 * Get instance of the class.
 	 *
 	 * @return object
@@ -234,6 +242,14 @@ class Widget_Base_Output extends Base_Output {
 
 			}
 
+			$custom_css = get_post_meta( $post_id, 'ats_custom_css', true );
+
+			if ( $custom_css ) {
+				// {{WRAPPER}} lets widget authors scope rules to just this
+				// widget; anything else they write applies dashboard-wide.
+				$this->custom_css[] = str_replace( '{{WRAPPER}}', '#ms-ats' . $post_id, $custom_css );
+			}
+
 			$output_args = array(
 				'id'          => $post_id,
 				'title'       => $title,
@@ -299,6 +315,10 @@ class Widget_Base_Output extends Base_Output {
 		ob_start();
 		require __DIR__ . '/inc/widget-styles.css.php';
 		$css = ob_get_clean();
+
+		if ( ! empty( $this->custom_css ) ) {
+			$css .= "\n" . implode( "\n", $this->custom_css );
+		}
 
 		wp_add_inline_style( 'ats-dashboard', $css );
 

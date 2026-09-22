@@ -41,6 +41,24 @@ return function () {
 			<?php do_action( 'ats_widget_metabox' ); ?>
 		</div>
 
+		<div class="postbox">
+			<div class="postbox-header">
+				<h2><?php esc_html_e( 'Custom CSS', 'ats-dashboard' ); ?></h2>
+			</div>
+			<div class="inside">
+				<p class="description">
+					<?php
+					printf(
+						/* translators: %s: the {{WRAPPER}} placeholder token. */
+						esc_html__( 'Applies to this widget only. Use %s in a selector to scope it to this widget; anything else applies dashboard-wide.', 'ats-dashboard' ),
+						'<code>{{WRAPPER}}</code>'
+					);
+					?>
+				</p>
+				<textarea id="ats_custom_css" class="widefat textarea ats-css-code-editor" name="ats_custom_css" rows="10"><?php echo esc_textarea( wp_unslash( get_post_meta( $post->ID, 'ats_custom_css', true ) ) ); ?></textarea>
+			</div>
+		</div>
+
 	</div>
 
 	<?php

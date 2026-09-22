@@ -16,7 +16,33 @@ return function ( $module, $post ) {
 
 	$admin_menu = $GLOBALS['menu'];
 
+	// The page's real URL only exists once WordPress has registered its menu
+	// page — that happens for published posts with a menu type set (see
+	// Admin_Page_Base_Output::get_posts()), on every admin_menu load.
+	$menu_url = '';
+
+	if ( 'publish' === $post->post_status && $menu_type && $post->post_name ) {
+		$menu_url = menu_page_url( 'ats_page_' . $post->post_name, false );
+	}
+
 	?>
+
+	<?php if ( $menu_url ) : ?>
+
+		<div class="ats-metabox-field">
+			<label class="label"><?php esc_html_e( 'Permalink', 'ats-dashboard' ); ?></label>
+			<input type="text" class="is-full" value="<?php echo esc_url( $menu_url ); ?>" readonly onclick="this.select();">
+			<a href="<?php echo esc_url( $menu_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'View', 'ats-dashboard' ); ?></a>
+		</div>
+
+	<?php else : ?>
+
+		<div class="ats-metabox-field">
+			<label class="label"><?php esc_html_e( 'Permalink', 'ats-dashboard' ); ?></label>
+			<p class="description"><?php esc_html_e( 'Available once this page is published with a Menu Type set.', 'ats-dashboard' ); ?></p>
+		</div>
+
+	<?php endif; ?>
 
 	<div class="ats-metabox-field">
 		<label class="label" for="ats_menu_type"><?php esc_html_e( 'Menu Type', 'ats-dashboard' ); ?></label>

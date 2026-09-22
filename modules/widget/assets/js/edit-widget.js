@@ -8,6 +8,7 @@
 		setupCustomRecipient();
 		setupContactForm();
 		setupHtmlCodeEditor();
+		setupCssCodeEditor();
 		setupColorFields();
 	}
 
@@ -52,6 +53,36 @@
 
 		setTimeout( function () {
 			htmlCodeEditor.codemirror.refresh();
+		}, 300 );
+	}
+
+	/**
+	 * Set up CodeMirror (line numbers, CSS syntax highlighting) on the
+	 * per-widget Custom CSS field. This field is always visible regardless
+	 * of widget type, so it doesn't need the same visibility-refresh
+	 * handling as the HTML field.
+	 */
+	function setupCssCodeEditor() {
+		var el = document.getElementById( "ats_custom_css" );
+		if ( ! el || ! window.wp || ! wp.codeEditor ) return;
+
+		if ( el.dataset.atsCodemirrorInitialized ) return;
+		el.dataset.atsCodemirrorInitialized = "1";
+
+		var editorSettings = wp.codeEditor.defaultSettings
+			? _.clone( wp.codeEditor.defaultSettings )
+			: {};
+
+		editorSettings.codemirror = _.extend( {}, editorSettings.codemirror, {
+			indentUnit: 4,
+			tabSize: 4,
+			mode: "css",
+		} );
+
+		var cssCodeEditor = wp.codeEditor.initialize( el, editorSettings );
+
+		setTimeout( function () {
+			cssCodeEditor.codemirror.refresh();
 		}, 300 );
 	}
 

@@ -43,7 +43,15 @@ return function () {
 	$args = array(
 		'labels'              => $labels,
 		'menu_icon'           => 'dashicons-format-gallery',
-		'public'              => true,
+		// These posts back /wp-admin/admin.php?page=ats_page_<slug> screens
+		// (see Admin_Page_Base_Output::add_menu()), never a frontend URL.
+		// 'public' => true also turns on publicly_queryable, which is what
+		// let a raw ?post_type=ats_admin_page&p=<id> query render the post
+		// on the frontend even with rewrite/query_var/has_archive all off.
+		'public'              => false,
+		'publicly_queryable'  => false,
+		'show_ui'             => true,
+		'show_in_nav_menus'   => false,
 		'exclude_from_search' => true,
 		'show_in_menu'        => false,
 		'show_in_rest'        => false,

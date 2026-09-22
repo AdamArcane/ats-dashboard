@@ -63,6 +63,7 @@ class Admin_Page_Base_Module extends Base_Module {
 		add_filter( 'post_updated_messages', array( $this, 'update_messages' ) );
 		add_filter( 'manage_ats_admin_page_posts_columns', array( $this, 'set_columns' ) );
 		add_action( 'manage_ats_admin_page_posts_custom_column', array( $this, 'column_content' ), 10, 2 );
+		add_filter( 'post_row_actions', array( $this, 'row_actions' ), 10, 2 );
 		add_action( 'do_meta_boxes', array( $this, 'remove_metaboxes' ) );
 
 		add_filter( 'template_include', array( $this, 'include_template' ), 1 );
@@ -191,6 +192,52 @@ class Admin_Page_Base_Module extends Base_Module {
 
 		$column_content = require __DIR__ . '/inc/column-content.php';
 		$column_content( $this, $column, $post_id );
+
+	}
+
+	/**
+	 * Point the list table's "View" row action at this admin page's actual
+	 * /wp-admin/admin.php?page=... URL. WordPress core stops printing that
+	 * link itself once a post type is non-public (see inc/post-type.php),
+	 * which is otherwise correct — this page was never a frontend URL — but
+	 * leaves no easy way to reach the URL registered in add_menu().
+	 *
+	 * @param array   $actions The existing row actions.
+	 * @param WP_Post $post    The current post.
+	 *
+	 * @return array The filtered row actions.
+	 */
+	public function row_actions( $actions, $post ) {
+
+		if ( 'ats_admin_page' !== $post->post_type ) {
+			return $actions;
+		}
+
+		unset( $actions['view'] );
+
+		$menu_type = get_post_meta( $post->ID, 'ats_menu_type', true );
+
+		// No menu type means add_menu() was never called for this post (see
+		// Admin_Page_Base_Output::get_posts()), so there's no registered page
+		// to link to yet.
+		if ( ! $menu_type || 'publish' !== $post->post_status ) {
+			return $actions;
+		}
+
+		$screen_id = 'ats_page_' . $post->post_name;
+		$url       = menu_page_url( $screen_id, false );
+
+		if ( ! $url ) {
+			return $actions;
+		}
+
+		$actions['view'] = sprintf(
+			'<a href="%1$s">%2$s</a>',
+			esc_url( $url ),
+			esc_html__( 'View', 'ats-dashboard' )
+		);
+
+		return $actions;
 
 	}
 
@@ -549,6 +596,17 @@ class Admin_Page_Base_Module extends Base_Module {
 
 		if ( ! is_singular( 'ats_admin_page' ) && ! is_singular( $divi_layout_post_type ) && ! is_singular( 'ats_block_template' ) ) {
 			return;
+		}
+
+		// These post types only render on the frontend for the iframe preview
+		// shown inside their wp-admin edit screen (see Block_Helper::render_content()
+		// and Divi_Helper) — they're never meant to be a page a visitor lands on.
+		// The CPTs stay publicly_queryable (a WordPress limitation: even a
+		// `'public' => false` post type still resolves a direct `?p=&post_type=`
+		// query), so the block has to happen here instead, gated behind the same
+		// capability the CPT itself requires to read/edit these posts.
+		if ( ! current_user_can( apply_filters( 'ats_settings_capability', 'manage_options' ) ) ) {
+			wp_die( esc_html__( 'Nothing found for the requested page.', 'ats-dashboard' ), '', array( 'response' => 404 ) );
 		}
 
 		// Force hide admin bar.
