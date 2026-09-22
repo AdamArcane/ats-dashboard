@@ -519,7 +519,7 @@ class Setting_Module extends Base_Module {
 			'ats-general-section'
 		);
 
-		add_settings_field( 'column-settings', 
+		add_settings_field( 'column-settings',
 			__( 'Dashboard Columns', 'ats-dashboard' ), 
 			array( $this, 'widget_columns_field' ), 
 			'ats-general-settings', 

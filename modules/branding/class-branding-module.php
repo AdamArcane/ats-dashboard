@@ -59,6 +59,7 @@ class Branding_Module extends Base_Module {
 
 		add_action( 'admin_menu', array( $this, 'submenu_page' ) );
 		add_action( 'admin_init', array( $this, 'add_settings' ) );
+		add_action( 'admin_init', array( self::get_instance(), 'lock_admin_theme' ) );
 		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'replace_dashicons_style' ), 1000 );
@@ -69,6 +70,7 @@ class Branding_Module extends Base_Module {
 
 		add_filter( 'ats_branding_enable_feature_field_path', array( self::get_instance(), 'enable_field' ) );
 		add_filter( 'ats_branding_choose_layout_field_path', array( self::get_instance(), 'choose_layout_field' ) );
+		add_filter( 'ats_branding_force_admin_theme_field_path', array( self::get_instance(), 'force_admin_theme_field' ) );
 
 		add_filter( 'ats_branding_wp_admin_darkmode_field_path', array( self::get_instance(), 'wp_admin_darkmode_field' ) );
 		add_filter( 'ats_branding_block_editor_darkmode_field_path', array( self::get_instance(), 'block_editor_darkmode_field' ) );
@@ -149,6 +151,7 @@ class Branding_Module extends Base_Module {
 
 		$this->add_branding_field( 'ats-branding-enable-field', 'Enable', 'enable_field', 'ats-branding-settings', 'ats-branding-section' );
 		$this->add_branding_field( 'ats-branding-layout-field', 'Layout', 'choose_layout_field', 'ats-branding-settings', 'ats-branding-section' );
+		$this->add_branding_field( 'ats-branding-force-admin-theme-field', 'Force Admin Theme', 'force_admin_theme_field', 'ats-branding-settings', 'ats-branding-section' );
 		$this->add_branding_field( 'wp-admin-darkmode', 'WP Admin', 'wp_admin_darkmode_field', 'ats-darkmode-settings', 'ats-darkmode-section' );
 		$this->add_branding_field( 'block-editor-darkmode', 'Block Editor', 'block_editor_darkmode_field', 'ats-darkmode-settings', 'ats-darkmode-section' );
 		$this->add_branding_field( 'ats-accent-color-field', 'Accent Color', 'accent_color_field', 'ats-admin-colors-settings', 'ats-admin-colors-section' );
@@ -373,6 +376,10 @@ class Branding_Module extends Base_Module {
 			$sanitized['layout'] = sanitize_text_field( $input['layout'] );
 		}
 
+		if ( isset( $input['force_admin_theme'] ) ) {
+			$sanitized['force_admin_theme'] = 1;
+		}
+
 		// Sanitize color fields.
 		if ( isset( $input['accent_color'] ) ) {
 			$sanitized['accent_color'] = sanitize_hex_color( $input['accent_color'] );
@@ -432,6 +439,48 @@ class Branding_Module extends Base_Module {
 	public function choose_layout_field( $template ) {
 
 		return __DIR__ . '/templates/fields/choose-layout.php';
+
+	}
+
+	/**
+	 * Force admin theme field.
+	 *
+	 * @param string $template The existing template path.
+	 * @return string The template path.
+	 */
+	public function force_admin_theme_field( $template ) {
+
+		return __DIR__ . '/templates/fields/force-admin-theme.php';
+
+	}
+
+	/**
+	 * Lock every user onto a single admin color scheme so the branding
+	 * colors above aren't overridden by a user's personal WordPress
+	 * Admin Color Scheme choice.
+	 *
+	 * The branding CSS output (@see Branding_Output::get_admin_styles())
+	 * is written to override WordPress's default "Fresh" color scheme,
+	 * so we lock users onto "Fresh" rather than registering a new
+	 * custom scheme.
+	 */
+	public function lock_admin_theme() {
+
+		$branding = get_option( 'ats_branding', array() );
+
+		if ( empty( $branding['force_admin_theme'] ) ) {
+			return;
+		}
+
+		remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
+
+		add_filter(
+			'get_user_option_admin_color',
+			function () {
+				return 'fresh';
+			},
+			5
+		);
 
 	}
 

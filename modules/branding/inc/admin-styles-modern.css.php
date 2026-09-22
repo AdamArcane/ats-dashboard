@@ -36,6 +36,24 @@ $secondary_text   = $color_helper->readable_text_color( $secondary_color );
 	--ats-secondary-color-hover: <?php echo esc_attr( $secondary_hover ); ?>;
 	--ats-secondary-border-color: <?php echo esc_attr( $secondary_border ); ?>;
 	--ats-secondary-text-color: <?php echo esc_attr( $secondary_text ); ?>;
+
+	<?php
+	/**
+	 * WordPress core's non-default admin color schemes set these on
+	 * `body.admin-color-{scheme}`, and the block editor / newer
+	 * @wordpress/components UI (the Publish button, focus rings,
+	 * selected-media borders, toggles, etc.) reads them directly instead
+	 * of the classic .wp-core-ui button selectors below. A body class
+	 * selector outranks our plain `:root` on specificity, so these need
+	 * `!important` to reliably win regardless of which scheme a user has
+	 * picked in their profile.
+	 */
+	$accent_rgb = implode( ', ', $color_helper->hex_to_rgb( $accent_color ) );
+	?>
+	--wp-admin-theme-color: <?php echo esc_attr( $accent_color ); ?> !important;
+	--wp-admin-theme-color--rgb: <?php echo esc_attr( $accent_rgb ); ?> !important;
+	--wp-admin-theme-color-darker-10: <?php echo esc_attr( $color_helper->darken( $accent_color, 0.1 ) ); ?> !important;
+	--wp-admin-theme-color-darker-20: <?php echo esc_attr( $color_helper->darken( $accent_color, 0.2 ) ); ?> !important;
 }
 
 /* This part is based on a WordPress color scheme */
@@ -162,6 +180,36 @@ textarea:focus {
 	box-shadow: inset 0 2px 5px -3px #241906;
 }
 
+<?php
+/**
+ * Block editor: Publish button, block inserter toggle, and other
+ * "primary" @wordpress/components buttons.
+ *
+ * These read their color from a chain of CSS custom properties
+ * (--wp-components-color-accent, --wp-admin-theme-color, and as of
+ * newer WordPress versions a separate "--wpds-color-*" design-token
+ * system injected inline on an editor wrapper element). That chain is
+ * both fragile and version-dependent, so instead of trying to override
+ * every variable in it, we set the button's final CSS properties
+ * directly with !important, which wins regardless of what any of those
+ * variables resolve to.
+ */
+?>
+.components-button.is-primary {
+	background: <?php echo esc_attr( $accent_color ); ?> !important;
+	color: #fff !important;
+}
+
+.components-button.is-primary:hover:not(:disabled) {
+	background: <?php echo esc_attr( $color_helper->darken( $accent_color, 0.1 ) ); ?> !important;
+	color: #fff !important;
+}
+
+.components-button.is-primary:active:not(:disabled) {
+	background: <?php echo esc_attr( $color_helper->darken( $accent_color, 0.2 ) ); ?> !important;
+	color: #fff !important;
+}
+
 .wp-core-ui .button-primary[disabled], .wp-core-ui .button-primary:disabled, .wp-core-ui .button-primary.button-primary-disabled, .wp-core-ui .button-primary.disabled {
 	color: #d1cdc7 !important;
 	background: <?php echo esc_attr( $accent_color ); ?> !important;
@@ -205,10 +253,34 @@ textarea:focus {
 }
 
 /* List tables */
+
+<?php
+/**
+ * Unlike the states below, WordPress core hardcodes this button's idle
+ * color/border directly in wp-admin/css/common.css (not through a color
+ * scheme file), so it isn't affected by the active admin color scheme
+ * and has to be overridden here explicitly.
+ */
+?>
+.wrap .add-new-h2,
+.wrap .add-new-h2:active,
+.wrap .page-title-action,
+.wrap .page-title-action:active {
+	border-color: <?php echo esc_attr( $accent_color ); ?>;
+	color: <?php echo esc_attr( $accent_color ); ?>;
+}
+
 .wrap .add-new-h2:hover,
 .wrap .page-title-action:hover {
 	color: #fff;
 	background-color: <?php echo esc_attr( $accent_color ); ?>;
+}
+
+.page-title-action:focus,
+.wrap .page-title-action:focus {
+	border-color: <?php echo esc_attr( $accent_color ); ?>;
+	color: <?php echo esc_attr( $accent_color ); ?>;
+	box-shadow: 0 0 0 1px <?php echo esc_attr( $accent_color ); ?>;
 }
 
 .view-switch a.current:before {
