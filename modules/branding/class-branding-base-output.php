@@ -94,6 +94,10 @@ class Branding_Base_Output extends Base_Output {
 	/**
 	 * Version text.
 	 *
+	 * Defaults to the plugin's own version instead of WordPress core's,
+	 * since the branded dashboard shouldn't be surfacing the underlying
+	 * WordPress version to its users.
+	 *
 	 * @param string $version_text The version text.
 	 *
 	 * @return string The updated version text.
@@ -104,6 +108,8 @@ class Branding_Base_Output extends Base_Output {
 
 		if ( ! empty( $branding['version_text'] ) ) {
 			$version_text = $branding['version_text'];
+		} else {
+			$version_text = 'ATS Dashboard ' . ATS_DASHBOARD_PLUGIN_VERSION;
 		}
 
 		return $version_text;
