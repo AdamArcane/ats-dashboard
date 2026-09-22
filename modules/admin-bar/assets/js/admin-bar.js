@@ -108,6 +108,7 @@
 			was_added: 1,
 			is_hidden: 0,
 			icon: "",
+			open_new_tab: 0,
 			/**
 			 * These properties are not being used currently.
 			 * But leave it here because in the future, if requested, it would be used for
@@ -158,6 +159,7 @@
 			meta_default: [],
 			was_added: 1,
 			is_hidden: 0,
+			open_new_tab: 0,
 			/**
 			 * These properties are not being used currently.
 			 * But leave it here because in the future, if requested, it would be used for
@@ -464,6 +466,11 @@
 		template = template.replace(/{default_menu_href}/g, menu.href_default);
 
 		template = template.replace(
+			/{menu_open_new_tab_checked}/g,
+			menu.open_new_tab ? "checked" : ""
+		);
+
+		template = template.replace(
 			/{default_menu_group}/g,
 			menu.group_default ? menu.group_default : "false"
 		);
@@ -758,6 +765,11 @@
 		);
 
 		template = template.replace(
+			/{submenu_open_new_tab_checked}/g,
+			submenu.open_new_tab ? "checked" : ""
+		);
+
+		template = template.replace(
 			/{default_submenu_group}/g,
 			submenu.group_default ? submenu.group_default : "false"
 		);
@@ -1016,6 +1028,12 @@
 		if (iconField) {
 			menuData.icon = iconField.value;
 		}
+
+		var openNewTabField = menuItem.querySelector(
+			'[data-name="' + fieldPrefix + '_open_new_tab"]'
+		);
+
+		menuData.open_new_tab = openNewTabField && openNewTabField.checked ? 1 : 0;
 
 		if (matchedItemObj) {
 			if (matchedItemObj.frontend_only) {

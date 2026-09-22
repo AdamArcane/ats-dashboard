@@ -71,15 +71,31 @@ ob_start();
 								<?php esc_html_e( 'Menu URL', 'ats-dashboard' ); ?>
 							</label>
 							<div class="control">
-								<input 
-									type="text" 
-									name="menu_href_{default_menu_id}" 
-									id="menu_href_{default_menu_id}" 
-									value="{menu_href}" 
-									placeholder="{default_menu_href}" 
+								<input
+									type="text"
+									name="menu_href_{default_menu_id}"
+									id="menu_href_{default_menu_id}"
+									value="{menu_href}"
+									placeholder="{default_menu_href}"
 									class="ats-menu-builder--text-field"
 									data-name="menu_href"
 									{menu_href_is_disabled}
+								>
+							</div>
+						</div>
+						<div class="field {menu_href_field_is_hidden}">
+							<label for="menu_open_new_tab_{default_menu_id}" class="label ats-menu-builder--label">
+								<?php esc_html_e( 'Open in New Tab', 'ats-dashboard' ); ?>
+							</label>
+							<div class="control">
+								<input
+									type="checkbox"
+									name="menu_open_new_tab_{default_menu_id}"
+									id="menu_open_new_tab_{default_menu_id}"
+									value="1"
+									{menu_open_new_tab_checked}
+									class="ats-menu-builder--checkbox-field"
+									data-name="menu_open_new_tab"
 								>
 							</div>
 						</div>

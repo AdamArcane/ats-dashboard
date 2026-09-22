@@ -174,6 +174,7 @@ class Admin_Bar_Output extends Base_Output {
 						false === stripos( $arg_key, '_default' )
 						&& 'was_added' !== $arg_key
 						&& 'icon' !== $arg_key
+						&& 'open_new_tab' !== $arg_key
 						/**
 						 * These conditions are not being used currently.
 						 * But leave it here because in the future, if requested, it would be used for
@@ -207,6 +208,12 @@ class Admin_Bar_Output extends Base_Output {
 							</div>
 						';
 					}
+				}
+
+				if ( ! empty( $menu['open_new_tab'] ) ) {
+					$args['meta']           = isset( $args['meta'] ) && is_array( $args['meta'] ) ? $args['meta'] : array();
+					$args['meta']['target'] = '_blank';
+					$args['meta']['rel']    = 'noopener noreferrer';
 				}
 			}
 

@@ -80,6 +80,22 @@ ob_start();
 								>
 							</div>
 						</div>
+						<div class="field">
+							<label for="menu_open_new_tab_{role}_{default_menu_id}" class="label ats-menu-builder--label">
+								<?php esc_html_e( 'Open in New Tab', 'ats-dashboard' ); ?>
+							</label>
+							<div class="control">
+								<input
+									type="checkbox"
+									name="menu_open_new_tab_{role}_{default_menu_id}"
+									id="menu_open_new_tab_{role}_{default_menu_id}"
+									value="1"
+									{menu_open_new_tab_checked}
+									class="ats-menu-builder--checkbox-field"
+									data-name="menu_open_new_tab"
+								>
+							</div>
+						</div>
 						<div class="is-nested">
 							<div class="field">
 								<label for="menu_icon_{role}_{default_menu_id}" class="label ats-menu-builder--label">

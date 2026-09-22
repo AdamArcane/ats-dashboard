@@ -248,6 +248,10 @@ class Admin_Menu_Output extends Base_Output {
 				$menu_class = $menu_item['class'] ? $menu_item['class'] : ( isset( $matched_default_menu[4] ) ? $matched_default_menu[4] : '' );
 				$menu_class = (string) $menu_class;
 
+				if ( ! empty( $menu_item['open_new_tab'] ) ) {
+					$menu_class = trim( $menu_class . ' ats-open-new-tab' );
+				}
+
 				array_push( $new_menu_item, $this->placeholder_helper->convert_admin_menu_placeholder_tags( $menu_title ) );
 				array_push( $new_menu_item, $menu_cap );
 				array_push( $new_menu_item, $menu_url );
@@ -467,8 +471,12 @@ class Admin_Menu_Output extends Base_Output {
 							$submenu_class = isset( $matched_default_submenu[4] ) ? $matched_default_submenu[4] : '';
 							$submenu_class = (string) $submenu_class;
 
+							if ( ! empty( $submenu_item['open_new_tab'] ) ) {
+								$submenu_class = trim( $submenu_class . ' ats-open-new-tab' );
+							}
+
 							if ( ! empty( $submenu_class ) ) {
-								array_push( $new_submenu_item, $matched_default_submenu[4] );
+								array_push( $new_submenu_item, $submenu_class );
 							}
 
 							$new_submenu_item['url_default'] = $submenu_item['url_default'];

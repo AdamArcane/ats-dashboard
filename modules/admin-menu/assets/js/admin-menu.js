@@ -230,6 +230,7 @@
 			id: "menu-custom-" + randomId,
 			id_default: "menu-custom-" + randomId,
 			is_hidden: "0",
+			open_new_tab: "",
 			submenu: [],
 			title: "Custom Menu",
 			title_default: "Custom Menu",
@@ -319,6 +320,7 @@
 		var submenu = {
 			id: "submenu-custom-" + randomId,
 			is_hidden: "0",
+			open_new_tab: "",
 			title: "Custom Submenu",
 			title_default: "Custom Submenu",
 			url: "",
@@ -682,6 +684,11 @@
 			template = template.replace(/{menu_url}/g, menu.url);
 			template = template.replace(/{default_menu_url}/g, menu.url_default);
 
+			template = template.replace(
+				/{menu_open_new_tab_checked}/g,
+				menu.open_new_tab == "1" ? "checked" : ""
+			);
+
 			template = template.replace(/{menu_id}/g, menu.id);
 			template = template.replace(/{default_menu_id}/g, menu.id_default);
 
@@ -801,6 +808,11 @@
 
 		template = template.replace(/{submenu_url}/g, submenu.url);
 		template = template.replace(/{default_submenu_url}/g, submenu.url_default);
+
+		template = template.replace(
+			/{submenu_open_new_tab_checked}/g,
+			submenu.open_new_tab == "1" ? "checked" : ""
+		);
 
 		template = template.replace(/{submenu_is_hidden}/g, submenu.is_hidden);
 		template = template.replace(
@@ -1048,6 +1060,12 @@
 					).value;
 					menuData.icon_type = "";
 
+					var menuOpenNewTabField = menuItem.querySelector(
+						'[data-name="menu_open_new_tab"]'
+					);
+					menuData.open_new_tab =
+						menuOpenNewTabField && menuOpenNewTabField.checked ? "1" : "";
+
 					var iconSvgTab = menuItem.querySelector('[data-tab-name="icon_svg"]');
 
 					if (menuData.dashicon || menuData.icon_svg) {
@@ -1091,6 +1109,14 @@
 					}
 
 					submenuData.url_default = submenuItem.dataset.defaultUrl;
+
+					var submenuOpenNewTabField = submenuItem.querySelector(
+						'[data-name="submenu_open_new_tab"]'
+					);
+					submenuData.open_new_tab =
+						submenuOpenNewTabField && submenuOpenNewTabField.checked
+							? "1"
+							: "";
 
 					submenuList.push(submenuData);
 				});

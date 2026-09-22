@@ -60,6 +60,22 @@ ob_start();
 					>
 				</div>
 			</div>
+			<div class="field">
+				<label for="submenu_open_new_tab_{role}_{default_menu_id}_{submenu_id}" class="label ats-menu-builder--label">
+					<?php esc_html_e( 'Open in New Tab', 'ats-dashboard' ); ?>
+				</label>
+				<div class="control">
+					<input
+						type="checkbox"
+						name="submenu_open_new_tab_{role}_{default_menu_id}_{submenu_id}"
+						id="submenu_open_new_tab_{role}_{default_menu_id}_{submenu_id}"
+						value="1"
+						{submenu_open_new_tab_checked}
+						class="ats-menu-builder--checkbox-field"
+						data-name="submenu_open_new_tab"
+					>
+				</div>
+			</div>
 		</div><!-- .ats-menu-builder--fields -->
 
 	</div><!-- .ats-menu-builder--expanded-panel -->

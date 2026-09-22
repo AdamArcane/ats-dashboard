@@ -369,6 +369,7 @@ class Admin_Bar_Base_Module extends Base_Module {
 				'meta_default'   => $node->meta,
 				'was_added'      => 0,
 				'is_hidden'      => 0,
+				'open_new_tab'   => 0,
 				/**
 				 * These properties are not being used currently.
 				 * But leave it here because in the future, if requested, it would be used for
@@ -410,6 +411,7 @@ class Admin_Bar_Base_Module extends Base_Module {
 				'meta_default'   => isset( $item_data['meta'] ) ? $item_data['meta'] : array(),
 				'was_added'      => 0,
 				'is_hidden'      => 0,
+				'open_new_tab'   => 0,
 				'frontend_only'  => 1,
 				/**
 				 * These properties are not being used currently.
@@ -461,6 +463,7 @@ class Admin_Bar_Base_Module extends Base_Module {
 					'meta_default'   => $menu['meta'],
 					'was_added'      => 0,
 					'is_hidden'      => 0,
+					'open_new_tab'   => 0,
 					/**
 					 * These properties are not being used currently.
 					 * But leave it here because in the future, if requested, it would be used for
@@ -733,6 +736,7 @@ class Admin_Bar_Base_Module extends Base_Module {
 			'meta_default'   => array(),
 			'was_added'      => 0,
 			'is_hidden'      => 0,
+			'open_new_tab'   => 0,
 			'frontend_only'  => 1,
 			/**
 			 * These properties are not being used currently.

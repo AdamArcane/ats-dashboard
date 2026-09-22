@@ -514,10 +514,11 @@ class Get_Menu {
 
 			$content_helper = new Content_Helper();
 
-			$formatted_menu['title'] = $content_helper->strip_tags_content( $menu_item[0] );
-			$formatted_menu['url']   = $menu_item[2];
-			$formatted_menu['class'] = $menu_item[4];
-			$formatted_menu['type']  = $menu_type;
+			$formatted_menu['title']        = $content_helper->strip_tags_content( $menu_item[0] );
+			$formatted_menu['url']          = $menu_item[2];
+			$formatted_menu['class']        = $menu_item[4];
+			$formatted_menu['type']         = $menu_type;
+			$formatted_menu['open_new_tab'] = '';
 
 			$formatted_menu['dashicon'] = '';
 			$formatted_menu['icon_svg'] = '';
@@ -542,8 +543,9 @@ class Get_Menu {
 
 					$content_helper = new Content_Helper();
 
-					$formatted_submenu['title'] = $content_helper->strip_tags_content( $submenu_item[0] );
-					$formatted_submenu['url']   = $submenu_item[2];
+					$formatted_submenu['title']        = $content_helper->strip_tags_content( $submenu_item[0] );
+					$formatted_submenu['url']          = $submenu_item[2];
+					$formatted_submenu['open_new_tab'] = '';
 
 					array_push( $formatted_submenus, $formatted_submenu );
 				}
