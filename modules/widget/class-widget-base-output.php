@@ -12,6 +12,7 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 use WP_Query;
 use ATSDash\Base\Base_Output;
 use ATSDash\Helpers\Widget_Helper;
+use ATSDash\Setting\Site_Owner_Role;
 
 /**
  * Class to setup widgets output.
@@ -116,6 +117,7 @@ class Widget_Base_Output extends Base_Output {
 	public function setup() {
 
 		add_action( 'wp_dashboard_setup', array( self::get_instance(), 'add_dashboard_widgets' ) );
+		add_action( 'wp_dashboard_setup', array( self::get_instance(), 'add_site_overview_widget' ), 20 );
 		add_action( 'wp_dashboard_setup', array( self::get_instance(), 'remove_default_dashboard_widgets' ), 100 );
 		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'dashboard_styles' ), 100 );
 
@@ -302,6 +304,358 @@ class Widget_Base_Output extends Base_Output {
 				}
 			}
 		}
+
+	}
+
+	/**
+	 * Replace WordPress core's "At a Glance" widget with a "Site Overview"
+	 * widget geared towards a managed-client audience: content counts,
+	 * storage used, SSL status, and last content update — no WordPress
+	 * version, theme name, or other details a managed client wouldn't
+	 * act on.
+	 */
+	public function add_site_overview_widget() {
+
+		$settings = get_option( 'ats_settings' );
+
+		if ( isset( $settings['disable_site_overview_widget'] ) ) {
+			return;
+		}
+
+		remove_meta_box( 'dashboard_right_now', 'dashboard', 'normal' );
+
+		wp_add_dashboard_widget( 'ats_site_overview', __( 'Site Overview', 'ats-dashboard' ), array( $this, 'render_site_overview_widget' ) );
+
+		$this->custom_css[] = $this->get_site_overview_styles();
+
+	}
+
+	/**
+	 * Render the Site Overview widget.
+	 */
+	public function render_site_overview_widget() {
+
+		$post_counts      = wp_count_posts( 'post' );
+		$page_counts      = wp_count_posts( 'page' );
+		$comment_counts   = wp_count_comments();
+		$user_count       = count_users();
+
+		$published_posts  = isset( $post_counts->publish ) ? (int) $post_counts->publish : 0;
+		$published_pages  = isset( $page_counts->publish ) ? (int) $page_counts->publish : 0;
+		$pending_comments = isset( $comment_counts->moderated ) ? (int) $comment_counts->moderated : 0;
+		$total_users      = isset( $user_count['total_users'] ) ? (int) $user_count['total_users'] : 0;
+
+		$site_owner_count = 0;
+
+		if ( Site_Owner_Role::is_enabled() && isset( $user_count['avail_roles'][ Site_Owner_Role::ROLE_KEY ] ) ) {
+			$site_owner_count = (int) $user_count['avail_roles'][ Site_Owner_Role::ROLE_KEY ];
+		}
+
+		$storage_used  = $this->get_uploads_size_human();
+		$last_change   = $this->get_last_content_change();
+		$is_secure     = is_ssl();
+		$is_up_to_date = $this->is_maintenance_up_to_date();
+		?>
+
+		<div class="ats-site-overview-widget">
+
+			<ul class="ats-site-overview-counts">
+				<li>
+					<a href="<?php echo esc_url( admin_url( 'edit.php' ) ); ?>">
+						<span class="ats-count"><?php echo esc_html( number_format_i18n( $published_posts ) ); ?></span>
+						<span class="ats-label"><?php echo esc_html( _n( 'Post', 'Posts', $published_posts, 'ats-dashboard' ) ); ?></span>
+					</a>
+				</li>
+				<li>
+					<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=page' ) ); ?>">
+						<span class="ats-count"><?php echo esc_html( number_format_i18n( $published_pages ) ); ?></span>
+						<span class="ats-label"><?php echo esc_html( _n( 'Page', 'Pages', $published_pages, 'ats-dashboard' ) ); ?></span>
+					</a>
+				</li>
+				<li>
+					<a href="<?php echo esc_url( admin_url( 'users.php' ) ); ?>">
+						<span class="ats-count"><?php echo esc_html( number_format_i18n( $total_users ) ); ?></span>
+						<span class="ats-label">
+							<?php echo esc_html( _n( 'User', 'Users', $total_users, 'ats-dashboard' ) ); ?>
+							<?php if ( $site_owner_count > 0 ) : ?>
+								· <?php echo esc_html( number_format_i18n( $site_owner_count ) ); ?> <?php echo esc_html( $this->pluralize_role_name( Site_Owner_Role::role_name(), $site_owner_count ) ); ?>
+							<?php endif; ?>
+						</span>
+					</a>
+				</li>
+				<?php if ( $pending_comments > 0 ) : ?>
+					<li class="ats-needs-attention">
+						<a href="<?php echo esc_url( admin_url( 'edit-comments.php?comment_status=moderated' ) ); ?>">
+							<span class="ats-count"><?php echo esc_html( number_format_i18n( $pending_comments ) ); ?></span>
+							<span class="ats-label"><?php echo esc_html( _n( 'Comment awaiting moderation', 'Comments awaiting moderation', $pending_comments, 'ats-dashboard' ) ); ?></span>
+						</a>
+					</li>
+				<?php endif; ?>
+			</ul>
+
+			<ul class="ats-site-overview-details">
+				<li>
+					<span class="ats-detail-label"><?php esc_html_e( 'Maintenance', 'ats-dashboard' ); ?></span>
+					<span class="ats-detail-value <?php echo $is_up_to_date ? 'ats-status-good' : 'ats-status-pending'; ?>">
+						<?php echo $is_up_to_date ? esc_html__( 'Up to date', 'ats-dashboard' ) : esc_html__( 'Updates scheduled', 'ats-dashboard' ); ?>
+					</span>
+				</li>
+				<li>
+					<span class="ats-detail-label"><?php esc_html_e( 'Security', 'ats-dashboard' ); ?></span>
+					<span class="ats-detail-value <?php echo $is_secure ? 'ats-status-good' : 'ats-status-bad'; ?>">
+						<?php echo $is_secure ? esc_html__( 'Secure (SSL)', 'ats-dashboard' ) : esc_html__( 'Not Secure', 'ats-dashboard' ); ?>
+					</span>
+				</li>
+				<li>
+					<span class="ats-detail-label"><?php esc_html_e( 'Storage Used', 'ats-dashboard' ); ?></span>
+					<span class="ats-detail-value"><?php echo esc_html( $storage_used ); ?></span>
+				</li>
+				<li>
+					<span class="ats-detail-label"><?php esc_html_e( 'Last Content Change', 'ats-dashboard' ); ?></span>
+					<span class="ats-detail-value"><?php echo esc_html( $last_change ? $last_change['date'] : __( 'No content yet', 'ats-dashboard' ) ); ?></span>
+				</li>
+				<?php if ( $last_change ) : ?>
+					<li class="ats-last-change-link">
+						<a href="<?php echo esc_url( $last_change['url'] ); ?>" target="_blank" rel="noopener noreferrer">
+							<?php
+							echo esc_html(
+								$last_change['was_added']
+									/* translators: %s: Post/page title. */
+									? sprintf( __( 'Added: %s', 'ats-dashboard' ), $last_change['title'] )
+									/* translators: %s: Post/page title. */
+									: sprintf( __( 'Modified: %s', 'ats-dashboard' ), $last_change['title'] )
+							);
+							?>
+						</a>
+					</li>
+				<?php endif; ?>
+			</ul>
+
+		</div>
+
+		<?php
+
+	}
+
+	/**
+	 * Get the uploads directory size, formatted for display.
+	 *
+	 * Recursive directory scans are expensive, so the result is cached
+	 * for a few hours rather than recalculated on every dashboard load.
+	 *
+	 * @return string
+	 */
+	private function get_uploads_size_human() {
+
+		$cached = get_transient( 'ats_site_overview_storage' );
+
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
+		if ( ! function_exists( 'get_dirsize' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+
+		$uploads = wp_upload_dir();
+		$bytes   = get_dirsize( $uploads['basedir'] );
+
+		$human = false !== $bytes ? size_format( $bytes, 1 ) : __( 'Unknown', 'ats-dashboard' );
+
+		set_transient( 'ats_site_overview_storage', $human, 12 * HOUR_IN_SECONDS );
+
+		return $human;
+
+	}
+
+	/**
+	 * Get the most recently changed published post/page/custom post type
+	 * entry — a concrete "content last changed on" date rather than a
+	 * vague "X hours ago" that resets on every unrelated save, plus what
+	 * that entry was and whether it was newly added or an edit to
+	 * existing content.
+	 *
+	 * @return array|false {
+	 *     @type string $date      The formatted modification date.
+	 *     @type string $title     The entry's title.
+	 *     @type string $url       The entry's public URL.
+	 *     @type bool   $was_added True if this was a new entry, false if an edit to existing content.
+	 * }
+	 */
+	private function get_last_content_change() {
+
+		$post_types = get_post_types( array( 'public' => true ), 'names' );
+		unset( $post_types['attachment'] );
+
+		if ( empty( $post_types ) ) {
+			return false;
+		}
+
+		$latest = get_posts(
+			array(
+				'post_type'      => array_values( $post_types ),
+				'post_status'    => 'publish',
+				'posts_per_page' => 1,
+				'orderby'        => 'modified',
+				'order'          => 'DESC',
+				'fields'         => 'ids',
+			)
+		);
+
+		if ( empty( $latest ) ) {
+			return false;
+		}
+
+		$post_id = $latest[0];
+
+		$published_ts = strtotime( get_post_field( 'post_date', $post_id ) );
+		$modified_ts  = strtotime( get_post_field( 'post_modified', $post_id ) );
+
+		// A first publish can shift a few seconds between post_date and
+		// post_modified (revision save, scheduled publish, etc.), so treat
+		// anything within 2 minutes of its publish time as "added" rather
+		// than a later "modified" edit.
+		$was_added = abs( $modified_ts - $published_ts ) <= 2 * MINUTE_IN_SECONDS;
+
+		$title = get_the_title( $post_id );
+
+		return array(
+			'date'      => date_i18n( get_option( 'date_format' ), $modified_ts ),
+			'title'     => '' !== $title ? $title : __( '(no title)', 'ats-dashboard' ),
+			'url'       => get_permalink( $post_id ),
+			'was_added' => $was_added,
+		);
+
+	}
+
+	/**
+	 * Whether the site has no pending core/plugin/theme updates.
+	 *
+	 * Deliberately reported as a binary "Up to date" / "Updates scheduled"
+	 * status rather than surfacing a raw update count — a managed client
+	 * seeing "7 plugin updates available" reads as neglect, not as
+	 * information they can act on; the maintenance provider is the one
+	 * who acts on it.
+	 *
+	 * @return bool
+	 */
+	private function is_maintenance_up_to_date() {
+
+		if ( ! function_exists( 'wp_get_update_data' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/update.php';
+		}
+
+		$update_data = wp_get_update_data();
+
+		return empty( $update_data['counts']['total'] );
+
+	}
+
+	/**
+	 * Naively pluralize a (possibly admin-configured) role display name for
+	 * the "N {Role Name}" sublabel.
+	 *
+	 * @param string $name  The role display name, e.g. "Site Owner".
+	 * @param int    $count The count it's being used with.
+	 * @return string
+	 */
+	private function pluralize_role_name( $name, $count ) {
+
+		if ( 1 === $count || preg_match( '/s$/i', $name ) ) {
+			return $name;
+		}
+
+		return $name . 's';
+
+	}
+
+	/**
+	 * Site Overview widget styles.
+	 *
+	 * @return string
+	 */
+	private function get_site_overview_styles() {
+
+		return '
+			.ats-site-overview-widget .ats-site-overview-counts {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				margin: 0 0 16px;
+				padding: 0;
+				list-style: none;
+			}
+			.ats-site-overview-widget .ats-site-overview-counts li {
+				flex: 1 1 calc(50% - 12px);
+				min-width: 100px;
+			}
+			.ats-site-overview-widget .ats-site-overview-counts a {
+				display: block;
+				padding: 10px 12px;
+				border-radius: 4px;
+				background: #f6f7f7;
+				text-decoration: none;
+			}
+			.ats-site-overview-widget .ats-count {
+				display: block;
+				font-size: 20px;
+				font-weight: 600;
+				line-height: 1.3;
+				color: #1d2327;
+			}
+			.ats-site-overview-widget .ats-label {
+				display: block;
+				font-size: 13px;
+				color: #646970;
+			}
+			.ats-site-overview-widget .ats-needs-attention a {
+				background: #fcf0f1;
+			}
+			.ats-site-overview-widget .ats-needs-attention .ats-count {
+				color: #d63638;
+			}
+			.ats-site-overview-widget .ats-site-overview-details {
+				margin: 0;
+				padding: 12px 0 0;
+				border-top: 1px solid #dcdcde;
+				list-style: none;
+			}
+			.ats-site-overview-widget .ats-site-overview-details li {
+				display: flex;
+				justify-content: space-between;
+				padding: 4px 0;
+				font-size: 13px;
+			}
+			.ats-site-overview-widget .ats-detail-label {
+				color: #646970;
+			}
+			.ats-site-overview-widget .ats-detail-value {
+				font-weight: 600;
+				color: #1d2327;
+			}
+			.ats-site-overview-widget .ats-status-good {
+				color: #00a32a;
+			}
+			.ats-site-overview-widget .ats-status-bad {
+				color: #d63638;
+			}
+			.ats-site-overview-widget .ats-status-pending {
+				color: #2271b1;
+			}
+			.ats-site-overview-widget .ats-last-change-link {
+				justify-content: flex-start;
+				padding-top: 0;
+			}
+			.ats-site-overview-widget .ats-last-change-link a {
+				font-size: 12px;
+				color: #646970;
+				text-decoration: none;
+			}
+			.ats-site-overview-widget .ats-last-change-link a:hover {
+				color: #2271b1;
+				text-decoration: underline;
+			}
+		';
 
 	}
 

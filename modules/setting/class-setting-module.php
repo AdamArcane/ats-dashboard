@@ -480,6 +480,14 @@ class Setting_Module extends Base_Module {
 
 		// General fields.
 		add_settings_field(
+			'disable-site-overview-widget-settings',
+			__( 'Site Overview Widget', 'ats-dashboard' ),
+			array( $this, 'disable_site_overview_widget_field' ),
+			'ats-general-settings',
+			'ats-general-section'
+		);
+
+		add_settings_field(
 			'remove-help-tab-settings',
 			__( 'Remove Help Tab', 'ats-dashboard' ),
 			array( $this, 'remove_help_tab_field' ),
@@ -757,6 +765,16 @@ class Setting_Module extends Base_Module {
 	public function remove_widget_shadow_field() {
 
 		$field = require __DIR__ . '/templates/fields/remove-widget-shadow.php';
+		$field();
+
+	}
+
+	/**
+	 * Disable site overview widget field.
+	 */
+	public function disable_site_overview_widget_field() {
+
+		$field = require __DIR__ . '/templates/fields/disable-site-overview-widget.php';
 		$field();
 
 	}
