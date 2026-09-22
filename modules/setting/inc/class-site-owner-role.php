@@ -16,6 +16,8 @@ class Site_Owner_Role {
 
 	const ROLE_KEY = 'site_owner';
 
+	const DEFAULT_ROLE_NAME = 'Site Owner';
+
 	/**
 	 * Curated capability groups shown in the settings UI.
 	 *
@@ -108,6 +110,20 @@ class Site_Owner_Role {
 	}
 
 	/**
+	 * Get the configured display name for the Site Owner role.
+	 *
+	 * @return string
+	 */
+	public static function role_name() {
+
+		$settings = get_option( 'ats_settings', array() );
+		$name     = isset( $settings['site_owner_role_name'] ) ? trim( (string) $settings['site_owner_role_name'] ) : '';
+
+		return '' !== $name ? $name : __( 'Site Owner', 'ats-dashboard' );
+
+	}
+
+	/**
 	 * Whether the Site Owner role feature is enabled.
 	 *
 	 * @return bool
@@ -163,12 +179,15 @@ class Site_Owner_Role {
 		}
 
 		$caps = self::build_caps();
+		$name = self::role_name();
 
 		if ( ! $role ) {
-			add_role( self::ROLE_KEY, __( 'Site Owner', 'ats-dashboard' ), $caps );
+			add_role( self::ROLE_KEY, $name, $caps );
 
 			return;
 		}
+
+		self::sync_role_name( $name );
 
 		foreach ( self::all_configurable_caps() as $cap ) {
 			if ( isset( $caps[ $cap ] ) ) {
@@ -176,6 +195,34 @@ class Site_Owner_Role {
 			} else {
 				$role->remove_cap( $cap );
 			}
+		}
+
+	}
+
+	/**
+	 * Update the display name of the already-registered Site Owner role, if it
+	 * has changed. WordPress core has no `rename_role()`, so this updates the
+	 * `WP_Roles` in-memory/db state directly, mirroring what `add_role()` does.
+	 *
+	 * @param string $name The desired display name.
+	 */
+	private static function sync_role_name( $name ) {
+
+		global $wp_roles;
+
+		if ( ! isset( $wp_roles ) ) {
+			$wp_roles = wp_roles(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		}
+
+		if ( ! isset( $wp_roles->roles[ self::ROLE_KEY ] ) || $wp_roles->roles[ self::ROLE_KEY ]['name'] === $name ) {
+			return;
+		}
+
+		$wp_roles->roles[ self::ROLE_KEY ]['name'] = $name;
+		$wp_roles->role_names[ self::ROLE_KEY ]    = $name;
+
+		if ( $wp_roles->use_db ) {
+			update_option( $wp_roles->role_key, $wp_roles->roles );
 		}
 
 	}

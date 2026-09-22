@@ -15,6 +15,7 @@ return function () {
 
 	<label for="ats_settings[remove_font_awesome]" class="label checkbox-label">
 		&nbsp;
+		<input type="hidden" name="ats_settings_checkboxes[]" value="remove_font_awesome">
 		<input type="checkbox" name="ats_settings[remove_font_awesome]" id="ats_settings[remove_font_awesome]" value="1" <?php checked( $is_checked, 1 ); ?>>
 		<div class="indicator"></div>
 	</label>

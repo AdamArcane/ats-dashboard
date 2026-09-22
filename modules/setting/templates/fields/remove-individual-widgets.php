@@ -20,6 +20,7 @@ return function () {
 		<div class="setting-field">
 			<label for="ats_settings[welcome_panel]" class="label checkbox-label">
 				<?php esc_html_e( 'Welcome Panel', 'ats-dashboard' ); ?> (<code>welcome_panel</code>)
+				<input type="hidden" name="ats_settings_checkboxes[]" value="welcome_panel">
 				<input type="checkbox" name="ats_settings[welcome_panel]" id="ats_settings[welcome_panel]" value="1" <?php checked( $is_checked, 1 ); ?>>
 				<div class="indicator"></div>
 			</label>
@@ -38,6 +39,7 @@ return function () {
 			<div class="setting-field">
 				<label for="ats_settings[<?php echo esc_attr( $id ); ?>]" class="label checkbox-label">
 					<?php echo esc_attr( $title ); ?> (<code><?php echo esc_attr( $id ); ?></code>)
+					<input type="hidden" name="ats_settings_checkboxes[]" value="<?php echo esc_attr( $id ); ?>">
 					<input type="checkbox" name="ats_settings[<?php echo esc_attr( $id ); ?>]" id="ats_settings[<?php echo esc_attr( $id ); ?>]" value="1" <?php checked( $is_checked, 1 ); ?>>
 					<div class="indicator"></div>
 				</label>

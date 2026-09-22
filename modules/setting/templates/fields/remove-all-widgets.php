@@ -15,6 +15,7 @@ return function () {
 
 	<label for="ats_settings[remove-all]" class="label checkbox-label">
 		<?php esc_html_e( 'All', 'ats-dashboard' ); ?>
+		<input type="hidden" name="ats_settings_checkboxes[]" value="remove-all">
 		<input type="checkbox" name="ats_settings[remove-all]" id="ats_settings[remove-all]" value="1" <?php checked( $is_checked, 1 ); ?>>
 		<div class="indicator"></div>
 	</label>

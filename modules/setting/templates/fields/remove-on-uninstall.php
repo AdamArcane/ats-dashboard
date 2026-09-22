@@ -15,6 +15,7 @@ return function () {
 
 	<label for="ats_settings[remove-on-uninstall]" class="label checkbox-label">
 		&nbsp;
+		<input type="hidden" name="ats_settings_checkboxes[]" value="remove-on-uninstall">
 		<input type="checkbox" name="ats_settings[remove-on-uninstall]" id="ats_settings[remove-on-uninstall]" value="1" <?php checked( $is_checked, 1 ); ?>>
 		<div class="indicator"></div>
 	</label>

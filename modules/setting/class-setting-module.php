@@ -102,6 +102,14 @@ class Setting_Module extends Base_Module {
 			);
 
 			add_settings_field(
+				'site-owner-role-name',
+				__( 'Role Name', 'ats-dashboard' ),
+				array( $this, 'site_owner_role_name_field' ),
+				'ats-site-owner-role-settings',
+				'ats-site-owner-role-section'
+			);
+
+			add_settings_field(
 				'site-owner-role-capabilities',
 				__( 'Restricted Capabilities', 'ats-dashboard' ),
 				array( $this, 'site_owner_role_capabilities_field' ),
@@ -117,6 +125,16 @@ class Setting_Module extends Base_Module {
 		public function site_owner_role_enabled_field() {
 
 			$field = require __DIR__ . '/templates/fields/site-owner-role-enabled.php';
+			$field();
+
+		}
+
+		/**
+		 * Site Owner role name field.
+		 */
+		public function site_owner_role_name_field() {
+
+			$field = require __DIR__ . '/templates/fields/site-owner-role-name.php';
 			$field();
 
 		}
@@ -564,7 +582,27 @@ class Setting_Module extends Base_Module {
 	 */
 	public function sanitize_input( $input ) {
 
-		$output = $input;
+		// The "ats_settings" option is shared by three separate <form>s: the
+		// General Settings page, the Dashboard Widgets page, and the
+		// Branding page's Custom CSS tab. options.php replaces the whole
+		// option with whatever was submitted, so without this merge, saving
+		// one form wipes out the fields that only live on the others.
+		$output = array_merge( get_option( 'ats_settings', array() ), $input );
+
+		// Checkboxes vanish from $_POST entirely when unchecked, so a plain
+		// merge can't tell "unchecked" apart from "not part of this form".
+		// Each checkbox field registers its own key in a hidden field so we
+		// know which ones to explicitly clear when a submitted form doesn't
+		// send them.
+		if ( ! empty( $_POST['ats_settings_checkboxes'] ) && is_array( $_POST['ats_settings_checkboxes'] ) ) {
+			foreach ( wp_unslash( $_POST['ats_settings_checkboxes'] ) as $checkbox_key ) {
+				$checkbox_key = sanitize_key( $checkbox_key );
+
+				if ( '' !== $checkbox_key && ! isset( $input[ $checkbox_key ] ) ) {
+					unset( $output[ $checkbox_key ] );
+				}
+			}
+		}
 
 		$content_helper = new Content_Helper();
 
@@ -580,6 +618,10 @@ class Setting_Module extends Base_Module {
 			if ( isset( $output[ $color_field ] ) ) {
 				$output[ $color_field ] = sanitize_hex_color( $output[ $color_field ] );
 			}
+		}
+
+		if ( isset( $output['site_owner_role_name'] ) ) {
+			$output['site_owner_role_name'] = sanitize_text_field( $output['site_owner_role_name'] );
 		}
 
 		if ( isset( $output['border_radius'] ) ) {

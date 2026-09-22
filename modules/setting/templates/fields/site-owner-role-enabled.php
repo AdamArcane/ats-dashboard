@@ -15,6 +15,7 @@ return function () {
 	?>
 
 	<label class="toggle-switch">
+		<input type="hidden" name="ats_settings_checkboxes[]" value="site_owner_role_enabled">
 		<input type="checkbox" name="ats_settings[site_owner_role_enabled]" value="1" <?php checked( $enabled ); ?> />
 		<div class="switch-track">
 			<div class="switch-thumb"></div>

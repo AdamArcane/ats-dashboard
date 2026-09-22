@@ -18,6 +18,8 @@ return function () {
 		<?php esc_html_e( 'Choose which advanced capabilities the Site Owner role is granted. All standard content management capabilities (posts, pages, media, comments) are always granted. Checked = granted, unchecked = denied.', 'ats-dashboard' ); ?>
 	</p>
 
+	<input type="hidden" name="ats_settings_checkboxes[]" value="site_owner_caps">
+
 	<?php foreach ( Site_Owner_Role::cap_groups() as $group_label => $caps ) : ?>
 		<div class="ats-site-owner-cap-group">
 			<h4><?php echo esc_html( $group_label ); ?></h4>
