@@ -542,7 +542,7 @@
 }
 
 .atsui-wrap .toggle-switch input:checked + .switch-track {
-	background-color: #5bcb86;
+	background-color: #681e1e;
 }
 
 .atsui-wrap .toggle-switch input:checked + .switch-track .switch-thumb {
