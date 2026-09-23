@@ -43,10 +43,12 @@ return function () {
 		$widgets = $widgets ? $widgets : array();
 
 		if ( ! empty( $widgets ) ) {
-			foreach ( $widgets as &$widget ) {
+			$export_widgets = array();
+
+			foreach ( $widgets as $widget ) {
 				$meta = get_post_meta( $widget->ID );
 
-				$widget->meta = array();
+				$widget_meta = array();
 
 				foreach ( $meta as $meta_key => $meta_value ) {
 
@@ -55,12 +57,22 @@ return function () {
 						$meta_value = $array_helper->clean_unserialize( $meta_value, 3 );
 					}
 
-					$widget->meta[ $meta_key ] = count( $meta_value ) > 1 ? $meta_value : $meta_value[0];
+					$widget_meta[ $meta_key ] = count( $meta_value ) > 1 ? $meta_value : $meta_value[0];
 
 				}
+
+				$export_widgets[] = array(
+					'post_name'    => $widget->post_name,
+					'post_title'   => $widget->post_title,
+					'post_content' => $widget->post_content,
+					'post_excerpt' => $widget->post_excerpt,
+					'post_status'  => $widget->post_status,
+					'menu_order'   => $widget->menu_order,
+					'meta'         => $widget_meta,
+				);
 			}
 
-			$export_data['widgets'] = $widgets;
+			$export_data['widgets'] = $export_widgets;
 		}
 	}
 
@@ -98,10 +110,12 @@ return function () {
 		$admin_pages = $admin_pages ? $admin_pages : array();
 
 		if ( ! empty( $admin_pages ) ) {
-			foreach ( $admin_pages as &$admin_page ) {
+			$export_admin_pages = array();
+
+			foreach ( $admin_pages as $admin_page ) {
 				$meta = get_post_meta( $admin_page->ID );
 
-				$admin_page->meta = array();
+				$admin_page_meta = array();
 
 				foreach ( $meta as $meta_key => $raw_meta_value ) {
 
@@ -112,12 +126,22 @@ return function () {
 						$meta_value = $array_helper->clean_unserialize( $meta_value, 3 );
 					}
 
-					$admin_page->meta[ $meta_key ] = $meta_value;
+					$admin_page_meta[ $meta_key ] = $meta_value;
 
 				}
+
+				$export_admin_pages[] = array(
+					'post_name'    => $admin_page->post_name,
+					'post_title'   => $admin_page->post_title,
+					'post_content' => $admin_page->post_content,
+					'post_excerpt' => $admin_page->post_excerpt,
+					'post_status'  => $admin_page->post_status,
+					'menu_order'   => $admin_page->menu_order,
+					'meta'         => $admin_page_meta,
+				);
 			}
 
-			$export_data['admin_pages'] = $admin_pages;
+			$export_data['admin_pages'] = $export_admin_pages;
 		}
 	}
 
