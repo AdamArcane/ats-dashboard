@@ -14,7 +14,11 @@ return function ( $module ) {
 		// Atsui.
 		wp_enqueue_style( 'atsui', ATS_DASHBOARD_PLUGIN_URL . '/assets/css/atsui.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
 
-		// Integrations page.
+	}
+
+	if ( $module->screen()->is_integrations() || $module->screen()->is_dashboard() ) {
+
+		// Integrations page and the System Info dashboard widget.
 		wp_enqueue_style( 'ats-integrations', $module->url . '/assets/css/integrations.css', array(), ATS_DASHBOARD_PLUGIN_VERSION );
 
 	}

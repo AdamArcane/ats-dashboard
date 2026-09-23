@@ -61,6 +61,7 @@ class Integrations_Module extends Base_Module {
 		add_action( 'admin_init', array( self::get_instance(), 'add_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_scripts' ) );
+		add_action( 'wp_dashboard_setup', array( self::get_instance(), 'dashboard_widget' ) );
 
 		// The module output.
 		require_once __DIR__ . '/class-integrations-output.php';
@@ -81,6 +82,34 @@ class Integrations_Module extends Base_Module {
 	public function submenu_page_content() {
 
 		$template = require __DIR__ . '/templates/integrations-template.php';
+		$template();
+
+	}
+
+	/**
+	 * Register the System Links dashboard widget, visible only to users who
+	 * can manage the integrations settings (administrators by default).
+	 */
+	public function dashboard_widget() {
+
+		if ( ! current_user_can( apply_filters( 'ats_settings_capability', 'manage_options' ) ) ) {
+			return;
+		}
+
+		wp_add_dashboard_widget(
+			'ats_integrations_system_links',
+			__( 'System Links', 'ats-dashboard' ),
+			array( $this, 'dashboard_widget_content' )
+		);
+
+	}
+
+	/**
+	 * Render the System Links dashboard widget.
+	 */
+	public function dashboard_widget_content() {
+
+		$template = require __DIR__ . '/templates/dashboard-widget.php';
 		$template();
 
 	}
