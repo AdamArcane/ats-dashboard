@@ -779,10 +779,20 @@ div#wp-responsive-toggle a:before {
 
 	#adminmenu .wp-has-current-submenu ul > li > a, .folded #adminmenu li.menu-top .wp-submenu > li > a {
 		padding: 7px 15px;
+		box-sizing: border-box;
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	#adminmenu .wp-submenu a {
-		padding: 7px 0;
+		padding: 7px 30px 7px 0;
+		box-sizing: border-box;
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	/* Custom Logo */
@@ -892,10 +902,20 @@ div#wp-responsive-toggle a:before {
 
 	#adminmenu .wp-has-current-submenu ul > li > a, .folded #adminmenu li.menu-top .wp-submenu > li > a {
 		padding: 7px 15px;
+		box-sizing: border-box;
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	#adminmenu .wp-submenu a {
-		padding: 7px 0;
+		padding: 7px 30px 7px 0;
+		box-sizing: border-box;
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	/* Custom Logo */
