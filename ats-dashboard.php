@@ -46,6 +46,10 @@ if ( ATS_DASHBOARD_UPDATES_ENABLED && ATS_DASHBOARD_UPDATE_MANIFEST_URL ) {
 	);
 }
 
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require_once __DIR__ . '/includes/class-cli-command.php';
+}
+
 // Admin menu specific support — must run directly (unhooked) to avoid being overlapped by other plugins.
 require_once __DIR__ . '/modules/admin-menu/inc/not-doing-ajax.php';
 ats_admin_menu_not_doing_ajax();
