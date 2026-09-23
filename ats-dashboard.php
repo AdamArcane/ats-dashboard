@@ -20,6 +20,15 @@ define( 'ATS_DASHBOARD_PLUGIN_VERSION', '1.0.3' );
 define( 'ATS_DASHBOARD_PLUGIN_FILE', plugin_basename( __FILE__ ) );
 define( 'ATS_DASHBOARD_DEFAULT_LOGO_URL', 'https://cdn-r2.arcanetechct.com/LogoWideTransparent.png' );
 
+// ── Self-hosted Auto-Updates (R2) ───────────────────────────────────────────────
+
+require_once __DIR__ . '/includes/class-simple-updater.php';
+new ATS_Dashboard_Updater(
+	'https://files.arcanetechct.com/ats-dashboard/info.json',
+	__FILE__,
+	ATS_DASHBOARD_PLUGIN_VERSION
+);
+
 // Admin menu specific support — must run directly (unhooked) to avoid being overlapped by other plugins.
 require_once __DIR__ . '/modules/admin-menu/inc/not-doing-ajax.php';
 ats_admin_menu_not_doing_ajax();

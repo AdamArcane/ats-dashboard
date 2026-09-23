@@ -642,8 +642,8 @@ class Widget_Base_Output extends Base_Output {
 			.ats-site-overview-widget .ats-status-pending {
 				color: #2271b1;
 			}
-			.ats-site-overview-widget .ats-last-change-link {
-				justify-content: flex-start;
+			.ats-site-overview-widget .ats-site-overview-details li.ats-last-change-link {
+				justify-content: flex-end;
 				padding-top: 0;
 			}
 			.ats-site-overview-widget .ats-last-change-link a {
