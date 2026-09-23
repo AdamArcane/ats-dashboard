@@ -63,6 +63,16 @@ return function () {
 					</form>
 				</div>
 
+				<div class="atsui">
+					<form method="post" action="options.php" onsubmit="return confirm('<?php echo esc_js( __( 'Are you sure you want to reset all ATS Dashboard settings? This cannot be undone.', 'ats-dashboard' ) ); ?>');">
+					<?php
+					settings_fields( 'ats-reset-group' );
+					do_settings_sections( 'ats-dashboard-reset' );
+					submit_button( __( 'Reset to Defaults', 'ats-dashboard' ), 'delete' );
+					?>
+					</form>
+				</div>
+
 			</div>
 
 		</div>

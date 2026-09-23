@@ -74,10 +74,12 @@ return function () {
 						</td>
 					</tr>
 				<?php endif; ?>
+				<tr class="ats-override-note-row">
+					<th></th>
+					<td class="ats-override-note"><?php esc_html_e( 'Managed centrally via the MainWP Postmark extension. To change the server, message stream, or sender, update the assignment in MainWP and push the config again — this page just reflects what is currently deployed.', 'ats-dashboard' ); ?></td>
+				</tr>
 			</tbody>
 		</table>
-
-		<p class="description"><?php esc_html_e( 'Managed centrally via the MainWP Postmark extension. To change the server, message stream, or sender, update the assignment in MainWP and push the config again — this page just reflects what is currently deployed.', 'ats-dashboard' ); ?></p>
 
 	<?php endif; ?>
 

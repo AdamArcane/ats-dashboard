@@ -10,6 +10,7 @@ namespace ATSDash\Tool;
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use ATSDash\Base\Base_Module;
+use ATSDash\Setup;
 
 /**
  * Class to setup tool module.
@@ -57,6 +58,7 @@ class Tool_Module extends Base_Module {
 	 */
 	public function setup() {
 		add_filter( 'option_page_capability_ats-import-group', array( $this, 'tools_capability' ) );
+		add_filter( 'option_page_capability_ats-reset-group', array( $this, 'tools_capability' ) );
 		add_filter( 'option_page_capability_ats-export-group', array( $this, 'tools_capability' ) );
 
 		/**
@@ -121,14 +123,17 @@ class Tool_Module extends Base_Module {
 		// Settings groups.
 		register_setting( 'ats-export-group', 'ats_export', array( 'sanitize_callback' => array( $this, 'process_export' ) ) );
 		register_setting( 'ats-import-group', 'ats_import', array( 'sanitize_callback' => array( $this, 'process_import' ) ) );
+		register_setting( 'ats-reset-group', 'ats_reset', array( 'sanitize_callback' => array( $this, 'process_reset' ) ) );
 
 		// Settings sections.
 		add_settings_section( 'ats-export-section', __( 'Export', 'ats-dashboard' ), '', 'ats-dashboard-export' );
 		add_settings_section( 'ats-import-section', __( 'Import', 'ats-dashboard' ), '', 'ats-dashboard-import' );
+		add_settings_section( 'ats-reset-section', __( 'Reset', 'ats-dashboard' ), '', 'ats-dashboard-reset' );
 
 		// Settings fields.
 		add_settings_field( 'ats-export-field', '', array( $this, 'render_export_field' ), 'ats-dashboard-export', 'ats-export-section', array( 'class' => 'is-gapless has-small-text' ) );
 		add_settings_field( 'ats-import-field', '', array( $this, 'render_import_field' ), 'ats-dashboard-import', 'ats-import-section', array( 'class' => 'is-gapless has-small-text' ) );
+		add_settings_field( 'ats-reset-field', '', array( $this, 'render_reset_field' ), 'ats-dashboard-reset', 'ats-reset-section', array( 'class' => 'is-gapless has-small-text' ) );
 
 	}
 
@@ -157,6 +162,18 @@ class Tool_Module extends Base_Module {
 	}
 
 	/**
+	 * Render reset field.
+	 *
+	 * @param array $args The setting's arguments.
+	 */
+	public function render_reset_field( $args ) {
+
+		$field = require __DIR__ . '/templates/fields/reset-field.php';
+		$field();
+
+	}
+
+	/**
 	 * Process the export.
 	 */
 	public function process_export() {
@@ -175,6 +192,23 @@ class Tool_Module extends Base_Module {
 
 		$process = require __DIR__ . '/inc/process-import.php';
 		$process();
+
+	}
+
+	/**
+	 * Reset all ATS Dashboard settings on this site back to their defaults.
+	 */
+	public function process_reset() {
+		$this->authorize_transfer( 'ats-reset-group' );
+
+		if ( empty( $_POST['ats_reset_confirm'] ) ) {
+			add_settings_error( 'ats_export', esc_attr( 'ats-reset' ), __( 'Please confirm you want to reset all settings.', 'ats-dashboard' ) );
+			return;
+		}
+
+		Setup::get_instance()->delete_ats_data();
+
+		add_settings_error( 'ats_export', esc_attr( 'ats-reset' ), __( 'All ATS Dashboard settings have been reset to their defaults.', 'ats-dashboard' ), 'updated' );
 
 	}
 

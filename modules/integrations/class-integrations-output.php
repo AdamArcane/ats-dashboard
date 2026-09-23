@@ -163,24 +163,117 @@ class Integrations_Output extends Base_Output {
 	 * @return array {
 	 *     @type string $value       The resolved value.
 	 *     @type bool   $is_override Whether the value came from a manual override.
+	 *     @type string $pushed      The raw MainWP-pushed value, ignoring any override.
 	 * }
 	 */
 	public function get_mainwp_site_id() {
 
 		$overrides      = get_option( 'ats_integrations', array() );
 		$override_value = isset( $overrides['mainwp_site_id_override'] ) ? trim( $overrides['mainwp_site_id_override'] ) : '';
+		$pushed_value   = (string) get_option( 'arcane_atc_mainwp_site_id', '' );
 
 		if ( '' !== $override_value ) {
 			return array(
 				'value'       => $override_value,
 				'is_override' => true,
+				'pushed'      => $pushed_value,
 			);
 		}
 
 		return array(
-			'value'       => (string) get_option( 'arcane_atc_mainwp_site_id', '' ),
+			'value'       => $pushed_value,
 			'is_override' => false,
+			'pushed'      => $pushed_value,
 		);
+
+	}
+
+	/**
+	 * Get the URL to manage this site on the MainWP dashboard, if MainWP has
+	 * been matched to this site (site ID pushed or manually overridden) and
+	 * a dashboard base URL is available (auto-detected or overridden).
+	 *
+	 * @return string The manage URL, or an empty string if either piece is missing.
+	 */
+	public function get_mainwp_manage_url() {
+
+		$mainwp_site_id = $this->get_mainwp_site_id();
+		$base_url       = $this->get_mainwp_base_url();
+
+		if ( empty( $mainwp_site_id['value'] ) || '' === $base_url ) {
+			return '';
+		}
+
+		return $base_url . '/wp-admin/admin.php?page=managesites&id=' . rawurlencode( $mainwp_site_id['value'] );
+
+	}
+
+	/**
+	 * Get the MainWP dashboard's base URL (scheme + host, no trailing slash),
+	 * resolved against a manual override.
+	 *
+	 * Auto-detected from the MainWP Child plugin's own connection record
+	 * (`mainwp_child_server` — the dashboard this site is connected to) when
+	 * available, so this doesn't need to be entered by hand on sites that are
+	 * already connected to MainWP. The manual override exists for sites
+	 * where MainWP Child isn't installed/active, or to correct a value.
+	 *
+	 * @return string The base URL, or an empty string if neither an override
+	 *                nor an auto-detected value is available.
+	 */
+	public function get_mainwp_base_url() {
+
+		$overrides      = get_option( 'ats_integrations', array() );
+		$override_value = isset( $overrides['mainwp_base_url'] ) ? trim( $overrides['mainwp_base_url'] ) : '';
+
+		if ( '' !== $override_value ) {
+			return untrailingslashit( $override_value );
+		}
+
+		return $this->detect_mainwp_base_url();
+
+	}
+
+	/**
+	 * Get the auto-detected MainWP dashboard base URL, ignoring any manual
+	 * override — for showing alongside the override field in settings.
+	 *
+	 * @return string
+	 */
+	public function get_mainwp_base_url_detected() {
+
+		return $this->detect_mainwp_base_url();
+
+	}
+
+	/**
+	 * Read the MainWP dashboard URL the MainWP Child plugin has this site
+	 * connected to (`mainwp_child_server`, encrypted at rest), and reduce it
+	 * to just scheme + host (+ port) — no admin path, query, user, etc.
+	 *
+	 * @return string
+	 */
+	private function detect_mainwp_base_url() {
+
+		if ( ! class_exists( '\MainWP\Child\MainWP_Child_Keys_Manager' ) ) {
+			return '';
+		}
+
+		$server = \MainWP\Child\MainWP_Child_Keys_Manager::get_encrypted_option( 'mainwp_child_server', '' );
+
+		if ( ! is_string( $server ) || '' === $server ) {
+			return '';
+		}
+
+		$parts = wp_parse_url( $server );
+
+		if ( empty( $parts['scheme'] ) || empty( $parts['host'] ) || ! in_array( strtolower( $parts['scheme'] ), array( 'http', 'https' ), true ) ) {
+			return '';
+		}
+
+		$port = isset( $parts['port'] ) ? ':' . $parts['port'] : '';
+
+		return $parts['scheme'] . '://' . $parts['host'] . $port;
 
 	}
 

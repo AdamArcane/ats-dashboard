@@ -24,6 +24,7 @@ class Import_Handler {
 		$login_customizer_settings = isset( $imports['login_customizer_settings'] ) ? $imports['login_customizer_settings'] : array();
 		$login_redirect_settings   = isset( $imports['login_redirect_settings'] ) ? $imports['login_redirect_settings'] : array();
 		$widgets                   = isset( $imports['widgets'] ) ? $imports['widgets'] : array();
+		$widgets_order             = isset( $imports['widgets_order'] ) ? $imports['widgets_order'] : array();
 		$admin_pages               = isset( $imports['admin_pages'] ) ? $imports['admin_pages'] : array();
 
 		// Backwards compatibility for "feature_settings".
@@ -67,6 +68,16 @@ class Import_Handler {
 		if ( $widgets ) {
 			self::apply_posts( $widgets, 'ats_widgets', $array_helper );
 			$messages[] = __( 'Widgets imported', 'ats-dashboard' );
+		}
+
+		if ( $widgets_order ) {
+			update_option( 'ats_widget_order', $widgets_order );
+
+			foreach ( get_users( array( 'fields' => 'ID' ) ) as $user_id ) {
+				update_user_meta( $user_id, 'meta-box-order_dashboard', $widgets_order );
+			}
+
+			$messages[] = __( 'Dashboard widget order imported', 'ats-dashboard' );
 		}
 
 		if ( $admin_pages ) {

@@ -62,6 +62,7 @@ class Integrations_Module extends Base_Module {
 		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_scripts' ) );
 		add_action( 'wp_dashboard_setup', array( self::get_instance(), 'dashboard_widget' ) );
+		add_action( 'admin_bar_menu', array( self::get_instance(), 'admin_bar_menu_item' ), 45 );
 
 		// The module output.
 		require_once __DIR__ . '/class-integrations-output.php';
@@ -115,6 +116,40 @@ class Integrations_Module extends Base_Module {
 	}
 
 	/**
+	 * Add a "Manage in MainWP" item to the site name admin bar dropdown
+	 * (next to "Visit Site"), but only for admins and only once MainWP has
+	 * been matched to this site.
+	 *
+	 * @param \WP_Admin_Bar $wp_admin_bar The admin bar instance.
+	 */
+	public function admin_bar_menu_item( $wp_admin_bar ) {
+
+		if ( ! current_user_can( apply_filters( 'ats_settings_capability', 'manage_options' ) ) ) {
+			return;
+		}
+
+		$manage_url = Integrations_Output::get_instance()->get_mainwp_manage_url();
+
+		if ( ! $manage_url ) {
+			return;
+		}
+
+		$wp_admin_bar->add_node(
+			array(
+				'id'     => 'ats-manage-in-mainwp',
+				'parent' => 'site-name',
+				'title'  => __( 'Manage in MainWP', 'ats-dashboard' ),
+				'href'   => $manage_url,
+				'meta'   => array(
+					'target' => '_blank',
+					'rel'    => 'noopener noreferrer',
+				),
+			)
+		);
+
+	}
+
+	/**
 	 * Enqueue admin styles.
 	 */
 	public function admin_styles() {
@@ -157,11 +192,15 @@ class Integrations_Module extends Base_Module {
 		add_settings_section( 'ats-suitedash-section', '', '', $pages['suitedash'] );
 		add_settings_section( 'ats-postmark-section', '', '', $pages['postmark'] );
 
-		// Fields.
-		add_settings_field( 'mainwp-site-id', __( 'MainWP Site ID', 'ats-dashboard' ), array( $this, 'mainwp_site_id_field' ), $pages['mainwp'], 'ats-mainwp-section' );
-		add_settings_field( 'ploi-status', __( 'Server / Hosting Status', 'ats-dashboard' ), array( $this, 'ploi_status_field' ), $pages['ploi'], 'ats-ploi-section' );
-		add_settings_field( 'suitedash-status', __( 'Company / CRM Status', 'ats-dashboard' ), array( $this, 'suitedash_status_field' ), $pages['suitedash'], 'ats-suitedash-section' );
-		add_settings_field( 'postmark-status', __( 'Email Delivery Status', 'ats-dashboard' ), array( $this, 'postmark_status_field' ), $pages['postmark'], 'ats-postmark-section' );
+		// Fields. No label: each row inside the field content already carries
+		// its own label (e.g. "Dashboard URL", "Server Name"), and the tab
+		// nav already names the integration, so a settings-field label here
+		// would just repeat one of those in its own column.
+		add_settings_field( 'mainwp-base-url', '', array( $this, 'mainwp_base_url_field' ), $pages['mainwp'], 'ats-mainwp-section' );
+		add_settings_field( 'mainwp-site-id', '', array( $this, 'mainwp_site_id_field' ), $pages['mainwp'], 'ats-mainwp-section' );
+		add_settings_field( 'ploi-status', '', array( $this, 'ploi_status_field' ), $pages['ploi'], 'ats-ploi-section' );
+		add_settings_field( 'suitedash-status', '', array( $this, 'suitedash_status_field' ), $pages['suitedash'], 'ats-suitedash-section' );
+		add_settings_field( 'postmark-status', '', array( $this, 'postmark_status_field' ), $pages['postmark'], 'ats-postmark-section' );
 
 	}
 
@@ -189,6 +228,7 @@ class Integrations_Module extends Base_Module {
 
 		$sanitized = array();
 
+		$sanitized['mainwp_base_url']         = isset( $input['mainwp_base_url'] ) ? untrailingslashit( esc_url_raw( trim( $input['mainwp_base_url'] ) ) ) : '';
 		$sanitized['mainwp_site_id_override'] = isset( $input['mainwp_site_id_override'] ) ? sanitize_text_field( $input['mainwp_site_id_override'] ) : '';
 
 		$ploi_fields                       = array( 'server_name', 'server_ip', 'php_version', 'domain', 'status' );
@@ -211,6 +251,16 @@ class Integrations_Module extends Base_Module {
 		$sanitized = apply_filters( 'ats_integrations_sanitize_settings', $sanitized, $input );
 
 		return $sanitized;
+
+	}
+
+	/**
+	 * MainWP dashboard base URL field.
+	 */
+	public function mainwp_base_url_field() {
+
+		$field = require __DIR__ . '/templates/fields/mainwp-base-url.php';
+		$field();
 
 	}
 

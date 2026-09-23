@@ -43,26 +43,124 @@
 	color: #1d2327;
 }
 
-.ats-integrations-overrides {
-	margin-top: 16px;
-	padding-top: 16px;
+/* ── Settings field rows: no outer label column ──────────────────────── */
+/* Every field's own content already carries its row-level labels, so the
+   Settings API's per-field <th> label column (unused — see add_settings_field
+   calls passing '') is hidden and the field <td> takes the full row. */
+
+.ats-integrations-form .form-table > tbody > tr > th,
+.ats-integrations-form .form-table > tr > th {
+	display: none;
+}
+
+.ats-integrations-form .form-table > tbody > tr > td,
+.ats-integrations-form .form-table > tr > td {
+	display: block;
+	width: 100%;
+}
+
+/* A visual break between stacked field blocks within the same tab (e.g.
+   Dashboard URL vs. Site ID on the MainWP tab), so it's clear where one
+   field's table + note ends and the next begins. */
+.ats-integrations-form .form-table > tbody > tr + tr > td,
+.ats-integrations-form .form-table > tr + tr > td {
 	border-top: 1px solid #dcdcde;
 }
 
-.ats-integrations-overrides h4 {
-	margin: 0 0 8px;
-}
+/* ── Label | Auto Value | Override table ────────────────────────────── */
 
-.ats-integrations-overrides .ats-integrations-override-row {
-	display: flex;
-	align-items: center;
-	gap: 10px;
+.ats-override-table {
+	width: 100%;
+	border-collapse: collapse;
 	margin-bottom: 8px;
 }
 
-.ats-integrations-overrides label {
+.ats-override-table th,
+.ats-override-table td {
+	text-align: left;
+	padding: 8px 10px 8px 0;
+	vertical-align: middle;
+}
+
+.ats-override-table tbody th {
 	width: 160px;
-	flex-shrink: 0;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.ats-override-row {
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.ats-override-row:last-child {
+	border-bottom: none;
+}
+
+.ats-override-auto-cell {
+	cursor: pointer;
+}
+
+.ats-override-auto-value {
+	color: #3c434a;
+}
+
+.ats-override-row.has-override .ats-override-auto-value {
+	color: #a7aaad;
+	text-decoration: line-through;
+}
+
+.ats-override-na {
+	color: #c3c4c7;
+}
+
+.ats-override-note-row .ats-override-note {
+	padding-top: 4px;
+	padding-bottom: 10px;
+	color: #646970;
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.ats-override-display,
+.ats-override-edit {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.ats-override-display-value {
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.ats-override-edit-toggle {
+	display: inline-flex;
+	align-items: center;
+	background: none;
+	border: none;
+	padding: 2px;
+	margin: 0;
+	cursor: pointer;
+	color: #787c82;
+}
+
+.ats-override-edit-toggle:hover {
+	color: #2271b1;
+}
+
+.ats-override-edit-toggle .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.ats-override-cancel {
+	color: #787c82;
+	text-decoration: none;
+}
+
+.ats-override-cancel:hover {
+	color: #d63638;
 }
 
 /* ── System Links dashboard widget ──────────────────────────────────── */

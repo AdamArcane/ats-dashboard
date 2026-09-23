@@ -12,10 +12,18 @@ class Import_Validator {
 			return new \WP_Error( 'ats_invalid_import', __( 'Please upload a valid ATS Dashboard JSON object.', 'ats-dashboard' ) );
 		}
 
-		$groups = array( 'modules_manager_settings', 'feature_settings', 'settings', 'branding_settings', 'login_customizer_settings', 'login_settings', 'login_redirect_settings', 'widgets', 'admin_pages', 'admin_menu', 'admin_bar', 'multisite_settings' );
+		$groups = array( 'modules_manager_settings', 'feature_settings', 'settings', 'branding_settings', 'login_customizer_settings', 'login_settings', 'login_redirect_settings', 'widgets', 'widgets_order', 'admin_pages', 'admin_menu', 'admin_bar', 'multisite_settings' );
 		foreach ( $groups as $group ) {
 			if ( array_key_exists( $group, $data ) && ! is_array( $data[ $group ] ) ) {
 				return new \WP_Error( 'ats_invalid_import', __( 'Import sections must contain arrays or objects.', 'ats-dashboard' ) );
+			}
+		}
+
+		if ( isset( $data['widgets_order'] ) ) {
+			foreach ( $data['widgets_order'] as $column => $order ) {
+				if ( ! is_string( $column ) || ! is_string( $order ) ) {
+					return new \WP_Error( 'ats_invalid_import', __( 'Invalid imported dashboard widget order.', 'ats-dashboard' ) );
+				}
 			}
 		}
 

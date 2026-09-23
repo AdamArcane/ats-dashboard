@@ -74,6 +74,12 @@ return function () {
 
 			$export_data['widgets'] = $export_widgets;
 		}
+
+		$widgets_order = get_option( 'ats_widget_order', array() );
+
+		if ( ! empty( $widgets_order ) && is_array( $widgets_order ) ) {
+			$export_data['widgets_order'] = $widgets_order;
+		}
 	}
 
 	if ( in_array( 'branding', $selected_modules, true ) ) {

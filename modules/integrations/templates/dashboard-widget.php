@@ -139,8 +139,7 @@ return function () {
 	}
 
 	if ( $mainwp_id ) {
-		$url = 'https://siteman.arcanetech.cloud/wp-admin/admin.php?page=managesites&id=' . rawurlencode( $mainwp_id );
-		$row( __( 'MainWP', 'ats-dashboard' ), __( 'Manage Site', 'ats-dashboard' ), '', $url );
+		$row( __( 'MainWP', 'ats-dashboard' ), __( 'Manage Site', 'ats-dashboard' ), '', $output->get_mainwp_manage_url() );
 	} else {
 		$row( __( 'MainWP', 'ats-dashboard' ), __( 'Not configured', 'ats-dashboard' ), '', null );
 	}

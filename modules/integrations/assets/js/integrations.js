@@ -16,6 +16,7 @@
 	 */
 	function init() {
 		setupTabsNavigation();
+		setupOverrideToggles();
 	}
 
 	/**
@@ -57,6 +58,54 @@
 			"display",
 			"block"
 		);
+	}
+
+	/**
+	 * Wire up the Label | Auto Value | Override rows: clicking the auto value
+	 * or the edit icon reveals the override input; Cancel reverts an
+	 * unsaved edit and hides it again.
+	 */
+	function setupOverrideToggles() {
+		$(document).on(
+			"click",
+			".ats-override-auto-cell, .ats-override-edit-toggle",
+			function () {
+				var $row = $(this).closest(".ats-override-row");
+				openOverrideEditor($row);
+			}
+		);
+
+		$(document).on("click", ".ats-override-cancel", function () {
+			var $row = $(this).closest(".ats-override-row");
+			var $input = $row.find(".ats-override-edit input");
+
+			$input.val($input.data("original"));
+			closeOverrideEditor($row);
+		});
+	}
+
+	/**
+	 * Show a row's override input, hiding its read-only display.
+	 *
+	 * @param {Object} $row jQuery-wrapped .ats-override-row element.
+	 */
+	function openOverrideEditor($row) {
+		$row.find(".ats-override-display").hide();
+		$row.find(".ats-override-edit").show().find("input").trigger("focus");
+	}
+
+	/**
+	 * Hide a row's override input and show its read-only display again.
+	 *
+	 * @param {Object} $row jQuery-wrapped .ats-override-row element.
+	 */
+	function closeOverrideEditor($row) {
+		var $input = $row.find(".ats-override-edit input");
+		var hasValue = "" !== String($input.val()).trim();
+
+		$row.toggleClass("has-override", hasValue);
+		$row.find(".ats-override-edit").hide();
+		$row.find(".ats-override-display").show();
 	}
 
 	return {};
