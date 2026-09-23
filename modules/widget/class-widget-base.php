@@ -537,7 +537,7 @@ class Widget_Base_Module extends Base_Module {
 	public function roles_column_content( $column_content, $post_id ) {
 
 		$roles = get_post_meta( $post_id, 'ats_widget_roles', true );
-		$roles = is_serialized( $roles ) ? unserialize( $roles ) : $roles;
+		$roles = ( new \ATSDash\Helpers\Array_Helper() )->clean_unserialize( $roles, 3 );
 		$roles = empty( $roles ) ? array( 'all' ) : $roles;
 		$roles = implode( ', ', $roles );
 

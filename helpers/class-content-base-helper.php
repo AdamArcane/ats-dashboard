@@ -129,19 +129,19 @@ class Content_Base_Helper {
 	/**
 	 * Get allowed HTML tags for the Admin Page "HTML" content field.
 	 *
-	 * Extends WordPress's 'post' context with <script>. Admin Pages are only
-	 * editable by users who already have unrestricted, entirely unsanitized
-	 * JS execution via the sibling Custom JS field (see
-	 * Admin_Page_Output::print_admin_page_scripts()), so stripping <script>
-	 * here doesn't protect against anything — it just breaks embeds (e.g. a
-	 * third-party form's `<script src="...">` snippet) that only work as an
-	 * actual tag, not as Custom JS's raw JS body.
+	 * Script embeds require the same permission as the Custom JS field.
+	 * This method is used when saving/importing, not when displaying content.
 	 *
 	 * @return array The allowed HTML tags.
 	 */
 	public function get_admin_page_html_allowed_tags() {
 
 		$allowed_tags = wp_kses_allowed_html( 'post' );
+
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			unset( $allowed_tags['script'] );
+			return $allowed_tags;
+		}
 
 		$allowed_tags['script'] = array(
 			'src'            => true,

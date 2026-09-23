@@ -10,7 +10,7 @@
 		"ats-dashboard"
 	],
 	"author": "Adam Tommasi",
-	"license": "GPL-3.0",
+	"license": "GPL-3.0-only",
 	"bugs": {
 		"url": "https://arcanetechct.com/contact"
 	},

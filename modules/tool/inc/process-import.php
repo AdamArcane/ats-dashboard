@@ -8,13 +8,16 @@
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 use ATSDash\Helpers\Array_Helper;
+use ATSDash\Tool\Import_Validator;
+
+require_once dirname( __DIR__ ) . '/class-import-validator.php';
 
 return function () {
 
 	$array_helper = new Array_Helper();
 	$import_file  = isset( $_FILES['ats_import_file'] ) ? $_FILES['ats_import_file'] : null;
 
-	if ( is_null( $import_file ) ) {
+	if ( ! is_array( $import_file ) || ! isset( $import_file['error'], $import_file['name'], $import_file['tmp_name'] ) || UPLOAD_ERR_OK !== $import_file['error'] || ! is_string( $import_file['name'] ) || ! is_string( $import_file['tmp_name'] ) || ! is_uploaded_file( $import_file['tmp_name'] ) ) {
 
 		add_settings_error(
 			'ats_export',
@@ -57,8 +60,16 @@ return function () {
 
 	}
 
-	$imports = file_get_contents( $tmp_file, true );
-	$imports = (array) json_decode( $imports, true );
+	if ( filesize( $tmp_file ) > 5 * MB_IN_BYTES ) {
+		add_settings_error( 'ats_export', 'ats-import', __( 'Import files must be no larger than 5 MB.', 'ats-dashboard' ) );
+		return;
+	}
+
+	$imports = Import_Validator::decode( file_get_contents( $tmp_file ) );
+	if ( is_wp_error( $imports ) ) {
+		add_settings_error( 'ats_export', 'ats-import', $imports->get_error_message() );
+		return;
+	}
 
 	// Retrieve settings & widgets.
 	$modules_manager_settings  = isset( $imports['modules_manager_settings'] ) ? $imports['modules_manager_settings'] : array();
@@ -113,8 +124,6 @@ return function () {
 			update_option( 'ats_login_redirect', $login_redirect_settings );
 		}
 
-		do_action( 'ats_import_settings', $imports );
-
 		add_settings_error(
 			'ats_export',
 			esc_attr( 'ats-import' ),
@@ -123,6 +132,9 @@ return function () {
 		);
 
 	}
+
+	// Network-only exports must also be handled when no site settings are present.
+	do_action( 'ats_import_settings', $imports );
 
 	if ( $widgets ) {
 
@@ -134,7 +146,7 @@ return function () {
 			}
 
 			$post = get_page_by_path( $widget['post_name'], OBJECT, 'ats_widgets' );
-			$meta = $widget['meta'];
+			$meta = Import_Validator::prepare_meta( $widget['meta'] );
 
 			unset( $widget['meta'] );
 
@@ -151,6 +163,10 @@ return function () {
 
 				$post_id = wp_insert_post( $widget );
 
+			}
+
+			if ( ! $post_id || is_wp_error( $post_id ) ) {
+				continue;
 			}
 
 			foreach ( $meta as $meta_key => $meta_value ) {
@@ -175,7 +191,7 @@ return function () {
 
 		foreach ( $admin_pages as $admin_page ) {
 			$post = get_page_by_path( $admin_page['post_name'], OBJECT, 'ats_admin_page' );
-			$meta = $admin_page['meta'];
+			$meta = Import_Validator::prepare_meta( $admin_page['meta'] );
 
 			unset( $admin_page['meta'] );
 
@@ -189,6 +205,10 @@ return function () {
 				unset( $admin_page['ID'] );
 
 				$post_id = wp_insert_post( $admin_page );
+			}
+
+			if ( ! $post_id || is_wp_error( $post_id ) ) {
+				continue;
 			}
 
 			foreach ( $meta as $meta_key => $meta_value ) {

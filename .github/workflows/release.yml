@@ -94,7 +94,7 @@ jobs:
             --exclude='.git' --exclude='.github' --exclude='build' \
             --exclude='.gitignore' --exclude='.vscode' --exclude='.claude' \
             --exclude='_to_delete' --exclude='node_modules' --exclude="*.DS_Store" \
-            --exclude='.parcel-cache' \
+            --exclude='tests' --exclude='.parcel-cache' \
             --exclude='package.json' --exclude='package-lock.json' \
             --exclude='ats-dashboard.zip' \
             ./ build/ats-dashboard/

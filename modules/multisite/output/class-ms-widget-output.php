@@ -128,14 +128,14 @@ class Ms_Widget_Output extends Base_Output {
 		add_filter(
 			'ats_tools_capability',
 			function () {
-				'manage_network'; // Only allow network admins to access the tools page.
+				return 'manage_network'; // Only allow network admins to access the tools page.
 			}
 		);
 
 		add_filter(
 			'ats_modules_capability',
 			function () {
-				'manage_network'; // Only allow network admins to access the modules page.
+				return 'manage_network'; // Only allow network admins to access the modules page.
 			}
 		);
 

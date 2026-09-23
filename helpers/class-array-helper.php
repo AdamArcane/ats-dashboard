@@ -79,14 +79,25 @@ class Array_Helper {
 	public function clean_unserialize( $value, $depth = 2 ) {
 		for ( $i = 0; $i < $depth; $i++ ) {
 			if ( is_serialized( $value ) ) {
-				// phpcs:ignore
-				$value = unserialize( $value );
+				// Legacy role lists may be serialized more than once. Never instantiate objects.
+				$value = @unserialize( $value, array( 'allowed_classes' => false, 'max_depth' => 32 ) );
 
 				if ( ! is_serialized( $value ) ) {
 					break;
 				}
 			} else {
 				break;
+			}
+		}
+
+		if ( ! is_array( $value ) ) {
+			return array();
+		}
+
+		// All consumers expect a flat list of roles or user IDs.
+		foreach ( $value as $item ) {
+			if ( ! is_string( $item ) && ! is_int( $item ) ) {
+				return array();
 			}
 		}
 

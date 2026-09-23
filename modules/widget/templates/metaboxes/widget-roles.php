@@ -15,7 +15,7 @@ return function ( $post ) {
 
 	$widget_roles = get_post_meta( $post->ID, 'ats_widget_roles', true );
 	$widget_roles = empty( $widget_roles ) ? array( 'all' ) : $widget_roles;
-	$widget_roles = is_serialized( $widget_roles ) ? unserialize( $widget_roles ) : $widget_roles;
+	$widget_roles = ( new \ATSDash\Helpers\Array_Helper() )->clean_unserialize( $widget_roles, 3 );
 
 	$roles_obj = new \WP_Roles();
 	$roles     = $roles_obj->role_names;

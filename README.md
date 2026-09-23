@@ -43,6 +43,8 @@ The separate **Login Redirect** module supports a custom login URL, post-login d
 - Customize toolbar items and submenus, or hide the toolbar for selected roles.
 - Use dynamic placeholders in supported content and navigation fields.
 
+Saving or importing custom JavaScript and HTML script embeds requires WordPress's `unfiltered_html` capability. On Multisite this normally means a Super Admin. Other page editors can still edit permitted content; their saves and imports leave existing custom JavaScript unchanged.
+
 ### Site Owner role
 
 Create an optional **Site Owner** role with a configurable display name. Its capabilities start from the Administrator role, then exclude unchecked capabilities from the plugin's configurable groups: plugins, themes, settings and tools, core and files, and users.
@@ -122,6 +124,8 @@ Supported export sections include module toggles, general settings, widgets, bra
 
 Imports replace included option groups and update existing widgets or admin pages with matching slugs. Export the destination configuration before importing if you need to preserve it. The export does not include integration overrides, email notification templates, media files, or separate builder template libraries.
 
+Imports accept JSON uploads up to 5 MB and validate recognized section and post structures before writing. Legacy serialized role/user lists are supported with PHP object creation disabled. Imported widgets and admin pages are restricted to their corresponding post types. On Multisite, Tools requires network administration permission; network imports only update the four supported ATS network options and require `manage_network_options`.
+
 The setting labeled **Remove Data on Uninstall** is currently checked by the plugin's **deactivation** handler, which deletes listed plugin options when enabled. Leave it disabled to retain those settings through deactivation; it is not a complete removal of all widget and admin-page content.
 
 ## Development
@@ -155,7 +159,16 @@ assets/                 Shared admin assets
 
 ### Validation and contributions
 
-There is no automated test suite or lint script configured in `package.json`. For PHP changes, run a syntax check on each changed file, for example:
+Run the isolated PHP regression checks without a database or mail service:
+
+```sh
+php tests/security.php
+php tests/bootstrap-config.php default
+php tests/bootstrap-config.php disabled
+php tests/bootstrap-config.php custom
+```
+
+These tests use WordPress test doubles to check import validation, object rejection, permission boundaries, editor escaping, and updater configuration. They do not replace testing in WordPress. For PHP changes, also run a syntax check on each changed file, for example:
 
 ```sh
 php -l ats-dashboard.php
@@ -169,6 +182,21 @@ Keep pull requests focused, describe the behavior changed, and include the WordP
 
 The included updater checks an Arcane-hosted JSON manifest at `https://files.arcanetechct.com/ats-dashboard/info.json` and exposes available updates through WordPress's normal plugin update interface. Successful manifest responses are cached for six hours; forcing a WordPress update check clears that cache.
 
+Arcane's update service and default logo CDN remain enabled by default. To opt out of the updater, add this to `wp-config.php` before WordPress loads plugins:
+
+```php
+define( 'ATS_DASHBOARD_UPDATES_ENABLED', false );
+```
+
+Forks can instead use their own manifest and logo URLs:
+
+```php
+define( 'ATS_DASHBOARD_UPDATE_MANIFEST_URL', 'https://example.com/ats-dashboard/info.json' );
+define( 'ATS_DASHBOARD_DEFAULT_LOGO_URL', 'https://example.com/logo.png' );
+```
+
+The manifest controls which ZIP WordPress offers to install. Use an HTTPS endpoint you control and trust. Disabling the updater stops ATS Dashboard from registering its update hooks; it does not disable other WordPress update mechanisms. The logo override supplies the default for branding fields and does not replace already saved logos.
+
 The [release workflow](.github/workflows/release.yml) packages the plugin and uploads the ZIP and update manifest to Cloudflare R2. It supports version tags in the form `vX.Y.Z` or a manual patch, minor, or major bump from GitHub Actions. The workflow requires `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, and `R2_SECRET_ACCESS_KEY` repository secrets, and publishes to the `plugins` bucket.
 
 Before a tag-based release, make the plugin header's `Version` and `ATS_DASHBOARD_PLUGIN_VERSION` match the tag. The workflow rejects mismatches. 
@@ -177,4 +205,4 @@ The release workflow packages the checked-in assets without running npm, so rebu
 
 ## License
 
-[`package.json`](package.json) declares **GPL-3.0**. A standalone license file is not currently included in the repository.
+ATS Dashboard is a modified derivative of **Ultimate Dashboard by David Vongries**, whose published source is GPLv2-or-later. This fork is distributed under **GPL-3.0-only**; see [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md). Bundled libraries and fonts retain their respective licenses, documented in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

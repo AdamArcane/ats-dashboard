@@ -63,7 +63,7 @@ return function ( $module, $post_id ) {
 	}
 
 	// Custom js.
-	if ( isset( $_POST['ats_custom_js'] ) ) {
+	if ( current_user_can( 'unfiltered_html' ) && isset( $_POST['ats_custom_js'] ) && is_string( $_POST['ats_custom_js'] ) ) {
 		update_post_meta( $post_id, 'ats_custom_js', $_POST['ats_custom_js'] );
 	}
 

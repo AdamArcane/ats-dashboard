@@ -13,7 +13,7 @@ return function ( $post ) {
 
 	$allowed_roles = get_post_meta( $post->ID, 'ats_allowed_roles', true );
 	$allowed_roles = empty( $allowed_roles ) ? array( 'all' ) : $allowed_roles;
-	$allowed_roles = is_serialized( $allowed_roles ) ? unserialize( $allowed_roles ) : $allowed_roles;
+	$allowed_roles = ( new \ATSDash\Helpers\Array_Helper() )->clean_unserialize( $allowed_roles, 3 );
 
 	$roles_obj = new \WP_Roles();
 	$roles     = $roles_obj->role_names;

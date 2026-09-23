@@ -13,7 +13,7 @@ return function ( $post ) {
 
 	$allowed_user_ids = get_post_meta( $post->ID, 'ats_restrict_users', true );
 	$allowed_user_ids = empty( $allowed_user_ids ) ? array( 'all' ) : $allowed_user_ids;
-	$allowed_user_ids = is_serialized( $allowed_user_ids ) ? unserialize( $allowed_user_ids ) : $allowed_user_ids;
+	$allowed_user_ids = ( new \ATSDash\Helpers\Array_Helper() )->clean_unserialize( $allowed_user_ids, 3 );
 
 	$users = get_users();
 	?>
