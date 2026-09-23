@@ -644,6 +644,41 @@
 	}
 
 	/**
+	 * Get visibility meta (dashicon suffix, indicator class, label, and "selected" attrs)
+	 * based on the stored is_hidden value.
+	 *
+	 * @param {string} isHidden "0" (normal), "1" (hidden), or "2" (hidden, but showable).
+	 * @return {object} The visibility meta.
+	 */
+	function getVisibilityMeta(isHidden) {
+		var value = String(isHidden);
+		var meta = {
+			icon: "visibility",
+			indicatorClass: "is-visible",
+			label: "Visible",
+			normalSelected: "",
+			hiddenSelected: "",
+			showableSelected: "",
+		};
+
+		if (value === "1") {
+			meta.icon = "hidden";
+			meta.indicatorClass = "is-hidden";
+			meta.label = "Hidden";
+			meta.hiddenSelected = "selected";
+		} else if (value === "2") {
+			meta.icon = "hidden";
+			meta.indicatorClass = "is-hidden-showable";
+			meta.label = "Hidden, but showable";
+			meta.showableSelected = "selected";
+		} else {
+			meta.normalSelected = "selected";
+		}
+
+		return meta;
+	}
+
+	/**
 	 * Replace menu placeholders.
 	 *
 	 * @param {string} by Either by role or user_id.
@@ -711,9 +746,29 @@
 					? '<span class="dashicons dashicons-trash ats-menu-builder--remove-menu-item"></span>'
 					: ""
 			);
+
+			var menuVisibilityMeta = getVisibilityMeta(menu.is_hidden);
+
+			template = template.replace(/{hidden_icon}/g, menuVisibilityMeta.icon);
 			template = template.replace(
-				/{hidden_icon}/g,
-				menu.is_hidden == "1" ? "hidden" : "visibility"
+				/{visibility_indicator_class}/g,
+				menuVisibilityMeta.indicatorClass
+			);
+			template = template.replace(
+				/{visibility_label}/g,
+				menuVisibilityMeta.label
+			);
+			template = template.replace(
+				/{menu_visibility_normal_selected}/g,
+				menuVisibilityMeta.normalSelected
+			);
+			template = template.replace(
+				/{menu_visibility_hidden_selected}/g,
+				menuVisibilityMeta.hiddenSelected
+			);
+			template = template.replace(
+				/{menu_visibility_showable_selected}/g,
+				menuVisibilityMeta.showableSelected
 			);
 			template = template.replace(/{menu_was_added}/g, menu.was_added);
 
@@ -821,9 +876,29 @@
 				? '<span class="dashicons dashicons-trash ats-menu-builder--remove-menu-item"></span>'
 				: ""
 		);
+
+		var submenuVisibilityMeta = getVisibilityMeta(submenu.is_hidden);
+
+		template = template.replace(/{hidden_icon}/g, submenuVisibilityMeta.icon);
 		template = template.replace(
-			/{hidden_icon}/g,
-			submenu.is_hidden == "1" ? "hidden" : "visibility"
+			/{visibility_indicator_class}/g,
+			submenuVisibilityMeta.indicatorClass
+		);
+		template = template.replace(
+			/{visibility_label}/g,
+			submenuVisibilityMeta.label
+		);
+		template = template.replace(
+			/{submenu_visibility_normal_selected}/g,
+			submenuVisibilityMeta.normalSelected
+		);
+		template = template.replace(
+			/{submenu_visibility_hidden_selected}/g,
+			submenuVisibilityMeta.hiddenSelected
+		);
+		template = template.replace(
+			/{submenu_visibility_showable_selected}/g,
+			submenuVisibilityMeta.showableSelected
 		);
 		template = template.replace(/{submenu_was_added}/g, submenu.was_added);
 
@@ -957,6 +1032,35 @@
 				iconWrapper.innerHTML = iconOutput;
 			});
 		});
+
+		var visibilityFieldDataAttr = isSubmenuItem
+			? '[data-name="submenu_visibility"]'
+			: '[data-name="menu_visibility"]';
+
+		var visibilityField = menuItem.querySelector(visibilityFieldDataAttr);
+
+		if (visibilityField) {
+			visibilityField.addEventListener("change", function () {
+				menuItem.dataset.hidden = this.value;
+
+				var indicator = menuItem.querySelector(
+					".ats-menu-builder--visibility-indicator"
+				);
+				if (!indicator) return;
+
+				var meta = getVisibilityMeta(this.value);
+
+				indicator.classList.remove(
+					"dashicons-visibility",
+					"dashicons-hidden",
+					"is-visible",
+					"is-hidden",
+					"is-hidden-showable"
+				);
+				indicator.classList.add("dashicons-" + meta.icon, meta.indicatorClass);
+				indicator.setAttribute("title", meta.label);
+			});
+		}
 
 		var titleFieldDataAttr = isSubmenuItem
 			? '[data-name="submenu_title"]'

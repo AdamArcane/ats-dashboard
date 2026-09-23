@@ -313,6 +313,38 @@
 	background-color: #f2f2f2;
 }
 
+.ats-menu-builder--menu-actions .ats-menu-builder--visibility-indicator {
+	position: relative;
+	opacity: 1;
+	visibility: visible;
+	cursor: default;
+}
+
+.ats-menu-builder--visibility-indicator.is-hidden {
+	color: #c00;
+}
+
+.ats-menu-builder--visibility-indicator.is-hidden-showable {
+	color: #b26200;
+}
+
+.ats-menu-builder--visibility-indicator.is-hidden-showable::after {
+	content: "";
+	position: absolute;
+	bottom: 4px;
+	left: 50%;
+	width: 4px;
+	height: 4px;
+	margin-left: -2px;
+	border-radius: 50%;
+	background-color: #b26200;
+}
+
+.ats-menu-builder--menu-item[data-hidden="2"] {
+	color: #ad6b00;
+	background: #fdf6ec;
+}
+
 .ats-menu-builder--menu-item.is-expanded
 	> .ats-menu-builder--control-panel
 	.ats-menu-builder--menu-actions
@@ -447,7 +479,8 @@
 }
 
 .ats-menu-builder--textarea-field,
-.ats-menu-builder--text-field {
+.ats-menu-builder--text-field,
+.ats-menu-builder--select-field {
 	width: 100%;
 }
 

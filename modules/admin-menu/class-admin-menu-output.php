@@ -92,13 +92,29 @@ class Admin_Menu_Output extends Base_Output {
 
 		add_action( 'ats_ajax_before_get_admin_menu', array( self::get_instance(), 'remove_output_actions' ) );
 
-		// Patch for Dashboard menu item with SVG icon.
+		// Patch for Dashboard menu item with SVG icon. Also wires up the "Show all" toggle for "hidden, but showable" menu items.
 		$scripts = file_get_contents( __DIR__ . '/assets/js/admin-menu-output.js' );
 
 		add_action(
 			'admin_footer',
 			function () use ( $scripts ) {
 				echo '<script>' . $scripts . '</script>';
+			}
+		);
+
+		add_action(
+			'admin_head',
+			function () {
+				echo '<style>'
+					. '#adminmenu li.ats-menu-hidden-showable{display:none!important}'
+					. '#adminmenu.ats-show-hidden-items li.ats-menu-hidden-showable{display:block!important}'
+					. '#adminmenu li#ats-show-hidden-toggle{border-top:1px solid rgba(240,246,252,.1)}'
+					. '#adminmenu li#ats-show-hidden-toggle button{display:flex;align-items:center;justify-content:center;gap:4px;box-sizing:border-box;width:100%;padding:8px 8px;margin:0;background:transparent;border:none;text-align:center;font-size:11px;line-height:1.4;color:#a7aaad;cursor:pointer;}'
+					. '#adminmenu li#ats-show-hidden-toggle button:hover,#adminmenu li#ats-show-hidden-toggle button:focus,#adminmenu li#ats-show-hidden-toggle.is-active button{color:#dcdcde}'
+					. '#adminmenu li#ats-show-hidden-toggle .ats-show-hidden-toggle-caret{display:inline-block;width:0;height:0;border-left:3px solid transparent;border-right:3px solid transparent;border-top:4px solid currentColor;transition:transform .15s ease}'
+					. '#adminmenu li#ats-show-hidden-toggle.is-active .ats-show-hidden-toggle-caret{transform:rotate(180deg)}'
+					. 'body.folded #adminmenu li#ats-show-hidden-toggle{display:none}'
+					. '</style>';
 			}
 		);
 
@@ -232,7 +248,8 @@ class Admin_Menu_Output extends Base_Output {
 				continue;
 			}
 
-			if ( ! $menu_item['is_hidden'] ) {
+			// Only fully "hidden" (1) items are excluded. "Hidden, but showable" (2) items still render, just CSS-hidden until toggled.
+			if ( '1' !== (string) $menu_item['is_hidden'] ) {
 				$menu_title = $menu_item['title'] ? $menu_item['title'] : ( isset( $matched_default_menu[0] ) ? $matched_default_menu[0] : '' );
 				$menu_title = (string) $menu_title;
 
@@ -250,6 +267,10 @@ class Admin_Menu_Output extends Base_Output {
 
 				if ( ! empty( $menu_item['open_new_tab'] ) ) {
 					$menu_class = trim( $menu_class . ' ats-open-new-tab' );
+				}
+
+				if ( '2' === (string) $menu_item['is_hidden'] ) {
+					$menu_class = trim( $menu_class . ' ats-menu-hidden-showable' );
 				}
 
 				array_push( $new_menu_item, $this->placeholder_helper->convert_admin_menu_placeholder_tags( $menu_title ) );
@@ -449,7 +470,8 @@ class Admin_Menu_Output extends Base_Output {
 							);
 						}
 
-						if ( ! $submenu_item['is_hidden'] ) {
+						// Only fully "hidden" (1) submenu items are excluded. "Hidden, but showable" (2) items still render, just CSS-hidden until toggled.
+						if ( '1' !== (string) $submenu_item['is_hidden'] ) {
 							$new_submenu_item = array();
 
 							$submenu_title = $submenu_item['title'] ? $submenu_item['title'] : ( isset( $matched_default_submenu[0] ) ? $matched_default_submenu[0] : '' );
@@ -473,6 +495,10 @@ class Admin_Menu_Output extends Base_Output {
 
 							if ( ! empty( $submenu_item['open_new_tab'] ) ) {
 								$submenu_class = trim( $submenu_class . ' ats-open-new-tab' );
+							}
+
+							if ( '2' === (string) $submenu_item['is_hidden'] ) {
+								$submenu_class = trim( $submenu_class . ' ats-menu-hidden-showable' );
 							}
 
 							if ( ! empty( $submenu_class ) ) {
@@ -512,6 +538,13 @@ class Admin_Menu_Output extends Base_Output {
 
 		$new_menu    = $this->get_new_menu_items( $role, $menu, $new_menu, $hidden_menu );
 		$new_submenu = $this->get_new_submenu_items( $role, $submenu, $new_submenu, $hidden_submenu );
+
+		/**
+		 * Items set to "Hidden, but showable" are rendered here with an "ats-menu-hidden-showable" class
+		 * and CSS-hidden by default (see the inline style in setup()). A "Show All" toggle - styled and
+		 * positioned like core's "Collapse menu" control - is inserted client-side by assets/js/admin-menu-output.js
+		 * whenever it finds at least one such item, so no server-side tracking of that is needed here.
+		 */
 
 		// Update the global $menu & $submenu to use our parsing results.
 		$menu    = $new_menu;

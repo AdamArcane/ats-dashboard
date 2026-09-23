@@ -20,7 +20,7 @@ ob_start();
 		</div>
 		<div class="ats-menu-builder--menu-actions">
 			{trash_icon}
-			<span class="dashicons dashicons-{hidden_icon} hide-menu"></span>
+			<span class="dashicons dashicons-{hidden_icon} ats-menu-builder--visibility-indicator {visibility_indicator_class}" title="{visibility_label}"></span>
 			<span class="dashicons dashicons-arrow-down-alt2 expand-menu"></span>
 		</div>
 	</div><!-- .ats-menu-builder--control-panel -->
@@ -74,6 +74,23 @@ ob_start();
 						class="ats-menu-builder--checkbox-field"
 						data-name="submenu_open_new_tab"
 					>
+				</div>
+			</div>
+			<div class="field">
+				<label for="submenu_visibility_{role}_{default_menu_id}_{submenu_id}" class="label ats-menu-builder--label">
+					<?php esc_html_e( 'Visibility', 'ats-dashboard' ); ?>
+				</label>
+				<div class="control">
+					<select
+						name="submenu_visibility_{role}_{default_menu_id}_{submenu_id}"
+						id="submenu_visibility_{role}_{default_menu_id}_{submenu_id}"
+						class="ats-menu-builder--select-field"
+						data-name="submenu_visibility"
+					>
+						<option value="0" {submenu_visibility_normal_selected}><?php esc_html_e( 'Normal - menu item shows', 'ats-dashboard' ); ?></option>
+						<option value="1" {submenu_visibility_hidden_selected}><?php esc_html_e( 'Hidden - menu item is hidden', 'ats-dashboard' ); ?></option>
+						<option value="2" {submenu_visibility_showable_selected}><?php esc_html_e( 'Hidden, but showable - adds a "Show all" toggle to reveal it', 'ats-dashboard' ); ?></option>
+					</select>
 				</div>
 			</div>
 		</div><!-- .ats-menu-builder--fields -->
