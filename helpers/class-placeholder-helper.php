@@ -54,17 +54,44 @@ class Placeholder_Helper {
 		$find = [
 			'{site_url}',
 			'{site_name}',
+			'{post_type}',
 		];
 
 		$replacement = [
 			$this->site_url,
 			$this->site_name,
+			$this->get_current_post_type_label(),
 		];
 
 		$str = str_replace( $find, $replacement, $str );
 		$str = apply_filters( 'ats_admin_menu_convert_placeholder_tags', $str );
 
 		return $str;
+
+	}
+
+	/**
+	 * Get the singular label of the post type being viewed on the front end,
+	 * falling back to a generic label (e.g. for archives or when the queried
+	 * object isn't a post) so front-end admin bar items always read naturally.
+	 *
+	 * @return string
+	 */
+	public function get_current_post_type_label() {
+
+		$generic_label = __( 'Content', 'ats-dashboard' );
+
+		$queried_object = get_queried_object();
+
+		if ( $queried_object instanceof \WP_Post ) {
+			$post_type_object = get_post_type_object( $queried_object->post_type );
+
+			if ( $post_type_object && ! empty( $post_type_object->labels->singular_name ) ) {
+				return $post_type_object->labels->singular_name;
+			}
+		}
+
+		return $generic_label;
 
 	}
 

@@ -97,7 +97,10 @@ class Admin_Bar_Base_Module extends Base_Module {
 				'after'  => 'new-content',
 				'id'     => 'edit',
 				'title'  => __( 'Edit', 'ats-dashboard' ) . ' {post_type}',
-				'href'   => '',
+				// Used only when the current page has nothing more specific to edit
+				// (e.g. an archive) - falls back to the general "All Posts" screen
+				// so the item is always clickable.
+				'href'   => admin_url( 'edit.php' ),
 			),
 
 			array(
@@ -498,11 +501,18 @@ class Admin_Bar_Base_Module extends Base_Module {
 			}
 		}
 
-		// Reset some item's property's value (such as title) so that it will use the existing item's value.
-		if ( 'output' === $target ) {
+		// Reset some item's property's value (such as title and href) so that it will use the existing item's
+		// value, since both are per-request (they point at whichever post is currently being viewed) and must
+		// not be frozen to whatever they were when the admin bar customization was last saved. Only do this
+		// when WordPress actually added its own "edit" node for the current request (e.g. a singular post) -
+		// on pages with nothing to edit (e.g. an archive) core adds no node to pull fresh values from, so the
+		// saved item's own generic title/href fallback must be left alone instead of being wiped out.
+		if ( 'output' === $target && isset( $existing_menu['edit'] ) ) {
 			if ( isset( $saved_menu['edit'] ) ) {
 				$saved_menu['edit']['title']         = '';
 				$saved_menu['edit']['title_default'] = '';
+				$saved_menu['edit']['href']           = '';
+				$saved_menu['edit']['href_default']   = '';
 			}
 		}
 
@@ -608,7 +618,7 @@ class Admin_Bar_Base_Module extends Base_Module {
 
 		// Get new items from $this->frontend_menu which are not inside $saved_menu.
 		foreach ( $this->frontend_menu as $menu_id => $menu ) {
-			if ( ! in_array( $menu_id, $non_ats_items_id, true ) ) {
+			if ( ! isset( $saved_menu[ $menu_id ] ) && ! in_array( $menu_id, $non_ats_items_id, true ) ) {
 				$new_item = $menu;
 
 				if ( isset( $menu['after'] ) && $menu['after'] ) {

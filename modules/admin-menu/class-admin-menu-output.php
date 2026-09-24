@@ -107,7 +107,10 @@ class Admin_Menu_Output extends Base_Output {
 			function () {
 				echo '<style>'
 					. '#adminmenu li.ats-menu-hidden-collapsed{display:none!important}'
-					. '#adminmenu.ats-show-hidden-items li.ats-menu-hidden-collapsed{display:block!important}'
+					. '#adminmenu.ats-show-hidden-items li.ats-menu-hidden-collapsed{display:block!important;position:relative}'
+					. '#adminmenu.ats-show-hidden-items li.ats-menu-hidden-collapsed::before{content:"";position:absolute;top:0;left:0;bottom:0;width:3px;background:#dba617;pointer-events:none}'
+					. '#adminmenu.ats-show-hidden-items li.ats-menu-hidden-collapsed>a{background:rgba(219,166,23,.08)}'
+					. '#adminmenu.ats-show-hidden-items li.ats-menu-hidden-collapsed>a:hover,#adminmenu.ats-show-hidden-items li.ats-menu-hidden-collapsed.opensub>a,#adminmenu.ats-show-hidden-items li.ats-menu-hidden-collapsed.wp-has-current-submenu>a{background:rgba(219,166,23,.16)}'
 					. '#adminmenu li#ats-show-hidden-toggle{border-top:1px solid rgba(240,246,252,.1)}'
 					. '#adminmenu li#ats-show-hidden-toggle button{display:flex;align-items:center;justify-content:center;gap:4px;box-sizing:border-box;width:100%;padding:8px 8px;margin:0;background:transparent;border:none;text-align:center;font-size:11px;line-height:1.4;color:#a7aaad;cursor:pointer;}'
 					. '#adminmenu li#ats-show-hidden-toggle button:hover,#adminmenu li#ats-show-hidden-toggle button:focus,#adminmenu li#ats-show-hidden-toggle.is-active button{color:#dcdcde}'
