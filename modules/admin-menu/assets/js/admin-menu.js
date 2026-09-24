@@ -402,9 +402,12 @@
 	 * based on the stored is_hidden value.
 	 *
 	 * @param {string} isHidden "0" (normal), "1" (hidden), or "2" (hidden, but collapsed).
+	 * @param {boolean} [roleRestricted] Whether a "hide for role(s)" rule also
+	 *  applies on top of `isHidden` - only meaningful when isHidden is "0",
+	 *  since "1"/"2" already read as hidden regardless.
 	 * @return {object} The visibility meta.
 	 */
-	function getVisibilityMeta(isHidden) {
+	function getVisibilityMeta(isHidden, roleRestricted) {
 		var value = String(isHidden);
 		var meta = {
 			icon: "visibility",
@@ -431,6 +434,13 @@
 			meta.collapsedSelected = "selected";
 		} else {
 			meta.normalSelected = "selected";
+
+			if (roleRestricted) {
+				// Still "Normal", but a role-hide rule hides it from some
+				// roles - the plain "visible" eye alone would be misleading.
+				meta.indicatorClass = "is-visible is-role-restricted";
+				meta.label = "Normal, but hidden for some role(s)";
+			}
 		}
 
 		return meta;
@@ -443,20 +453,25 @@
 	 *
 	 * @param {HTMLElement} indicator The visibility indicator element.
 	 * @param {string} value "0", "1", or "2".
+	 * @param {boolean} [roleRestricted] See getVisibilityMeta().
 	 */
-	function applyIndicatorVisibility(indicator, value) {
+	function applyIndicatorVisibility(indicator, value, roleRestricted) {
 		if (!indicator) return;
 
-		var meta = getVisibilityMeta(value);
+		var meta = getVisibilityMeta(value, roleRestricted);
 
 		indicator.classList.remove(
 			"dashicons-visibility",
 			"dashicons-hidden",
 			"is-visible",
 			"is-visibility-hidden",
-			"is-hidden-collapsed"
+			"is-hidden-collapsed",
+			"is-role-restricted"
 		);
-		indicator.classList.add("dashicons-" + meta.icon, meta.indicatorClass);
+		indicator.classList.add("dashicons-" + meta.icon);
+		meta.indicatorClass.split(" ").forEach(function (className) {
+			if (className) indicator.classList.add(className);
+		});
 		indicator.setAttribute("title", meta.label);
 	}
 
@@ -512,7 +527,11 @@
 				e.stopPropagation();
 
 				menuItem.dataset.hidden = option.value;
-				applyIndicatorVisibility(indicator, option.value);
+				applyIndicatorVisibility(
+					indicator,
+					option.value,
+					isRoleRestricted(readRoleHideData(menuItem))
+				);
 
 				var visibilityFieldAttr = isSubmenuItem
 					? '[data-name="submenu_visibility"]'
@@ -598,6 +617,37 @@
 	 * @param {object} item The menu or submenu item.
 	 * @return {object} The role-hide meta.
 	 */
+	/**
+	 * Whether an item's "Always hide for user role(s)" rule actually hides it
+	 * from at least one role, given its current mode/role selection. Used to
+	 * flag the visibility indicator when the Visibility setting alone (e.g.
+	 * "Normal") would otherwise look misleading.
+	 *
+	 * @param {object} item Item data with role_hide_enabled/role_hide_mode/role_hide_roles.
+	 * @return {boolean} Whether the item is effectively role-restricted.
+	 */
+	function isRoleRestricted(item) {
+		var enabled = String(item.role_hide_enabled || "0") === "1";
+		if (!enabled) return false;
+
+		var mode = item.role_hide_mode || "selected";
+		var hideRoles = Array.isArray(item.role_hide_roles)
+			? item.role_hide_roles
+			: [];
+
+		if ("all" === mode) return true;
+
+		if ("except" === mode) {
+			// hide_roles here is the allow-list (roles that still see it) - only
+			// a no-op if literally every role is in that allow-list.
+			var allRoles = (window.atsAdminMenu && atsAdminMenu.roles) || [];
+			return !allRoles.length || hideRoles.length < allRoles.length;
+		}
+
+		// "selected" mode: hide_roles is the roles it's hidden from.
+		return hideRoles.length > 0;
+	}
+
 	function getRoleHideMeta(item) {
 		var enabled = String(item.role_hide_enabled || "0") === "1";
 		var mode = item.role_hide_mode || "selected";
@@ -716,7 +766,10 @@
 					: ""
 			);
 
-			var menuVisibilityMeta = getVisibilityMeta(menu.is_hidden);
+			var menuVisibilityMeta = getVisibilityMeta(
+			menu.is_hidden,
+			isRoleRestricted(menu)
+		);
 
 			template = template.replace(/{hidden_icon}/g, menuVisibilityMeta.icon);
 			template = template.replace(
@@ -871,7 +924,10 @@
 				: ""
 		);
 
-		var submenuVisibilityMeta = getVisibilityMeta(submenu.is_hidden);
+		var submenuVisibilityMeta = getVisibilityMeta(
+		submenu.is_hidden,
+		isRoleRestricted(submenu)
+	);
 
 		template = template.replace(/{hidden_icon}/g, submenuVisibilityMeta.icon);
 		template = template.replace(
@@ -1079,8 +1135,28 @@
 		if (visibilityField) {
 			visibilityField.addEventListener("change", function () {
 				menuItem.dataset.hidden = this.value;
-				applyIndicatorVisibility(visibilityIndicator, this.value);
+				applyIndicatorVisibility(
+					visibilityIndicator,
+					this.value,
+					isRoleRestricted(readRoleHideData(menuItem))
+				);
 			});
+		}
+
+		// Keep the indicator's "restricted" badge in sync as the role-hide
+		// rule itself is edited, independent of the Visibility <select>.
+		function refreshVisibilityIndicator() {
+			if (!visibilityIndicator) return;
+
+			var currentValue = visibilityField
+				? visibilityField.value
+				: menuItem.dataset.hidden || "0";
+
+			applyIndicatorVisibility(
+				visibilityIndicator,
+				currentValue,
+				isRoleRestricted(readRoleHideData(menuItem))
+			);
 		}
 
 		// Separators use a simple binary hide-menu toggle instead (see
@@ -1124,6 +1200,7 @@
 			if (roleHideToggle && roleHideOptions) {
 				roleHideToggle.addEventListener("change", function () {
 					roleHideOptions.classList.toggle("is-hidden", !this.checked);
+					refreshVisibilityIndicator();
 				});
 			}
 
@@ -1141,7 +1218,16 @@
 						"is-hidden",
 						this.value === "all"
 					);
+					refreshVisibilityIndicator();
 				});
+			});
+
+			// Individual role checkboxes (shown for "selected"/"except" modes)
+			// also affect whether the rule is actually restrictive.
+			roleHideField.addEventListener("change", function (e) {
+				if (e.target && e.target.dataset.name === "role_hide_roles") {
+					refreshVisibilityIndicator();
+				}
 			});
 		}
 
