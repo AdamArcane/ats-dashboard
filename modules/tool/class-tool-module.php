@@ -321,19 +321,30 @@ class Tool_Module extends Base_Module {
 		 * @return array Updated menu data.
 		 */
 		public function replace_admin_menu_urls( $admin_menu, $find, $replace ) {
-			foreach ( $admin_menu as $role => $menu_items ) {
-				foreach ( (array) $menu_items as $menu_item_index => $menu_item ) {
-					foreach ( array( 'url', 'url_default' ) as $url_key ) {
-						if ( ! empty( $menu_item[ $url_key ] ) && 0 === stripos( $menu_item[ $url_key ], $find ) ) {
-							$admin_menu[ $role ][ $menu_item_index ][ $url_key ] = str_ireplace( $find, $replace, $menu_item[ $url_key ] );
-						}
+			/**
+			 * There's a single flat menu list now (no more per-role/per-user copies -
+			 * see Admin_Menu_Output::resolve_item_visibility()), so this operates
+			 * directly on $admin_menu[$index] rather than $admin_menu[$role][$index].
+			 */
+			foreach ( (array) $admin_menu as $menu_item_index => $menu_item ) {
+				if ( ! is_array( $menu_item ) ) {
+					continue;
+				}
+
+				foreach ( array( 'url', 'url_default' ) as $url_key ) {
+					if ( ! empty( $menu_item[ $url_key ] ) && 0 === stripos( $menu_item[ $url_key ], $find ) ) {
+						$admin_menu[ $menu_item_index ][ $url_key ] = str_ireplace( $find, $replace, $menu_item[ $url_key ] );
+					}
+				}
+
+				foreach ( (array) ( $menu_item['submenu'] ?? array() ) as $submenu_index => $submenu_item ) {
+					if ( ! is_array( $submenu_item ) ) {
+						continue;
 					}
 
-					foreach ( (array) ( $menu_item['submenu'] ?? array() ) as $submenu_index => $submenu_item ) {
-						foreach ( array( 'url', 'url_default' ) as $url_key ) {
-							if ( ! empty( $submenu_item[ $url_key ] ) && 0 === stripos( $submenu_item[ $url_key ], $find ) ) {
-								$admin_menu[ $role ][ $menu_item_index ]['submenu'][ $submenu_index ][ $url_key ] = str_ireplace( $find, $replace, $submenu_item[ $url_key ] );
-							}
+					foreach ( array( 'url', 'url_default' ) as $url_key ) {
+						if ( ! empty( $submenu_item[ $url_key ] ) && 0 === stripos( $submenu_item[ $url_key ], $find ) ) {
+							$admin_menu[ $menu_item_index ]['submenu'][ $submenu_index ][ $url_key ] = str_ireplace( $find, $replace, $submenu_item[ $url_key ] );
 						}
 					}
 				}
