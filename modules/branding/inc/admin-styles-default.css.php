@@ -15,11 +15,12 @@ $colors = \ATSDash\Helpers\Branding_Helper::default_colors();
 
 $colors = apply_filters( 'ats_branding_colors', $colors );
 
-$menu_item_color        = $colors['menu_item_color'];
-$accent_color           = $colors['accent_color'];
-$admin_bar_bg_color     = $colors['admin_bar_bg_color'];
-$admin_menu_bg_color    = $colors['admin_menu_bg_color'];
-$admin_submenu_bg_color = $colors['admin_submenu_bg_color'];
+$menu_item_color         = $colors['menu_item_color'];
+$accent_color            = $colors['accent_color'];
+$admin_bar_bg_color      = $colors['admin_bar_bg_color'];
+$admin_bar_logo_bg_color = $colors['admin_bar_logo_bg_color'];
+$admin_menu_bg_color     = $colors['admin_menu_bg_color'];
+$admin_submenu_bg_color  = $colors['admin_submenu_bg_color'];
 
 $color_helper     = new \ATSDash\Helpers\Color_Helper();
 $secondary_color  = $color_helper->soften( $accent_color );
@@ -56,6 +57,7 @@ $secondary_text   = $color_helper->readable_text_color( $secondary_color );
 
 /* For instant preview purpose */
 #wpadminbar #wp-admin-bar-wp-logo > .ab-item {
+	background-color: <?php echo esc_attr( $admin_bar_logo_bg_color ); ?>;
 	background-size: 80% auto;
 	background-repeat: no-repeat;
 	background-position: center center;

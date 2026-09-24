@@ -17,11 +17,12 @@ $colors = \ATSDash\Helpers\Branding_Helper::default_colors();
 
 $colors = apply_filters( 'ats_branding_colors', $colors );
 
-$menu_item_color        = $colors['menu_item_color'];
-$accent_color           = $colors['accent_color'];
-$admin_bar_bg_color     = $colors['admin_bar_bg_color'];
-$admin_menu_bg_color    = $colors['admin_menu_bg_color'];
-$admin_submenu_bg_color = $colors['admin_submenu_bg_color'];
+$menu_item_color         = $colors['menu_item_color'];
+$accent_color            = $colors['accent_color'];
+$admin_bar_bg_color      = $colors['admin_bar_bg_color'];
+$admin_bar_logo_bg_color = $colors['admin_bar_logo_bg_color'];
+$admin_menu_bg_color     = $colors['admin_menu_bg_color'];
+$admin_submenu_bg_color  = $colors['admin_submenu_bg_color'];
 
 $color_helper     = new \ATSDash\Helpers\Color_Helper();
 $secondary_color  = $color_helper->soften( $accent_color );
@@ -54,6 +55,12 @@ $secondary_text   = $color_helper->readable_text_color( $secondary_color );
 	--wp-admin-theme-color--rgb: <?php echo esc_attr( $accent_rgb ); ?> !important;
 	--wp-admin-theme-color-darker-10: <?php echo esc_attr( $color_helper->darken( $accent_color, 0.1 ) ); ?> !important;
 	--wp-admin-theme-color-darker-20: <?php echo esc_attr( $color_helper->darken( $accent_color, 0.2 ) ); ?> !important;
+}
+
+/* The core admin bar logo area is hidden by the "Custom Logo" rules below at desktop widths (replaced by the sidebar logo),
+   but it's still shown on mobile (see the max-width:960px block), so it needs its own background. */
+#wpadminbar #wp-admin-bar-wp-logo > .ab-item {
+	background-color: <?php echo esc_attr( $admin_bar_logo_bg_color ); ?>;
 }
 
 /* This part is based on a WordPress color scheme */
@@ -744,7 +751,7 @@ div#wp-responsive-toggle a:before {
 	}
 
 	.wp-admin:not(.folded) #adminmenuwrap {
-		padding-top: 50px;
+		padding-top: 100px;
 	}
 
 	.wp-admin:not(.folded) #wpadminbar {
@@ -796,19 +803,55 @@ div#wp-responsive-toggle a:before {
 	}
 
 	/* Custom Logo */
-	#adminmenu .ats-admin-logo-wrapper a {
-		box-sizing: content-box;
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-link {
+		box-sizing: border-box;
 		position: absolute;
-		height: 60px;
+		height: 70px;
 		top: 0;
-		left: 0;
-		width: 160px;
-		margin-top: -32px;
-		background: <?php echo esc_attr( $admin_submenu_bg_color ); ?>;
-		padding: 10px 30px;
+		left: 12px;
+		right: 12px;
+		margin-top: -20px;
+		background: <?php echo esc_attr( $admin_bar_logo_bg_color ); ?>;
+		border-radius: 8px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+		padding: 8px 16px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site {
+		box-sizing: border-box;
+		position: absolute;
+		height: 30px;
+		top: 0;
+		left: 12px;
+		right: 12px;
+		margin-top: 58px;
+		border-radius: 6px;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		color: <?php echo esc_attr( $menu_item_color ); ?>;
+		font-size: 12px;
+		text-decoration: none;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 4px;
+		transition: background-color .15s ease, border-color .15s ease;
+	}
+
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site .dashicons {
+		width: 14px;
+		height: 14px;
+		font-size: 14px;
+	}
+
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site:hover,
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site:focus {
+		background-color: <?php echo esc_attr( $accent_color ); ?>;
+		border-color: <?php echo esc_attr( $accent_color ); ?>;
+		color: <?php echo esc_attr( $menu_item_color ); ?>;
+		box-shadow: none;
 	}
 
 	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo {
@@ -867,7 +910,7 @@ div#wp-responsive-toggle a:before {
 	}
 
 	.wp-admin:not(.folded) #adminmenuwrap {
-		padding-top: 50px;
+		padding-top: 100px;
 	}
 
 	.wp-admin:not(.folded) #wpadminbar {
@@ -919,19 +962,55 @@ div#wp-responsive-toggle a:before {
 	}
 
 	/* Custom Logo */
-	#adminmenu .ats-admin-logo-wrapper a {
-		box-sizing: content-box;
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-link {
+		box-sizing: border-box;
 		position: absolute;
-		height: 60px;
+		height: 70px;
 		top: 0;
-		left: 0;
-		width: 160px;
-		margin-top: -32px;
-		background: <?php echo esc_attr( $admin_submenu_bg_color ); ?>;
-		padding: 10px 30px;
+		left: 12px;
+		right: 12px;
+		margin-top: -20px;
+		background: <?php echo esc_attr( $admin_bar_logo_bg_color ); ?>;
+		border-radius: 8px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+		padding: 8px 16px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site {
+		box-sizing: border-box;
+		position: absolute;
+		height: 30px;
+		top: 0;
+		left: 12px;
+		right: 12px;
+		margin-top: 58px;
+		border-radius: 6px;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		color: <?php echo esc_attr( $menu_item_color ); ?>;
+		font-size: 12px;
+		text-decoration: none;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 4px;
+		transition: background-color .15s ease, border-color .15s ease;
+	}
+
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site .dashicons {
+		width: 14px;
+		height: 14px;
+		font-size: 14px;
+	}
+
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site:hover,
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site:focus {
+		background-color: <?php echo esc_attr( $accent_color ); ?>;
+		border-color: <?php echo esc_attr( $accent_color ); ?>;
+		color: <?php echo esc_attr( $menu_item_color ); ?>;
+		box-shadow: none;
 	}
 
 	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo {
@@ -979,6 +1058,6 @@ div#wp-responsive-toggle a:before {
 	}
 
 	.wp-admin:not(.folded) #adminmenuwrap.ats-use-padding {
-		padding-top: 50px;
+		padding-top: 100px;
 	}
 }

@@ -32,7 +32,9 @@
 	var inheritedModernLogoWrapper = document.querySelector(
 		".ats-admin-logo-wrapper.ats-inherited-from-blueprint",
 	);
-	var modernLogoLinks = document.querySelectorAll(".ats-admin-logo-wrapper a");
+	var modernLogoLinks = document.querySelectorAll(
+		".ats-admin-logo-wrapper .ats-admin-logo-link",
+	);
 	var modernLogos = document.querySelectorAll(
 		".ats-admin-logo-wrapper .ats-admin-logo",
 	);
@@ -136,6 +138,8 @@
 
 			style.textContent = [
 				'#wpadminbar{background-color:' + (colors['admin-bar-bg-color'] || '') + ' !important}',
+				'#wpadminbar #wp-admin-bar-wp-logo > .ab-item{background-color:' + (colors['admin-bar-logo-bg-color'] || '') + ' !important}',
+				'#adminmenu .ats-admin-logo-wrapper a{background-color:' + (colors['admin-bar-logo-bg-color'] || '') + ' !important}',
 				'#adminmenu,#adminmenuback,#adminmenuwrap{background-color:' + (colors['admin-menu-bg-color'] || '') + ' !important}',
 				'#adminmenu .wp-submenu,#adminmenu .wp-has-current-submenu .wp-submenu{background-color:' + (colors['admin-submenu-bg-color'] || '') + ' !important}',
 				'#adminmenu a,#wpadminbar a{color:' + (colors['menu-item-color'] || '') + ' !important}',

@@ -506,8 +506,12 @@ class Branding_Output extends Base_Output {
 		?>
 
 		<li class="ats-admin-logo-wrapper ats-admin-logo-wrapper-output <?php echo esc_attr( $classname ); ?>">
-			<a href="<?php echo esc_url( $url ); ?>">
+			<a href="<?php echo esc_url( $url ); ?>" class="ats-admin-logo-link">
 				<img class="ats-admin-logo" src="<?php echo esc_url( $logo ); ?>" />
+			</a>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="ats-admin-logo-visit-site" target="_blank" rel="noopener noreferrer">
+				<span class="dashicons dashicons-external"></span>
+				<?php esc_html_e( 'Visit Site', 'ats-dashboard' ); ?>
 			</a>
 		</li>
 
@@ -551,8 +555,12 @@ class Branding_Output extends Base_Output {
 		?>
 
 		<li class="ats-admin-logo-wrapper ats-admin-logo-wrapper-preview ats-is-hidden">
-			<a href="<?php echo esc_url( $url ); ?>">
+			<a href="<?php echo esc_url( $url ); ?>" class="ats-admin-logo-link">
 				<img class="ats-admin-logo" src="<?php echo esc_url( $logo ); ?>" />
+			</a>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="ats-admin-logo-visit-site" target="_blank" rel="noopener noreferrer">
+				<span class="dashicons dashicons-external"></span>
+				<?php esc_html_e( 'Visit Site', 'ats-dashboard' ); ?>
 			</a>
 		</li>
 

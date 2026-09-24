@@ -7,7 +7,8 @@
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
-$admin_submenu_bg_color = $colors['admin_submenu_bg_color'];
+$admin_submenu_bg_color  = $colors['admin_submenu_bg_color'];
+$admin_bar_logo_bg_color = $colors['admin_bar_logo_bg_color'];
 ?>
 
 <style type="text/ats" class="ats-instant-preview ats-style-remove-wp-icon">
@@ -24,6 +25,6 @@ $admin_submenu_bg_color = $colors['admin_submenu_bg_color'];
 
 <style type="text/ats" class="ats-instant-preview" data-ats-prop-admin-submenu-bg-color="background">
 	#adminmenu .ats-admin-logo-wrapper a {
-		background: <?php echo esc_attr( $admin_submenu_bg_color ); ?>;
+		background: <?php echo esc_attr( $admin_bar_logo_bg_color ); ?>;
 	}
 </style>

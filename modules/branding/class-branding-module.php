@@ -77,6 +77,7 @@ class Branding_Module extends Base_Module {
 
 		add_filter( 'ats_branding_accent_color_field_path', array( self::get_instance(), 'accent_color_field' ) );
 		add_filter( 'ats_branding_admin_bar_bg_color_field_path', array( self::get_instance(), 'admin_bar_color_field' ) );
+		add_filter( 'ats_branding_admin_bar_logo_bg_color_field_path', array( self::get_instance(), 'admin_bar_logo_bg_color_field' ) );
 		add_filter( 'ats_branding_admin_menu_bg_color_field_path', array( self::get_instance(), 'admin_menu_bg_color_field' ) );
 		add_filter( 'ats_branding_admin_submenu_bg_color_field_path', array( self::get_instance(), 'admin_submenu_bg_color_field' ) );
 		add_filter( 'ats_branding_menu_item_color_field_path', array( self::get_instance(), 'menu_item_color_field' ) );
@@ -157,6 +158,7 @@ class Branding_Module extends Base_Module {
 		$this->add_branding_field( 'ats-accent-color-field', 'Accent Color', 'accent_color_field', 'ats-admin-colors-settings', 'ats-admin-colors-section' );
 		$this->add_branding_field( 'ats-menu-item-color-field', 'Menu Item Color', 'menu_item_color_field', 'ats-admin-colors-settings', 'ats-admin-colors-section' );
 		$this->add_branding_field( 'ats-admin-bar-bg-color-field', 'Admin Bar Bg Color', 'admin_bar_color_field', 'ats-admin-colors-settings', 'ats-admin-colors-section' );
+		$this->add_branding_field( 'ats-admin-bar-logo-bg-color-field', 'Admin Bar Logo Bg Color', 'admin_bar_logo_bg_color_field', 'ats-admin-colors-settings', 'ats-admin-colors-section' );
 		$this->add_branding_field( 'ats-admin-menu-bg-color-field', 'Admin Menu Bg Color', 'admin_menu_bg_color_field', 'ats-admin-colors-settings', 'ats-admin-colors-section' );
 		$this->add_branding_field( 'ats-admin-submenu-bg-color-field', 'Admin Submenu Bg Color', 'admin_submenu_bg_color_field', 'ats-admin-colors-settings', 'ats-admin-colors-section' );
 		$this->add_branding_field( 'ats-branding-admin-bar-logo-image-field', 'Admin Bar Logo', 'admin_bar_logo_field', 'ats-admin-logo-settings', 'ats-admin-logo-section' );
@@ -334,6 +336,10 @@ class Branding_Module extends Base_Module {
 			$colors['admin_bar_bg_color'] = $branding['admin_bar_bg_color'];
 		}
 
+		if ( isset( $branding['admin_bar_logo_bg_color'] ) && ! empty( $branding['admin_bar_logo_bg_color'] ) ) {
+			$colors['admin_bar_logo_bg_color'] = $branding['admin_bar_logo_bg_color'];
+		}
+
 		if ( isset( $branding['admin_menu_bg_color'] ) && ! empty( $branding['admin_menu_bg_color'] ) ) {
 			$colors['admin_menu_bg_color'] = $branding['admin_menu_bg_color'];
 		}
@@ -391,6 +397,10 @@ class Branding_Module extends Base_Module {
 
 		if ( isset( $input['admin_bar_bg_color'] ) ) {
 			$sanitized['admin_bar_bg_color'] = sanitize_hex_color( $input['admin_bar_bg_color'] );
+		}
+
+		if ( isset( $input['admin_bar_logo_bg_color'] ) ) {
+			$sanitized['admin_bar_logo_bg_color'] = sanitize_hex_color( $input['admin_bar_logo_bg_color'] );
 		}
 
 		if ( isset( $input['admin_menu_bg_color'] ) ) {
@@ -529,6 +539,18 @@ class Branding_Module extends Base_Module {
 	public function admin_bar_color_field( $template ) {
 
 		return __DIR__ . '/templates/fields/admin-bar-bg-color.php';
+
+	}
+
+	/**
+	 * Admin bar logo area bg color field.
+	 *
+	 * @param string $template The existing template path.
+	 * @return string The template path.
+	 */
+	public function admin_bar_logo_bg_color_field( $template ) {
+
+		return __DIR__ . '/templates/fields/admin-bar-logo-bg-color.php';
 
 	}
 
