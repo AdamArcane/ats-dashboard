@@ -3,7 +3,7 @@
  * Plugin Name: ATS Dashboard
  * Plugin URI: https://arcanetechct.com/
  * Description: ATS Dashboard gives you full control over your WordPress Dashboard. Remove the default Dashboard Widgets and create your own for a better user experience.
- * Version: 1.0.8
+ * Version: 1.0.9
  * Author: Arcane Tech
  * Author URI: https://arcanetechct.com/
  * Text Domain: ats-dashboard
@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 // Constants.
 define( 'ATS_DASHBOARD_PLUGIN_DIR', rtrim( plugin_dir_path( __FILE__ ), '/' ) );
 define( 'ATS_DASHBOARD_PLUGIN_URL', rtrim( plugin_dir_url( __FILE__ ), '/' ) );
-define( 'ATS_DASHBOARD_PLUGIN_VERSION', '1.0.8' );
+define( 'ATS_DASHBOARD_PLUGIN_VERSION', '1.0.9' );
 define( 'ATS_DASHBOARD_PLUGIN_FILE', plugin_basename( __FILE__ ) );
 if ( ! defined( 'ATS_DASHBOARD_DEFAULT_LOGO_URL' ) ) {
 	define( 'ATS_DASHBOARD_DEFAULT_LOGO_URL', 'https://cdn-r2.arcanetechct.com/LogoWideTransparent.png' );
