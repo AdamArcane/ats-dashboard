@@ -997,6 +997,219 @@
 		if (showForUsersField) {
 			initShowForUsersSelect(showForUsersField);
 		}
+
+		// Menu/submenu URL - search-as-you-type autocomplete.
+		var urlFieldDataAttr = isSubmenuItem
+			? '[data-name="submenu_url"]'
+			: '[data-name="menu_url"]';
+
+		var urlField = menuItem.querySelector(urlFieldDataAttr);
+
+		if (urlField) {
+			setupUrlAutocomplete(urlField);
+		}
+	}
+
+	/**
+	 * Wire up search-as-you-type suggestions on a Menu URL / Submenu URL field -
+	 * searches published content and the site's admin pages (this plugin's own
+	 * included), similar to Elementor's URL control. Free text always still works;
+	 * picking a suggestion just fills the field.
+	 *
+	 * @param {HTMLElement} field The text input to attach suggestions to.
+	 */
+	function setupUrlAutocomplete(field) {
+		if (field.dataset.urlAutocompleteInit) return;
+		field.dataset.urlAutocompleteInit = "1";
+
+		var control = field.closest(".control");
+		if (control) control.classList.add("ats-menu-builder--url-control");
+
+		var dropdown = document.createElement("ul");
+		dropdown.className = "ats-menu-builder--url-suggestions";
+		field.insertAdjacentElement("afterend", dropdown);
+
+		var debounceTimer = null;
+		var requestId = 0;
+
+		field.addEventListener("input", function () {
+			var term = field.value.trim();
+			clearTimeout(debounceTimer);
+
+			if (term.length < 2) {
+				dropdown.classList.remove("is-active");
+				return;
+			}
+
+			showUrlSuggestionsLoading(dropdown);
+
+			var thisRequestId = ++requestId;
+
+			debounceTimer = setTimeout(function () {
+				searchUrls(term, function (groups) {
+					// A newer search has started since this one went out - drop this response.
+					if (thisRequestId !== requestId) return;
+
+					renderUrlSuggestions(dropdown, groups, field);
+				});
+			}, 300);
+		});
+
+		field.addEventListener("focus", function () {
+			if (dropdown.childElementCount) dropdown.classList.add("is-active");
+		});
+
+		field.addEventListener("blur", function () {
+			// Delay so a click on a suggestion (mousedown) registers before we hide.
+			setTimeout(function () {
+				dropdown.classList.remove("is-active");
+			}, 150);
+		});
+	}
+
+	/**
+	 * Ajax search for a URL suggestion.
+	 *
+	 * @param {string} term The search term.
+	 * @param {Function} callback Called with the select2-shaped grouped results.
+	 */
+	function searchUrls(term, callback) {
+		$.ajax({
+			url: ajaxurl,
+			type: "post",
+			dataType: "json",
+			data: {
+				action: "ats_admin_menu_search_urls",
+				nonce: atsAdminMenu.nonces.searchUrls,
+				term: term,
+			},
+		}).done(function (r) {
+			if (!r || !r.success) return;
+			callback(r.data);
+		});
+	}
+
+	/**
+	 * Show a "Searching..." placeholder in the suggestions dropdown while a
+	 * search is in flight (covers both the ajax round trip and the debounce).
+	 *
+	 * @param {HTMLElement} dropdown The suggestions <ul>.
+	 */
+	function showUrlSuggestionsLoading(dropdown) {
+		dropdown.innerHTML = "";
+
+		var loading = document.createElement("li");
+		loading.className = "ats-menu-builder--url-suggestions-loading";
+		loading.textContent = "Searching…";
+		dropdown.appendChild(loading);
+
+		dropdown.classList.add("is-active");
+	}
+
+	/**
+	 * Render grouped URL suggestions into a dropdown, and wire up selecting one.
+	 *
+	 * @param {HTMLElement} dropdown The suggestions <ul>.
+	 * @param {array} groups The select2-shaped grouped results.
+	 * @param {HTMLElement} field The URL field the suggestions belong to.
+	 */
+	function renderUrlSuggestions(dropdown, groups, field) {
+		dropdown.innerHTML = "";
+
+		var hasMatches =
+			groups &&
+			groups.some(function (group) {
+				return group.children && group.children.length;
+			});
+
+		if (!hasMatches) {
+			var empty = document.createElement("li");
+			empty.className = "ats-menu-builder--url-suggestions-empty";
+			empty.textContent = "No matches found";
+			dropdown.appendChild(empty);
+			dropdown.classList.add("is-active");
+			return;
+		}
+
+		groups.forEach(function (group) {
+			if (!group.children || !group.children.length) return;
+
+			var groupLabel = document.createElement("li");
+			groupLabel.className = "ats-menu-builder--url-suggestions-group";
+			groupLabel.textContent = group.text;
+			dropdown.appendChild(groupLabel);
+
+			group.children.forEach(function (item) {
+				var option = document.createElement("li");
+				option.className = "ats-menu-builder--url-suggestion";
+
+				var titleEl = document.createElement("span");
+				titleEl.className = "ats-menu-builder--url-suggestion-title";
+				titleEl.textContent = item.text;
+				option.appendChild(titleEl);
+
+				var urlEl = document.createElement("span");
+				urlEl.className = "ats-menu-builder--url-suggestion-path";
+				urlEl.textContent = shortenSuggestionUrl(item.id);
+				option.appendChild(urlEl);
+
+				option.addEventListener("mousedown", function (e) {
+					// Keep focus on the field so the blur handler doesn't hide the
+					// dropdown before this click is registered.
+					e.preventDefault();
+
+					field.value = item.id;
+					field.dispatchEvent(new Event("change", { bubbles: true }));
+					fillTitleFromUrlSuggestion(field, item.text);
+					dropdown.classList.remove("is-active");
+				});
+
+				dropdown.appendChild(option);
+			});
+		});
+
+		dropdown.classList.add("is-active");
+	}
+
+	/**
+	 * Shorten a suggestion's full URL down to just its path + query, so
+	 * same-titled entries (e.g. two different "Categories" pages) are
+	 * distinguishable in the dropdown without a wall of repeated domain text.
+	 *
+	 * @param {string} url The full URL.
+	 * @return {string} The shortened URL.
+	 */
+	function shortenSuggestionUrl(url) {
+		try {
+			var parsed = new URL(url, window.location.origin);
+			return parsed.pathname + parsed.search;
+		} catch (e) {
+			return url;
+		}
+	}
+
+	/**
+	 * Fill in the Menu/Submenu Title field from a picked URL suggestion, but
+	 * only if the title field is currently empty - never clobber a title the
+	 * user already typed themselves.
+	 *
+	 * @param {HTMLElement} urlField The Menu URL / Submenu URL field just filled.
+	 * @param {string} suggestedTitle The picked suggestion's title.
+	 */
+	function fillTitleFromUrlSuggestion(urlField, suggestedTitle) {
+		if (!suggestedTitle) return;
+
+		var menuItem = urlField.closest(".ats-menu-builder--menu-item");
+		if (!menuItem) return;
+
+		var titleFieldName =
+			urlField.dataset.name === "submenu_url" ? "submenu_title" : "menu_title";
+		var titleField = menuItem.querySelector('[data-name="' + titleFieldName + '"]');
+
+		if (!titleField || titleField.value.trim() !== "") return;
+
+		titleField.value = suggestedTitle;
+		titleField.dispatchEvent(new Event("change", { bubbles: true }));
 	}
 
 	loading.start = function (button) {

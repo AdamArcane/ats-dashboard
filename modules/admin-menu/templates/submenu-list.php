@@ -49,14 +49,15 @@ ob_start();
 					<?php esc_html_e( 'Submenu URL', 'ats-dashboard' ); ?>
 				</label>
 				<div class="control">
-					<input 
-						type="text" 
-						name="submenu_url_{role}_{default_menu_id}_{submenu_id}" 
-						id="submenu_url_{role}_{default_menu_id}_{submenu_id}" 
-						value="{submenu_url}" 
-						placeholder="{default_submenu_url}" 
-						class="ats-menu-builder--text-field"
+					<input
+						type="text"
+						name="submenu_url_{role}_{default_menu_id}_{submenu_id}"
+						id="submenu_url_{role}_{default_menu_id}_{submenu_id}"
+						value="{submenu_url}"
+						placeholder="{default_submenu_url}"
+						class="ats-menu-builder--text-field ats-menu-builder--url-field"
 						data-name="submenu_url"
+						autocomplete="off"
 					>
 				</div>
 			</div>
@@ -65,15 +66,20 @@ ob_start();
 					<?php esc_html_e( 'Open in New Tab', 'ats-dashboard' ); ?>
 				</label>
 				<div class="control">
-					<input
-						type="checkbox"
-						name="submenu_open_new_tab_{role}_{default_menu_id}_{submenu_id}"
-						id="submenu_open_new_tab_{role}_{default_menu_id}_{submenu_id}"
-						value="1"
-						{submenu_open_new_tab_checked}
-						class="ats-menu-builder--checkbox-field"
-						data-name="submenu_open_new_tab"
-					>
+					<label for="submenu_open_new_tab_{role}_{default_menu_id}_{submenu_id}" class="toggle-switch">
+						<input
+							type="checkbox"
+							name="submenu_open_new_tab_{role}_{default_menu_id}_{submenu_id}"
+							id="submenu_open_new_tab_{role}_{default_menu_id}_{submenu_id}"
+							value="1"
+							{submenu_open_new_tab_checked}
+							class="ats-menu-builder--checkbox-field"
+							data-name="submenu_open_new_tab"
+						>
+						<div class="switch-track">
+							<div class="switch-thumb"></div>
+						</div>
+					</label>
 				</div>
 			</div>
 			<div class="field">
@@ -94,19 +100,25 @@ ob_start();
 				</div>
 			</div>
 			<div class="field ats-menu-builder--role-hide-field">
-				<label for="submenu_role_hide_enabled_{role}_{default_menu_id}_{submenu_id}" class="label checkbox-label">
-					<?php esc_html_e( 'Always hide for user role(s)', 'ats-dashboard' ); ?>
-					<input
-						type="checkbox"
-						name="submenu_role_hide_enabled_{role}_{default_menu_id}_{submenu_id}"
-						id="submenu_role_hide_enabled_{role}_{default_menu_id}_{submenu_id}"
-						value="1"
-						{submenu_role_hide_enabled_checked}
-						class="ats-menu-builder--checkbox-field ats-menu-builder--role-hide-toggle"
-						data-name="role_hide_enabled"
-					>
-					<div class="indicator"></div>
-				</label>
+				<div class="ats-menu-builder--toggle-row">
+					<label for="submenu_role_hide_enabled_{role}_{default_menu_id}_{submenu_id}" class="toggle-switch">
+						<input
+							type="checkbox"
+							name="submenu_role_hide_enabled_{role}_{default_menu_id}_{submenu_id}"
+							id="submenu_role_hide_enabled_{role}_{default_menu_id}_{submenu_id}"
+							value="1"
+							{submenu_role_hide_enabled_checked}
+							class="ats-menu-builder--checkbox-field ats-menu-builder--role-hide-toggle"
+							data-name="role_hide_enabled"
+						>
+						<div class="switch-track">
+							<div class="switch-thumb"></div>
+						</div>
+					</label>
+					<label for="submenu_role_hide_enabled_{role}_{default_menu_id}_{submenu_id}" class="ats-menu-builder--toggle-row-label">
+						<?php esc_html_e( 'Always hide for user role(s)', 'ats-dashboard' ); ?>
+					</label>
+				</div>
 
 				<div class="ats-menu-builder--role-hide-options {submenu_role_hide_options_hidden_class}">
 					<div class="control ats-menu-builder--role-hide-mode">

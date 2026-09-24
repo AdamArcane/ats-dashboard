@@ -427,6 +427,18 @@
 	margin-bottom: 15px;
 }
 
+.ats-menu-builder--toggle-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.ats-menu-builder--toggle-row-label {
+	margin: 0;
+	font-weight: 600;
+	cursor: pointer;
+}
+
 .ats-menu-builder--role-hide-options {
 	margin-top: 10px;
 	padding: 12px 15px;
@@ -504,6 +516,75 @@
 .ats-menu-builder--text-field,
 .ats-menu-builder--select-field {
 	width: 100%;
+}
+
+.ats-menu-builder--url-control {
+	position: relative;
+}
+
+.ats-menu-builder--url-suggestions {
+	display: none;
+	position: absolute;
+	z-index: 20;
+	top: 100%;
+	left: 0;
+	right: 0;
+	margin: 2px 0 0;
+	padding: 4px 0;
+	max-height: 260px;
+	overflow-y: auto;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ats-menu-builder--url-suggestions.is-active {
+	display: block;
+}
+
+.ats-menu-builder--url-suggestions-group {
+	padding: 6px 12px 4px;
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: #999;
+}
+
+.ats-menu-builder--url-suggestion {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 7px 12px;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+.ats-menu-builder--url-suggestion-title {
+	font-size: 13px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.ats-menu-builder--url-suggestion-path {
+	font-size: 11px;
+	color: #999;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.ats-menu-builder--url-suggestion:hover {
+	background-color: var(--ats-secondary-color, #f4dcda);
+}
+
+.ats-menu-builder--url-suggestions-loading,
+.ats-menu-builder--url-suggestions-empty {
+	padding: 8px 12px;
+	font-size: 13px;
+	font-style: italic;
+	color: #999;
 }
 
 .ats-menu-builder--textarea-field {

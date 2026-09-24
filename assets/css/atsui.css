@@ -504,6 +504,16 @@
 	background: rgba(0, 45, 96, 0.6);
 }
 
+/* Select2 - override its default blue theme to match the brand accent color */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+	background-color: var(--wp-admin-theme-color, #3858e9);
+}
+
+.select2-container--default.select2-container--open .select2-selection,
+.select2-container--default.select2-container--focus .select2-selection {
+	border-color: var(--wp-admin-theme-color, #3858e9);
+}
+
 /* Toggle switch */
 .atsui-wrap .toggle-switch {
 	position: relative;

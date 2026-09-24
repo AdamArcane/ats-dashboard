@@ -24,7 +24,10 @@ return function ( $module ) {
 		wp_deregister_script( 'ats-admin-menu' );
 
 		// Admin menu.
-		wp_enqueue_script( 'ats-admin-menu', $module->url . '/assets/js/admin-menu.js', array( 'jquery', 'dashicons-picker', 'jquery-ui-sortable' ), ATS_DASHBOARD_PLUGIN_VERSION, true );
+		$admin_menu_js_path    = ATS_DASHBOARD_PLUGIN_DIR . '/modules/admin-menu/assets/js/admin-menu.js';
+		$admin_menu_js_version = file_exists( $admin_menu_js_path ) ? (string) filemtime( $admin_menu_js_path ) : ATS_DASHBOARD_PLUGIN_VERSION;
+
+		wp_enqueue_script( 'ats-admin-menu', $module->url . '/assets/js/admin-menu.js', array( 'jquery', 'dashicons-picker', 'jquery-ui-sortable' ), $admin_menu_js_version, true );
 
 		$wp_roles   = wp_roles();
 		$role_names = $wp_roles->role_names;
@@ -42,10 +45,11 @@ return function ( $module ) {
 
 		$admin_menu_data = array(
 			'nonces'          => array(
-				'getMenu'   => wp_create_nonce( 'ats_admin_menu_get_menu' ),
-				'getUsers'  => wp_create_nonce( 'ats_admin_menu_get_users' ),
-				'resetMenu' => wp_create_nonce( 'ats_admin_menu_reset_menu' ),
-				'saveMenu'  => wp_create_nonce( 'ats_admin_menu_save_menu' ),
+				'getMenu'    => wp_create_nonce( 'ats_admin_menu_get_menu' ),
+				'getUsers'   => wp_create_nonce( 'ats_admin_menu_get_users' ),
+				'resetMenu'  => wp_create_nonce( 'ats_admin_menu_reset_menu' ),
+				'saveMenu'   => wp_create_nonce( 'ats_admin_menu_save_menu' ),
+				'searchUrls' => wp_create_nonce( 'ats_admin_menu_search_urls' ),
 			),
 			'warningMessages' => array(
 				'resetMenu' => __( 'Caution! Are you sure you want to reset the Admin Menu back to WordPress defaults?', 'ats-dashboard' ),
