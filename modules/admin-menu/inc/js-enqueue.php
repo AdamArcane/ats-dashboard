@@ -45,11 +45,12 @@ return function ( $module ) {
 
 		$admin_menu_data = array(
 			'nonces'          => array(
-				'getMenu'    => wp_create_nonce( 'ats_admin_menu_get_menu' ),
-				'getUsers'   => wp_create_nonce( 'ats_admin_menu_get_users' ),
-				'resetMenu'  => wp_create_nonce( 'ats_admin_menu_reset_menu' ),
-				'saveMenu'   => wp_create_nonce( 'ats_admin_menu_save_menu' ),
-				'searchUrls' => wp_create_nonce( 'ats_admin_menu_search_urls' ),
+				'getMenu'               => wp_create_nonce( 'ats_admin_menu_get_menu' ),
+				'getUsers'              => wp_create_nonce( 'ats_admin_menu_get_users' ),
+				'resetMenu'             => wp_create_nonce( 'ats_admin_menu_reset_menu' ),
+				'saveMenu'              => wp_create_nonce( 'ats_admin_menu_save_menu' ),
+				'searchUrls'            => wp_create_nonce( 'ats_admin_menu_search_urls' ),
+				'quickUpdateVisibility' => wp_create_nonce( 'ats_admin_menu_quick_update_visibility' ),
 			),
 			'warningMessages' => array(
 				'resetMenu' => __( 'Caution! Are you sure you want to reset the Admin Menu back to WordPress defaults?', 'ats-dashboard' ),

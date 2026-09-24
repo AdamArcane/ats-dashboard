@@ -37,7 +37,7 @@ function ats_admin_menu_not_doing_ajax() {
 	}
 
 	// Stop if current ajax request is not one of our specific ajax requests.
-	$allowed_actions = array( 'ats_admin_menu_get_menu', 'ats_admin_menu_search_urls' );
+	$allowed_actions = array( 'ats_admin_menu_get_menu', 'ats_admin_menu_search_urls', 'ats_admin_menu_quick_update_visibility' );
 
 	if ( ! isset( $_POST['action'] ) || ! in_array( $_POST['action'], $allowed_actions, true ) ) {
 		return;

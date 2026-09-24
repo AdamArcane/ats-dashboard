@@ -245,6 +245,58 @@
 	color: #888;
 }
 
+.ats-menu-builder--actions-relative {
+	position: relative;
+}
+
+.ats-menu-builder--visibility-indicator.is-saving {
+	opacity: 0.4;
+}
+
+.ats-menu-builder--visibility-popover {
+	display: none;
+	position: absolute;
+	z-index: 30;
+	top: 100%;
+	right: 0;
+	margin-top: 4px;
+	min-width: 140px;
+	padding: 4px 0;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	text-align: left;
+}
+
+.ats-menu-builder--visibility-popover.is-active {
+	display: block;
+}
+
+.ats-menu-builder--visibility-popover button {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	width: 100%;
+	padding: 7px 12px;
+	background: transparent;
+	border: none;
+	font-size: 13px;
+	text-align: left;
+	color: #333;
+	cursor: pointer;
+}
+
+.ats-menu-builder--visibility-popover button:hover {
+	background-color: var(--ats-secondary-color, #f4dcda);
+}
+
+.ats-menu-builder--visibility-popover .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
 .ats-menu-builder--menu-actions span:not(:first-child) {
 	margin-left: 5px;
 }
@@ -287,10 +339,10 @@
 	position: relative;
 	opacity: 1;
 	visibility: visible;
-	cursor: default;
+	cursor: pointer;
 }
 
-.ats-menu-builder--visibility-indicator.is-hidden {
+.ats-menu-builder--visibility-indicator.is-visibility-hidden {
 	color: #c00;
 }
 

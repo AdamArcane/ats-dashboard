@@ -85,6 +85,7 @@ class Admin_Menu_Module extends Base_Module {
 		require_once __DIR__ . '/ajax/class-reset-menu.php';
 		require_once __DIR__ . '/ajax/class-save-menu.php';
 		require_once __DIR__ . '/ajax/class-search-urls.php';
+		require_once __DIR__ . '/ajax/class-quick-update-visibility.php';
 
 		$get_menu  = new \ATSDash\AdminMenu\Ajax\Get_Menu();
 		$get_users = new \ATSDash\AdminMenu\Ajax\Get_Users();
@@ -94,6 +95,7 @@ class Admin_Menu_Module extends Base_Module {
 		add_action( 'wp_ajax_ats_admin_menu_reset_menu', array( Ajax\Reset_Menu::get_instance(), 'reset' ) );
 		add_action( 'wp_ajax_ats_admin_menu_save_menu', array( Ajax\Save_Menu::get_instance(), 'save' ) );
 		add_action( 'wp_ajax_ats_admin_menu_search_urls', array( Ajax\Search_Urls::get_instance(), 'ajax' ) );
+		add_action( 'wp_ajax_ats_admin_menu_quick_update_visibility', array( Ajax\Quick_Update_Visibility::get_instance(), 'update' ) );
 
 		add_action( 'ats_admin_menu_add_menu_button', array( self::get_instance(), 'add_menu_button' ) );
 		add_action( 'ats_admin_menu_add_submenu_button', array( self::get_instance(), 'add_submenu_button' ) );

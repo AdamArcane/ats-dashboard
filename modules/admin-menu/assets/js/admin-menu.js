@@ -417,7 +417,11 @@
 
 		if (value === "1") {
 			meta.icon = "hidden";
-			meta.indicatorClass = "is-hidden";
+			// Not just "is-hidden" - that exact class name is this codebase's own
+			// generic "display: none" utility (see .ats-menu-builder-box .is-hidden
+			// in ats-menu-builder.css), and this indicator lives inside that same
+			// box, so it would get hidden outright rather than just recolored.
+			meta.indicatorClass = "is-visibility-hidden";
 			meta.label = "Hidden";
 			meta.hiddenSelected = "selected";
 		} else if (value === "2") {
@@ -430,6 +434,161 @@
 		}
 
 		return meta;
+	}
+
+	/**
+	 * Apply a visibility value's icon/class/title to an indicator element.
+	 * Shared between the Visibility <select> change handler and the
+	 * quick-select popover, so both stay visually in sync.
+	 *
+	 * @param {HTMLElement} indicator The visibility indicator element.
+	 * @param {string} value "0", "1", or "2".
+	 */
+	function applyIndicatorVisibility(indicator, value) {
+		if (!indicator) return;
+
+		var meta = getVisibilityMeta(value);
+
+		indicator.classList.remove(
+			"dashicons-visibility",
+			"dashicons-hidden",
+			"is-visible",
+			"is-visibility-hidden",
+			"is-hidden-collapsed"
+		);
+		indicator.classList.add("dashicons-" + meta.icon, meta.indicatorClass);
+		indicator.setAttribute("title", meta.label);
+	}
+
+	/**
+	 * Close any open visibility quick-select popovers.
+	 */
+	function closeVisibilityPopovers() {
+		document
+			.querySelectorAll(".ats-menu-builder--visibility-popover.is-active")
+			.forEach(function (popover) {
+				popover.classList.remove("is-active");
+			});
+	}
+
+	/**
+	 * Wire up the visibility indicator as a quick-select trigger: clicking it
+	 * opens a small popover with the 3 Visibility states, and picking one
+	 * updates the item immediately (indicator, the Visibility <select> so the
+	 * expanded panel stays in sync, and the server via ajax) without needing
+	 * to expand the item or hit the main Save button.
+	 *
+	 * @param {HTMLElement} menuItem The menu or submenu item element.
+	 * @param {HTMLElement} indicator The visibility indicator element.
+	 * @param {boolean} isSubmenuItem Whether menuItem is a submenu item.
+	 */
+	function setupVisibilityQuickToggle(menuItem, indicator, isSubmenuItem) {
+		if (indicator.dataset.quickToggleInit) return;
+		indicator.dataset.quickToggleInit = "1";
+
+		var actionsWrap = indicator.closest(".ats-menu-builder--menu-actions");
+		if (actionsWrap) {
+			actionsWrap.classList.add("ats-menu-builder--actions-relative");
+		}
+
+		var options = [
+			{ value: "0", icon: "visibility", label: "Normal" },
+			{ value: "1", icon: "hidden", label: "Hidden" },
+			{ value: "2", icon: "hidden", label: "Optional" },
+		];
+
+		var popover = document.createElement("div");
+		popover.className = "ats-menu-builder--visibility-popover";
+
+		options.forEach(function (option) {
+			var button = document.createElement("button");
+			button.type = "button";
+			button.dataset.value = option.value;
+			button.innerHTML =
+				'<span class="dashicons dashicons-' + option.icon + '"></span>' +
+				option.label;
+
+			button.addEventListener("click", function (e) {
+				e.stopPropagation();
+
+				menuItem.dataset.hidden = option.value;
+				applyIndicatorVisibility(indicator, option.value);
+
+				var visibilityFieldAttr = isSubmenuItem
+					? '[data-name="submenu_visibility"]'
+					: '[data-name="menu_visibility"]';
+				var visibilityField = menuItem.querySelector(visibilityFieldAttr);
+				if (visibilityField) visibilityField.value = option.value;
+
+				closeVisibilityPopovers();
+				quickSaveVisibility(menuItem, isSubmenuItem, option.value, indicator);
+			});
+
+			popover.appendChild(button);
+		});
+
+		(actionsWrap || indicator.parentNode).appendChild(popover);
+
+		indicator.addEventListener("click", function (e) {
+			e.stopPropagation();
+			var willOpen = !popover.classList.contains("is-active");
+			closeVisibilityPopovers();
+			if (willOpen) popover.classList.add("is-active");
+		});
+
+		document.addEventListener("click", closeVisibilityPopovers);
+	}
+
+	/**
+	 * Save one item's visibility to the server immediately, without touching
+	 * (or requiring) the rest of the form. Finds (or, for a not-yet-customized
+	 * default item, creates) that one item in the saved menu and patches only
+	 * its is_hidden field - see Ajax\Quick_Update_Visibility::update().
+	 *
+	 * @param {HTMLElement} menuItem The menu or submenu item element.
+	 * @param {boolean} isSubmenuItem Whether menuItem is a submenu item.
+	 * @param {string} value The new visibility value.
+	 * @param {HTMLElement} indicator The visibility indicator element (for saving-state feedback).
+	 */
+	function quickSaveVisibility(menuItem, isSubmenuItem, value, indicator) {
+		var data = {
+			action: "ats_admin_menu_quick_update_visibility",
+			nonce: atsAdminMenu.nonces.quickUpdateVisibility,
+			is_hidden: value,
+			item_type: "menu",
+		};
+
+		if (isSubmenuItem) {
+			var parentItem = menuItem.closest(
+				".ats-menu-builder--menu-item:not(.ats-menu-builder--submenu-item)"
+			);
+			if (!parentItem) return;
+
+			data.item_key = parentItem.dataset.defaultId;
+			data.submenu_key = menuItem.dataset.defaultUrl;
+		} else {
+			data.item_key = menuItem.dataset.defaultId;
+		}
+
+		if (indicator) indicator.classList.add("is-saving");
+
+		$.ajax({
+			url: ajaxurl,
+			type: "post",
+			dataType: "json",
+			data: data,
+		})
+			.done(function (r) {
+				if (!r || !r.success) {
+					console.warn("ATS Admin Menu: quick visibility update failed", r);
+				}
+			})
+			.fail(function () {
+				console.warn("ATS Admin Menu: quick visibility update request failed");
+			})
+			.always(function () {
+				if (indicator) indicator.classList.remove("is-saving");
+			});
 	}
 
 	/**
@@ -913,28 +1072,25 @@
 			: '[data-name="menu_visibility"]';
 
 		var visibilityField = menuItem.querySelector(visibilityFieldDataAttr);
+		var visibilityIndicator = menuItem.querySelector(
+			".ats-menu-builder--visibility-indicator"
+		);
 
 		if (visibilityField) {
 			visibilityField.addEventListener("change", function () {
 				menuItem.dataset.hidden = this.value;
-
-				var indicator = menuItem.querySelector(
-					".ats-menu-builder--visibility-indicator"
-				);
-				if (!indicator) return;
-
-				var meta = getVisibilityMeta(this.value);
-
-				indicator.classList.remove(
-					"dashicons-visibility",
-					"dashicons-hidden",
-					"is-visible",
-					"is-hidden",
-					"is-hidden-collapsed"
-				);
-				indicator.classList.add("dashicons-" + meta.icon, meta.indicatorClass);
-				indicator.setAttribute("title", meta.label);
+				applyIndicatorVisibility(visibilityIndicator, this.value);
 			});
+		}
+
+		// Separators use a simple binary hide-menu toggle instead (see
+		// showHideMenuItem()) - this quick-select popover is only for the
+		// 3-way Visibility state on menu/submenu items.
+		if (
+			visibilityIndicator &&
+			!menuItem.classList.contains("ats-menu-builder--separator-item")
+		) {
+			setupVisibilityQuickToggle(menuItem, visibilityIndicator, isSubmenuItem);
 		}
 
 		var titleFieldDataAttr = isSubmenuItem
@@ -1274,8 +1430,12 @@
 
 		var menuList = [];
 
+		// The submenu <ul> also carries the "ats-menu-builder--menu-list" class (see
+		// menu-list.php's Submenu tab), so this needs ":scope >" - without it, "…menu-list
+		// > …menu-item" matches every submenu list's own direct children too, flattening
+		// every submenu item into the top-level list as a duplicate fake top-level item.
 		var menuItems = workspace.querySelectorAll(
-			".ats-menu-builder--menu-list > .ats-menu-builder--menu-item"
+			":scope > .ats-menu-builder--menu-list > .ats-menu-builder--menu-item"
 		);
 		menuItems = menuItems.length ? menuItems : [];
 
@@ -1310,9 +1470,16 @@
 				}
 			} else {
 				menuData.id_default = menuItem.dataset.defaultId;
-				menuData.title = menuItem.querySelector(
-					'[data-name="menu_title"]'
-				).value;
+
+				var menuTitleField = menuItem.querySelector('[data-name="menu_title"]');
+				if (!menuTitleField) {
+					console.warn(
+						"ATS Admin Menu: menu_title field missing for item",
+						menuItem.dataset.defaultId,
+						"- saving with an empty title. If this keeps happening, please report it."
+					);
+				}
+				menuData.title = menuTitleField ? menuTitleField.value : "";
 
 				// The menu_url didn't exist in v3.1.3 and below.
 				if (menuItem.querySelector('[data-name="menu_url"]')) {
@@ -1321,12 +1488,10 @@
 					).value;
 				}
 
-				menuData.dashicon = menuItem.querySelector(
-					'[data-name="dashicon"]'
-				).value;
-				menuData.icon_svg = menuItem.querySelector(
-					'[data-name="icon_svg"]'
-				).value;
+				var menuDashiconField = menuItem.querySelector('[data-name="dashicon"]');
+				var menuIconSvgField = menuItem.querySelector('[data-name="icon_svg"]');
+				menuData.dashicon = menuDashiconField ? menuDashiconField.value : "";
+				menuData.icon_svg = menuIconSvgField ? menuIconSvgField.value : "";
 				menuData.icon_type = "";
 
 				var menuOpenNewTabField = menuItem.querySelector(
@@ -1340,7 +1505,7 @@
 				if (menuData.dashicon || menuData.icon_svg) {
 					menuData.icon_type = "dashicon";
 
-					if (iconSvgTab.classList.contains("is-active")) {
+					if (iconSvgTab && iconSvgTab.classList.contains("is-active")) {
 						if (menuData.icon_svg) {
 							menuData.icon_type = "icon_svg";
 						}
@@ -1371,9 +1536,18 @@
 
 				submenuData.is_hidden = submenuItem.dataset.hidden;
 				submenuData.was_added = submenuItem.dataset.added;
-				submenuData.title = submenuItem.querySelector(
+
+				var submenuTitleField = submenuItem.querySelector(
 					'[data-name="submenu_title"]'
-				).value;
+				);
+				if (!submenuTitleField) {
+					console.warn(
+						"ATS Admin Menu: submenu_title field missing for a submenu item under",
+						menuItem.dataset.defaultId,
+						"- saving with an empty title. If this keeps happening, please report it."
+					);
+				}
+				submenuData.title = submenuTitleField ? submenuTitleField.value : "";
 				submenuData.url = "";
 
 				// The submenu_url didn't exist in v3.1.3 and below.
