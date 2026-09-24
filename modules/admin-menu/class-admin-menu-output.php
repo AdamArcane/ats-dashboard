@@ -92,7 +92,7 @@ class Admin_Menu_Output extends Base_Output {
 
 		add_action( 'ats_ajax_before_get_admin_menu', array( self::get_instance(), 'remove_output_actions' ) );
 
-		// Patch for Dashboard menu item with SVG icon. Also wires up the "Show all" toggle for "hidden, but showable" menu items.
+		// Patch for Dashboard menu item with SVG icon. Also wires up the "Show all" toggle for "hidden, but collapsed" menu items.
 		$scripts = file_get_contents( __DIR__ . '/assets/js/admin-menu-output.js' );
 
 		add_action(
@@ -106,8 +106,8 @@ class Admin_Menu_Output extends Base_Output {
 			'admin_head',
 			function () {
 				echo '<style>'
-					. '#adminmenu li.ats-menu-hidden-showable{display:none!important}'
-					. '#adminmenu.ats-show-hidden-items li.ats-menu-hidden-showable{display:block!important}'
+					. '#adminmenu li.ats-menu-hidden-collapsed{display:none!important}'
+					. '#adminmenu.ats-show-hidden-items li.ats-menu-hidden-collapsed{display:block!important}'
 					. '#adminmenu li#ats-show-hidden-toggle{border-top:1px solid rgba(240,246,252,.1)}'
 					. '#adminmenu li#ats-show-hidden-toggle button{display:flex;align-items:center;justify-content:center;gap:4px;box-sizing:border-box;width:100%;padding:8px 8px;margin:0;background:transparent;border:none;text-align:center;font-size:11px;line-height:1.4;color:#a7aaad;cursor:pointer;}'
 					. '#adminmenu li#ats-show-hidden-toggle button:hover,#adminmenu li#ats-show-hidden-toggle button:focus,#adminmenu li#ats-show-hidden-toggle.is-active button{color:#dcdcde}'
@@ -179,17 +179,23 @@ class Admin_Menu_Output extends Base_Output {
 		$role = $roles[0];
 
 		/**
-		 * Saved menu based on user ID/role.
+		 * Resolve the effective menu for the current user by layering:
+		 * Default (Everyone) -> Role overrides -> User overrides.
+		 *
+		 * Role & user entries only store what they override (see Menu_Inheritance_Helper),
+		 * so anything they don't touch keeps tracking the Default menu live.
 		 *
 		 * @var array $role_menu
 		 */
-		$role_menu = array();
+		$inheritance = new Menu_Inheritance_Helper();
 
-		// Prioritize user based menu over role based menu.
-		if ( ! empty( $saved_menu[ 'user_id_' . $user->ID ] ) ) {
-			$role_menu = $saved_menu[ 'user_id_' . $user->ID ];
-		} else {
-			$role_menu = ! empty( $saved_menu[ $role ] ) ? $saved_menu[ $role ] : array();
+		$default_items = ! empty( $saved_menu['default'] ) && is_array( $saved_menu['default'] ) ? $saved_menu['default'] : array();
+		$role_delta    = ! empty( $saved_menu[ $role ] ) && is_array( $saved_menu[ $role ] ) ? $saved_menu[ $role ] : array();
+
+		$role_menu = $inheritance->apply_delta( $default_items, $role_delta );
+
+		if ( ! empty( $saved_menu[ 'user_id_' . $user->ID ] ) && is_array( $saved_menu[ 'user_id_' . $user->ID ] ) ) {
+			$role_menu = $inheritance->apply_delta( $role_menu, $saved_menu[ 'user_id_' . $user->ID ] );
 		}
 
 		$role_menu = is_array( $role_menu ) ? $role_menu : array();
@@ -248,7 +254,7 @@ class Admin_Menu_Output extends Base_Output {
 				continue;
 			}
 
-			// Only fully "hidden" (1) items are excluded. "Hidden, but showable" (2) items still render, just CSS-hidden until toggled.
+			// Only fully "hidden" (1) items are excluded. "Hidden, but collapsed" (2) items still render, just CSS-hidden until toggled.
 			if ( '1' !== (string) $menu_item['is_hidden'] ) {
 				$menu_title = $menu_item['title'] ? $menu_item['title'] : ( isset( $matched_default_menu[0] ) ? $matched_default_menu[0] : '' );
 				$menu_title = (string) $menu_title;
@@ -270,7 +276,7 @@ class Admin_Menu_Output extends Base_Output {
 				}
 
 				if ( '2' === (string) $menu_item['is_hidden'] ) {
-					$menu_class = trim( $menu_class . ' ats-menu-hidden-showable' );
+					$menu_class = trim( $menu_class . ' ats-menu-hidden-collapsed' );
 				}
 
 				array_push( $new_menu_item, $this->placeholder_helper->convert_admin_menu_placeholder_tags( $menu_title ) );
@@ -470,7 +476,7 @@ class Admin_Menu_Output extends Base_Output {
 							);
 						}
 
-						// Only fully "hidden" (1) submenu items are excluded. "Hidden, but showable" (2) items still render, just CSS-hidden until toggled.
+						// Only fully "hidden" (1) submenu items are excluded. "Hidden, but collapsed" (2) items still render, just CSS-hidden until toggled.
 						if ( '1' !== (string) $submenu_item['is_hidden'] ) {
 							$new_submenu_item = array();
 
@@ -498,7 +504,7 @@ class Admin_Menu_Output extends Base_Output {
 							}
 
 							if ( '2' === (string) $submenu_item['is_hidden'] ) {
-								$submenu_class = trim( $submenu_class . ' ats-menu-hidden-showable' );
+								$submenu_class = trim( $submenu_class . ' ats-menu-hidden-collapsed' );
 							}
 
 							if ( ! empty( $submenu_class ) ) {
@@ -540,7 +546,7 @@ class Admin_Menu_Output extends Base_Output {
 		$new_submenu = $this->get_new_submenu_items( $role, $submenu, $new_submenu, $hidden_submenu );
 
 		/**
-		 * Items set to "Hidden, but showable" are rendered here with an "ats-menu-hidden-showable" class
+		 * Items set to "Hidden, but collapsed" are rendered here with an "ats-menu-hidden-collapsed" class
 		 * and CSS-hidden by default (see the inline style in setup()). A "Show All" toggle - styled and
 		 * positioned like core's "Collapse menu" control - is inserted client-side by assets/js/admin-menu-output.js
 		 * whenever it finds at least one such item, so no server-side tracking of that is needed here.

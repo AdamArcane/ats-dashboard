@@ -242,10 +242,36 @@ class Get_Menu {
 		$saved_menu = get_option( 'ats_admin_menu', array() );
 		$saved_menu = ! empty( $saved_menu ) && is_array( $saved_menu ) ? $saved_menu : array();
 
-		if ( 'user_id' === $this->by ) {
-			$custom_menu = ! empty( $saved_menu ) && ! empty( $saved_menu[ 'user_id_' . $this->user_id ] ) ? $saved_menu[ 'user_id_' . $this->user_id ] : array();
+		/**
+		 * Resolve the menu shown in the builder the same way it's resolved on
+		 * the front-end: Default (Everyone) -> Role overrides -> User overrides.
+		 * This way, editing a role/user tab starts from (and diffs against)
+		 * whatever Default currently looks like.
+		 *
+		 * @see \ATSDash\AdminMenu\Admin_Menu_Output::menu_output()
+		 */
+		$inheritance   = new \ATSDash\AdminMenu\Menu_Inheritance_Helper();
+		$default_items = ! empty( $saved_menu['default'] ) && is_array( $saved_menu['default'] ) ? $saved_menu['default'] : array();
+
+		/**
+		 * The delta belonging to the tab actually being loaded, i.e. this layer's
+		 * own overrides (as opposed to what it inherited). Used further down to
+		 * flag each item as inherited vs overridden for this tab in the builder UI.
+		 * Left empty for the Default tab, where the concept doesn't apply.
+		 */
+		$immediate_delta = array();
+
+		if ( 'default' === $role && 'user_id' !== $this->by ) {
+			$custom_menu = $default_items;
+		} elseif ( 'user_id' === $this->by ) {
+			$role_delta    = ! empty( $saved_menu[ $role ] ) && is_array( $saved_menu[ $role ] ) ? $saved_menu[ $role ] : array();
+			$resolved_role = $inheritance->apply_delta( $default_items, $role_delta );
+
+			$immediate_delta = ! empty( $saved_menu[ 'user_id_' . $this->user_id ] ) && is_array( $saved_menu[ 'user_id_' . $this->user_id ] ) ? $saved_menu[ 'user_id_' . $this->user_id ] : array();
+			$custom_menu     = $inheritance->apply_delta( $resolved_role, $immediate_delta );
 		} else {
-			$custom_menu = ! empty( $saved_menu ) && ! empty( $saved_menu[ $role ] ) ? $saved_menu[ $role ] : array();
+			$immediate_delta = ! empty( $saved_menu[ $role ] ) && is_array( $saved_menu[ $role ] ) ? $saved_menu[ $role ] : array();
+			$custom_menu     = $inheritance->apply_delta( $default_items, $immediate_delta );
 		}
 
 		$custom_menu = is_array( $custom_menu ) ? $custom_menu : [];
@@ -255,6 +281,10 @@ class Get_Menu {
 		} else {
 			$custom_menu = $this->get_new_default_menu_items( $merged_default_menu, $custom_menu );
 			$response    = $this->parse_response_with_custom_menu( $merged_default_menu, $custom_menu );
+		}
+
+		if ( 'default' !== $role || 'user_id' === $this->by ) {
+			$response = $inheritance->mark_overrides( $response, $immediate_delta );
 		}
 
 		return $response;

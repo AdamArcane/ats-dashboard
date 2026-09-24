@@ -21,6 +21,7 @@ ob_start();
 		<div class="ats-menu-builder--menu-name">{separator}</div>
 		<span class="ats-menu-builder--menu-actions">
 			{trash_icon}
+			{override_indicator}
 			<span class="dashicons dashicons-{hidden_icon} hide-menu"></span>
 		</span>
 	</div><!-- .ats-menu-builder--control-panel -->

@@ -51,18 +51,52 @@ class Save_Menu {
 		}
 
 		$_POST['menu'] = json_decode( stripslashes( $_POST['menu'] ), true );
+		$_POST['menu'] = is_array( $_POST['menu'] ) ? $_POST['menu'] : array();
 
 		$saved_menu = get_option( 'ats_admin_menu', array() );
+		$saved_menu = is_array( $saved_menu ) ? $saved_menu : array();
+
+		$inheritance = new \ATSDash\AdminMenu\Menu_Inheritance_Helper();
 
 		/**
-		 * Update the role based menu.
+		 * "Default (Everyone)" is the base every role/user diffs against, so it's
+		 * persisted first (as a full snapshot, same as before this feature) and
+		 * any role/user included in the same save uses this fresh value as its base.
+		 */
+		if ( isset( $_POST['menu']['default'] ) && is_array( $_POST['menu']['default'] ) ) {
+			$saved_menu['default'] = $_POST['menu']['default'];
+		}
+
+		$default_items = ! empty( $saved_menu['default'] ) && is_array( $saved_menu['default'] ) ? $saved_menu['default'] : array();
+
+		/**
+		 * Update the role & user based menu.
+		 *
+		 * Only the differences from the resolved parent layer are stored
+		 * (Default for a role, Default+Role for a user). Anything left
+		 * unchanged keeps inheriting from Default going forward.
 		 *
 		 * In the menu editor, the role based menu is only loaded if it's tab has been opened.
 		 * Also, it's tab is not delete-able.
 		 * That means, we only need to update the loaded menu.
 		 */
 		foreach ( $_POST['menu'] as $role_name => $menu_items ) {
-			$saved_menu[ $role_name ] = $menu_items;
+			if ( 'default' === $role_name || ! is_array( $menu_items ) ) {
+				continue;
+			}
+
+			if ( false !== stripos( $role_name, 'user_id_' ) ) {
+				$user_id   = absint( str_ireplace( 'user_id_', '', $role_name ) );
+				$user_data = get_userdata( $user_id );
+				$user_role = $user_data && ! empty( $user_data->roles[0] ) ? $user_data->roles[0] : '';
+
+				$role_delta    = ! empty( $saved_menu[ $user_role ] ) && is_array( $saved_menu[ $user_role ] ) ? $saved_menu[ $user_role ] : array();
+				$resolved_role = $inheritance->apply_delta( $default_items, $role_delta );
+
+				$saved_menu[ $role_name ] = $inheritance->diff_items( $resolved_role, $menu_items );
+			} else {
+				$saved_menu[ $role_name ] = $inheritance->diff_items( $default_items, $menu_items );
+			}
 		}
 
 		/**

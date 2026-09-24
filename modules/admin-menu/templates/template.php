@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 $wp_roles   = wp_roles();
-$role_names = $wp_roles->role_names;
+$role_names = array( 'default' => __( 'Default (Everyone)', 'ats-dashboard' ) ) + $wp_roles->role_names;
 
 $saved_menu      = get_option( 'ats_admin_menu', array() );
 $saved_user_data = array();
@@ -98,7 +98,7 @@ foreach ( $saved_menu as $identifier => $menu_item ) {
 						<ul class="ats-menu-builder--tab-menu ats-menu-builder--role-menu">
 							<?php foreach ( $role_names as $role_key => $role_name ) : ?>
 
-								<li class="ats-menu-builder--tab-menu-item<?php echo ( 'administrator' === $role_key ? ' is-active' : '' ); ?>" data-ats-tab-content="ats-menu-builder--<?php echo esc_html( $role_key ); ?>-edit-area" data-role="<?php echo esc_attr( $role_key ); ?>">
+								<li class="ats-menu-builder--tab-menu-item<?php echo ( 'default' === $role_key ? ' is-active' : '' ); ?>" data-ats-tab-content="ats-menu-builder--<?php echo esc_html( $role_key ); ?>-edit-area" data-role="<?php echo esc_attr( $role_key ); ?>">
 									<button type="button">
 										<?php echo esc_html( ucwords( $role_name ) ); ?>
 									</button>
@@ -110,7 +110,7 @@ foreach ( $saved_menu as $identifier => $menu_item ) {
 						<div class="ats-menu-builder--tab-content ats-menu-builder--edit-area">
 							<?php foreach ( $role_names as $role_key => $role_name ) : ?>
 
-								<div id="ats-menu-builder--<?php echo esc_attr( $role_key ); ?>-edit-area" class="ats-menu-builder--tab-content-item ats-menu-builder--workspace ats-menu-builder--role-workspace<?php echo ( 'administrator' === $role_key ? ' is-active' : '' ); ?>" data-role="<?php echo esc_attr( $role_key ); ?>">
+								<div id="ats-menu-builder--<?php echo esc_attr( $role_key ); ?>-edit-area" class="ats-menu-builder--tab-content-item ats-menu-builder--workspace ats-menu-builder--role-workspace<?php echo ( 'default' === $role_key ? ' is-active' : '' ); ?>" data-role="<?php echo esc_attr( $role_key ); ?>">
 									<ul class="ats-menu-builder--menu-list ats-menu-builder-sortable">
 										<!-- to be re-written via js -->
 										<li class="loading"></li>

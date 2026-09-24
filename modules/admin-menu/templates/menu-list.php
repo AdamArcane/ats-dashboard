@@ -23,6 +23,7 @@ ob_start();
 		</div>
 		<div class="ats-menu-builder--menu-actions">
 			{trash_icon}
+			{override_indicator}
 			<span class="dashicons dashicons-{hidden_icon} ats-menu-builder--visibility-indicator {visibility_indicator_class}" title="{visibility_label}"></span>
 			<span class="dashicons dashicons-arrow-down-alt2 expand-menu"></span>
 		</div>
@@ -107,9 +108,9 @@ ob_start();
 									class="ats-menu-builder--select-field"
 									data-name="menu_visibility"
 								>
-									<option value="0" {menu_visibility_normal_selected}><?php esc_html_e( 'Normal - menu item shows', 'ats-dashboard' ); ?></option>
-									<option value="1" {menu_visibility_hidden_selected}><?php esc_html_e( 'Hidden - menu item is hidden', 'ats-dashboard' ); ?></option>
-									<option value="2" {menu_visibility_showable_selected}><?php esc_html_e( 'Hidden, but showable - adds a "Show all" toggle to reveal it', 'ats-dashboard' ); ?></option>
+									<option value="0" {menu_visibility_normal_selected}><?php esc_html_e( 'Normal', 'ats-dashboard' ); ?></option>
+									<option value="1" {menu_visibility_hidden_selected}><?php esc_html_e( 'Hidden', 'ats-dashboard' ); ?></option>
+									<option value="2" {menu_visibility_collapsed_selected}><?php esc_html_e( 'Collapsed', 'ats-dashboard' ); ?></option>
 								</select>
 							</div>
 						</div>

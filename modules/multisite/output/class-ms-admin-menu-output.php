@@ -185,7 +185,7 @@ class Ms_Admin_Menu_Output extends Base_Output {
 		$roles = ! $roles || ! is_array( $roles ) ? array() : $roles;
 
 		$is_super_admin = is_super_admin();
-		$simulate_role  = in_array( $role, $roles, true ) ? false : true;
+		$simulate_role  = 'default' !== $role && ! in_array( $role, $roles, true );
 
 		$user_helper = new User_Helper();
 

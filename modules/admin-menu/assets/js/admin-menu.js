@@ -63,8 +63,8 @@
 
 		setupResetRoleButton();
 
-		// Load administrator's menu as it's shown in initial load.
-		getMenu("role", "administrator");
+		// Load the Default (Everyone) menu as it's shown in initial load.
+		getMenu("role", "default");
 
 		var savedUserTabsContentItems = elms.userTabsContent.querySelectorAll(
 			".ats-menu-builder--tab-content-item"
@@ -123,6 +123,12 @@
 			"click",
 			".ats-menu-builder--remove-menu-item",
 			removeMenuItem
+		);
+
+		$(document).on(
+			"click",
+			".ats-menu-builder--revert-to-default",
+			revertItemToDefault
 		);
 
 		setupUsersSelect2();
@@ -558,7 +564,7 @@
 
 	/**
 	 * Setup reset role button.
-	 * The button text should be changed when the role tab is switched.
+	 * The button text & target should be changed when the role tab is switched.
 	 */
 	function setupResetRoleButton() {
 		var tabs = document.querySelectorAll(
@@ -573,6 +579,25 @@
 				elms.resetRoleButton.dataset.role = this.dataset.role;
 			});
 		});
+
+		// User tabs are added dynamically, so this is delegated rather than
+		// bound once at load. Clicking a user tab both retargets the button
+		// and reveals it (it's hidden by default while on the Users header tab,
+		// since there's nothing selected to reset yet).
+		$(document).on(
+			"click",
+			".ats-menu-builder--user-menu > .ats-menu-builder--tab-menu-item",
+			function (e) {
+				if (e.target.classList.contains("delete-icon")) return;
+
+				var button = this.querySelector("button");
+				var name = button ? button.innerHTML : "This User's";
+
+				elms.resetRoleButton.innerHTML = "Reset " + name + " Menu";
+				elms.resetRoleButton.dataset.role = "user_id_" + this.dataset.userId;
+				elms.resetRoleButton.classList.remove("is-hidden");
+			}
+		);
 	}
 
 	/**
@@ -647,7 +672,7 @@
 	 * Get visibility meta (dashicon suffix, indicator class, label, and "selected" attrs)
 	 * based on the stored is_hidden value.
 	 *
-	 * @param {string} isHidden "0" (normal), "1" (hidden), or "2" (hidden, but showable).
+	 * @param {string} isHidden "0" (normal), "1" (hidden), or "2" (hidden, but collapsed).
 	 * @return {object} The visibility meta.
 	 */
 	function getVisibilityMeta(isHidden) {
@@ -658,7 +683,7 @@
 			label: "Visible",
 			normalSelected: "",
 			hiddenSelected: "",
-			showableSelected: "",
+			collapsedSelected: "",
 		};
 
 		if (value === "1") {
@@ -668,14 +693,62 @@
 			meta.hiddenSelected = "selected";
 		} else if (value === "2") {
 			meta.icon = "hidden";
-			meta.indicatorClass = "is-hidden-showable";
-			meta.label = "Hidden, but showable";
-			meta.showableSelected = "selected";
+			meta.indicatorClass = "is-hidden-collapsed";
+			meta.label = "Hidden, but collapsed";
+			meta.collapsedSelected = "selected";
 		} else {
 			meta.normalSelected = "selected";
 		}
 
 		return meta;
+	}
+
+	/**
+	 * Build the "inherited from Default" / "customized here" indicator markup.
+	 *
+	 * Only meaningful for role/user tabs - the Default tab has nothing to
+	 * inherit from, so no indicator is shown there (backend also omits the
+	 * `is_overridden` flag in that case). When overridden, the indicator
+	 * doubles as a "revert to Default" button (see revertItemToDefault()).
+	 *
+	 * @param {string} by Either "role" or "user_id".
+	 * @param {string} value The role or user_id value.
+	 * @param {boolean|undefined} isOverridden Whether the item is overridden at this layer.
+	 * @param {string} itemType The top level item's type ("menu" or "separator").
+	 * @param {string} itemKey The top level item's identity (id_default for "menu", url_default for "separator").
+	 * @param {string} [submenuKey] A submenu item's identity (its url_default), when this indicator is for a submenu item.
+	 * @return {string} The indicator markup, or an empty string.
+	 */
+	function getOverrideIndicatorHtml(
+		by,
+		value,
+		isOverridden,
+		itemType,
+		itemKey,
+		submenuKey
+	) {
+		if (by === "role" && value === "default") return "";
+		if (typeof isOverridden === "undefined") return "";
+
+		if (!isOverridden) {
+			return '<span class="dashicons dashicons-controls-repeat ats-menu-builder--inherit-indicator is-inherited" title="Inherited from Default"></span>';
+		}
+
+		var escAttr = function (value) {
+			return String(value || "").replace(/"/g, "&quot;");
+		};
+
+		return (
+			'<span class="dashicons dashicons-star-filled ats-menu-builder--inherit-indicator is-overridden ats-menu-builder--revert-to-default" ' +
+			'title="Customized for this tab - click to revert to Default" ' +
+			'data-item-type="' +
+			escAttr(itemType) +
+			'" data-item-key="' +
+			escAttr(itemKey) +
+			'" data-submenu-key="' +
+			escAttr(submenuKey) +
+			'"></span>'
+		);
 	}
 
 	/**
@@ -708,6 +781,16 @@
 			template = template.replace(/{menu_was_added}/g, menu.was_added);
 			template = template.replace(/{default_menu_id}/g, menu.id_default);
 			template = template.replace(/{default_menu_url}/g, menu.url_default);
+			template = template.replace(
+				/{override_indicator}/g,
+				getOverrideIndicatorHtml(
+					by,
+					value,
+					menu.is_overridden,
+					"separator",
+					menu.url_default
+				)
+			);
 		} else {
 			template = atsAdminMenu.templates.menuList;
 			template = template.replace(/{menu_title}/g, menu.title);
@@ -767,8 +850,18 @@
 				menuVisibilityMeta.hiddenSelected
 			);
 			template = template.replace(
-				/{menu_visibility_showable_selected}/g,
-				menuVisibilityMeta.showableSelected
+				/{menu_visibility_collapsed_selected}/g,
+				menuVisibilityMeta.collapsedSelected
+			);
+			template = template.replace(
+				/{override_indicator}/g,
+				getOverrideIndicatorHtml(
+					by,
+					value,
+					menu.is_overridden,
+					"menu",
+					menu.id_default
+				)
 			);
 			template = template.replace(/{menu_was_added}/g, menu.was_added);
 
@@ -897,10 +990,21 @@
 			submenuVisibilityMeta.hiddenSelected
 		);
 		template = template.replace(
-			/{submenu_visibility_showable_selected}/g,
-			submenuVisibilityMeta.showableSelected
+			/{submenu_visibility_collapsed_selected}/g,
+			submenuVisibilityMeta.collapsedSelected
 		);
 		template = template.replace(/{submenu_was_added}/g, submenu.was_added);
+		template = template.replace(
+			/{override_indicator}/g,
+			getOverrideIndicatorHtml(
+				by,
+				value,
+				submenu.is_overridden,
+				menu ? menu.type : "menu",
+				menu ? (menu.type === "separator" ? menu.url_default : menu.id_default) : "",
+				submenu.url_default
+			)
+		);
 
 		return template;
 	}
@@ -1055,7 +1159,7 @@
 					"dashicons-hidden",
 					"is-visible",
 					"is-hidden",
-					"is-hidden-showable"
+					"is-hidden-collapsed"
 				);
 				indicator.classList.add("dashicons-" + meta.icon, meta.indicatorClass);
 				indicator.setAttribute("title", meta.label);
@@ -1305,6 +1409,60 @@
 			})
 			.always(function () {
 				loading.stop(button);
+				state.isSaving = false;
+			});
+	}
+
+	/**
+	 * Revert a single overridden item (or one of its submenu items) back to
+	 * its inherited (Default, or Default+Role for a user) value, leaving the
+	 * rest of that role/user's overrides untouched. Bound to a click on the
+	 * "customized" star indicator - see getOverrideIndicatorHtml().
+	 *
+	 * @param {Event} e The click event.
+	 */
+	function revertItemToDefault(e) {
+		e.stopPropagation();
+
+		if (state.isSaving) return;
+
+		var target = this;
+		var workspace = $(target).closest(".ats-menu-builder--workspace")[0];
+		if (!workspace) return;
+
+		var role = workspace.dataset.userId
+			? "user_id_" + workspace.dataset.userId
+			: workspace.dataset.role;
+
+		var itemType = target.dataset.itemType;
+		var itemKey = target.dataset.itemKey;
+		var submenuKey = target.dataset.submenuKey;
+
+		var msg = submenuKey
+			? "Revert this submenu item to the Default menu's value?"
+			: "Revert this item to the Default menu's value?";
+
+		if (!confirm(msg)) return;
+
+		state.isSaving = true;
+
+		$.ajax({
+			url: ajaxurl,
+			type: "post",
+			dataType: "json",
+			data: {
+				action: "ats_admin_menu_reset_menu",
+				nonce: atsAdminMenu.nonces.resetMenu,
+				role: role,
+				item_type: itemType,
+				item_key: itemKey,
+				submenu_key: submenuKey || "",
+			},
+		})
+			.done(function (r) {
+				location.reload();
+			})
+			.always(function () {
 				state.isSaving = false;
 			});
 	}

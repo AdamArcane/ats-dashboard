@@ -37,10 +37,10 @@
 	var adminMenu = document.getElementById("adminmenu");
 	if (!adminMenu) return;
 
-	var hiddenShowableItems = adminMenu.querySelectorAll(
-		"li.ats-menu-hidden-showable"
+	var hiddenCollapsedItems = adminMenu.querySelectorAll(
+		"li.ats-menu-hidden-collapsed"
 	);
-	if (!hiddenShowableItems.length) return;
+	if (!hiddenCollapsedItems.length) return;
 
 	// Build the toggle as a standalone control (not a real menu item), styled and
 	// positioned like core's own "Collapse menu" button: small, muted, with a caret.

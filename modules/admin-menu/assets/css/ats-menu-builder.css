@@ -324,11 +324,11 @@
 	color: #c00;
 }
 
-.ats-menu-builder--visibility-indicator.is-hidden-showable {
+.ats-menu-builder--visibility-indicator.is-hidden-collapsed {
 	color: #b26200;
 }
 
-.ats-menu-builder--visibility-indicator.is-hidden-showable::after {
+.ats-menu-builder--visibility-indicator.is-hidden-collapsed::after {
 	content: "";
 	position: absolute;
 	bottom: 4px;
@@ -343,6 +343,27 @@
 .ats-menu-builder--menu-item[data-hidden="2"] {
 	color: #ad6b00;
 	background: #fdf6ec;
+}
+
+.ats-menu-builder--menu-actions .ats-menu-builder--inherit-indicator {
+	position: relative;
+	opacity: 1;
+	visibility: visible;
+	cursor: default;
+	font-size: 15px;
+}
+
+.ats-menu-builder--inherit-indicator.is-inherited {
+	color: #b5bcc2;
+}
+
+.ats-menu-builder--inherit-indicator.is-overridden {
+	color: #2271b1;
+	cursor: pointer;
+}
+
+.ats-menu-builder--inherit-indicator.is-overridden:hover {
+	color: #135e96;
 }
 
 .ats-menu-builder--menu-item.is-expanded
