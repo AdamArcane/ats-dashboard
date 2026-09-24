@@ -25,10 +25,8 @@
 	var elms = {};
 	var loading = {};
 	var state = {};
-	var usersSelect2 = null;
 	var usersData = [];
-	var savedUsers = [];
-	var loadedRoleMenu = [];
+	var pendingShowForUsersFields = [];
 
 	/**
 	 * Init the script.
@@ -39,56 +37,22 @@
 		elms.saveButton = elms.form.querySelector(
 			".ats-menu-builder--submit-button"
 		);
-		elms.resetRoleButton = elms.form.querySelector(
-			".ats-menu-builder--reset-role"
-		);
-		elms.resetButtons = elms.form.querySelectorAll(
+		elms.resetButton = elms.form.querySelector(
 			".ats-menu-builder--reset-button"
 		);
 
-		elms.searchBox = document.querySelector(
-			".ats-menu-builder-box--search-box"
-		);
-		elms.roleTabs = document.querySelector(".ats-menu-builder--role-tabs");
-		elms.userTabs = document.querySelector(".ats-menu-builder--user-tabs");
-		elms.userTabsMenu = elms.userTabs.querySelector(
-			".ats-menu-builder--user-menu"
-		);
-		elms.userTabsContent = elms.userTabs.querySelector(
-			".ats-menu-builder--edit-area"
-		);
-
-		state.usersLoaded = false;
 		state.isSaving = false;
 
-		setupResetRoleButton();
-
-		// Load the Default (Everyone) menu as it's shown in initial load.
-		getMenu("role", "default");
-
-		var savedUserTabsContentItems = elms.userTabsContent.querySelectorAll(
-			".ats-menu-builder--tab-content-item"
-		);
-
-		savedUserTabsContentItems.forEach(function (item) {
-			savedUsers.push(parseInt(item.dataset.userId, 10));
-			getMenu("user_id", item.dataset.userId);
-		});
+		// There's a single (Default) menu list now - load it once.
+		getMenu();
 
 		elms.form.addEventListener("submit", submitForm);
 
-		elms.resetButtons.forEach(function (resetButton) {
-			resetButton.addEventListener("click", resetMenu);
-		});
+		if (elms.resetButton) {
+			elms.resetButton.addEventListener("click", resetMenu);
+		}
 
 		$(document).on("click", ".ats-menu-builder--tab-menu-item", switchTab);
-		$(document).on("click", ".ats-menu-builder--remove-tab", removeTab);
-		$(document).on(
-			"click",
-			".ats-menu-builder-box--header-tab a",
-			switchHeaderTab
-		);
-		checkHeaderTabState();
 
 		$(document).on(
 			"click",
@@ -125,351 +89,14 @@
 			removeMenuItem
 		);
 
-		$(document).on(
-			"click",
-			".ats-menu-builder--revert-to-default",
-			revertItemToDefault
-		);
-
-		setupUsersSelect2();
-	}
-
-	function setupUsersSelect2() {
-		if (state.usersLoaded) return;
 		loadUsers();
-	}
-
-	function switchHeaderTab(e) {
-		var tabs = document.querySelectorAll(".ats-menu-builder-box--header-tab");
-		if (!tabs.length) return;
-
-		var tabMenuItem = e.target.parentNode;
-
-		tabs.forEach(function (tab) {
-			if (tab !== tabMenuItem) {
-				tab.classList.remove("is-active");
-			}
-		});
-
-		tabMenuItem.classList.add("is-active");
-
-		if (tabMenuItem.dataset.headerTab === "users") {
-			elms.searchBox.classList.remove("is-hidden");
-			elms.userTabs.classList.remove("is-hidden");
-			elms.roleTabs.classList.add("is-hidden");
-
-			hideResetButtons();
-		} else {
-			elms.searchBox.classList.add("is-hidden");
-			elms.userTabs.classList.add("is-hidden");
-			elms.roleTabs.classList.remove("is-hidden");
-
-			showResetButtons();
-		}
-	}
-
-	function checkHeaderTabState() {
-		var hash = window.location.hash.substr(1);
-		if (!hash) return;
-
-		$(".ats-menu-builder-box--header-tab").removeClass("is-active");
-
-		if (hash === "users-menu") {
-			$('.ats-menu-builder-box--header-tab[data-header-tab="users"]').addClass(
-				"is-active"
-			);
-			elms.searchBox.classList.remove("is-hidden");
-			elms.userTabs.classList.remove("is-hidden");
-			elms.roleTabs.classList.add("is-hidden");
-
-			elms.resetButtons.forEach(function (button) {
-				button.classList.add("is-hidden");
-			});
-		} else {
-			$('.ats-menu-builder-box--header-tab[data-header-tab="roles"]').addClass(
-				"is-active"
-			);
-			elms.searchBox.classList.add("is-hidden");
-			elms.userTabs.classList.add("is-hidden");
-			elms.roleTabs.classList.remove("is-hidden");
-		}
-	}
-
-	/**
-	 * Hide reset buttons.
-	 */
-	function hideResetButtons() {
-		elms.resetButtons.forEach(function (button) {
-			button.classList.add("is-hidden");
-		});
-	}
-
-	/**
-	 * Show reset buttons.
-	 */
-	function showResetButtons() {
-		elms.resetButtons.forEach(function (button) {
-			button.classList.remove("is-hidden");
-		});
-	}
-
-	/**
-	 * Add new menu item.
-	 * @param {Event} e The event object.
-	 */
-	function addNewMenu(e) {
-		var workspace = this.parentNode.parentNode;
-		var by = workspace.dataUserId ? "user_id" : "role";
-		var value =
-			by === "user_id" ? workspace.dataset.userId : workspace.dataset.role;
-		var randomId = Math.random().toString(36).substr(2, 10);
-		var menu = {
-			class: "menu-top menu-icon-custom ats-menu-top ats-menu-icon-custom",
-			class_default:
-				"menu-top menu-icon-custom ats-menu-top ats-menu-icon-custom",
-			dashicon: "dashicons-admin-generic",
-			dashicon_default: "dashicons-admin-generic",
-			icon_svg: "",
-			icon_svg_default: "",
-			icon_type: "dashicon",
-			icon_type_default: "dashicon",
-			id: "menu-custom-" + randomId,
-			id_default: "menu-custom-" + randomId,
-			is_hidden: "0",
-			open_new_tab: "",
-			submenu: [],
-			title: "Custom Menu",
-			title_default: "Custom Menu",
-			type: "menu",
-			url: "",
-			url_default: "/wp-admin/",
-			was_added: "1",
-		};
-		var template = replaceMenuPlaceholders(by, value, menu);
-
-		$(workspace.querySelector(".ats-menu-builder--menu-list")).append(
-			$(template)
-		);
-
-		var menuItem = workspace.querySelector(
-			'[data-default-id="menu-custom-' + randomId + '"]'
-		);
-
-		setupNewMenuItem(menuItem);
-
-		var submenuList = menuItem.querySelectorAll(
-			".ats-menu-builder--submenu-list"
-		);
-
-		if (submenuList.length) {
-			submenuList.forEach(function (submenu) {
-				setupMenuItems(submenu, true);
-			});
-		}
-	}
-
-	/**
-	 * Add new separator item.
-	 * @param {Event} e The event object.
-	 */
-	function addNewSeparator(e) {
-		var workspace = this.parentNode.parentNode;
-		var by = workspace.dataUserId ? "user_id" : "role";
-		var value =
-			by === "user_id" ? workspace.dataset.userId : workspace.dataset.role;
-		var randomId = Math.random().toString(36).substr(2, 5);
-		var menu = {
-			class: "wp-menu-separator ats-menu-separator",
-			class_default: "wp-menu-separator ats-menu-separator",
-			dashicon: "",
-			dashicon_default: "",
-			icon_svg: "",
-			icon_svg_default: "",
-			icon_type: "",
-			icon_type_default: "dashicon",
-			id: "separator-custom-" + randomId,
-			id_default: "separator-custom-" + randomId,
-			is_hidden: "0",
-			submenu: [],
-			title: "",
-			title_default: "",
-			type: "separator",
-			url: "",
-			url_default: "custom-separator-" + randomId,
-			was_added: "1",
-		};
-		var template = replaceMenuPlaceholders(by, value, menu);
-
-		$(workspace.querySelector(".ats-menu-builder--menu-list")).append(
-			$(template)
-		);
-
-		var menuItem = workspace.querySelector(
-			'[data-default-id="separator-custom-' + randomId + '"]'
-		);
-
-		setupNewMenuItem(menuItem);
-	}
-
-	/**
-	 * Add new submenu item.
-	 * @param {Event} e The event object.
-	 */
-	function addNewSubmenu(e) {
-		var workspace =
-			this.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
-				.parentNode;
-		var by = workspace.dataUserId ? "user_id" : "role";
-		var value =
-			by === "user_id" ? workspace.dataset.userId : workspace.dataset.role;
-		var randomId = Math.random().toString(36).substr(2, 10);
-		var submenu = {
-			id: "submenu-custom-" + randomId,
-			is_hidden: "0",
-			open_new_tab: "",
-			title: "Custom Submenu",
-			title_default: "Custom Submenu",
-			url: "",
-			url_default: "/wp-admin/",
-			was_added: "1",
-		};
-		var template = replaceSubmenuPlaceholders(by, value, submenu);
-
-		$(this.parentNode.querySelector(".ats-menu-builder--submenu-list")).append(
-			$(template)
-		);
-
-		var submenuItem = this.parentNode.querySelector(
-			'[data-submenu-id="submenu-custom-' + randomId + '"]'
-		);
-
-		setupNewMenuItem(submenuItem, true);
-	}
-
-	/**
-	 * Remove menu item.
-	 * @param {Event} e The event object.
-	 */
-	function removeMenuItem(e) {
-		var menuItem = this.parentNode.parentNode.parentNode;
-		if (!parseInt(menuItem.dataset.added, 10)) return;
-		var menuList = menuItem.parentNode;
-
-		menuList.removeChild(menuItem);
-	}
-
-	/**
-	 * Load users select2 data via ajax.
-	 */
-	function loadUsers() {
-		$.ajax({
-			type: "get",
-			url: ajaxurl,
-			cache: false,
-			data: {
-				action: "ats_admin_menu_get_users",
-				nonce: atsAdminMenu.nonces.getUsers,
-			},
-		})
-			.done(function (r) {
-				if (!r.success) return;
-
-				var field = document.querySelector(".ats-menu-builder--search-user");
-				if (!field) return;
-
-				field.options[0].innerHTML = field.dataset.placeholder;
-				field.disabled = false;
-				usersData = r.data;
-
-				usersData.forEach(function (data, index) {
-					if (savedUsers.indexOf(data.id) >= 0) {
-						usersData[index].disabled = true;
-					}
-				});
-
-				usersSelect2 = $(field).select2({
-					placeholder: field.dataset.placeholder,
-					data: usersData,
-				});
-
-				$(field).on("select2:select", onUserSelected);
-
-				state.usersLoaded = true;
-			})
-			.fail(function () {
-				console.log("Failed to load users");
-			})
-			.always(function () {
-				//
-			});
-	}
-
-	/**
-	 * Event handler to run when a user (inside select2) is selected.
-	 * @param {Event} e The event object.
-	 */
-	function onUserSelected(e) {
-		appendUserTabsMenu(e.params.data);
-		appendUserTabsContent(e.params.data);
-
-		usersData.forEach(function (data, index) {
-			if (data.id == e.params.data.id) {
-				usersData[index].disabled = true;
-			}
-		});
-
-		usersSelect2.select2("destroy");
-		usersSelect2.empty();
-
-		usersSelect2.select2({
-			placeholder: usersSelect2.data("placeholder"),
-			data: usersData,
-		});
-
-		getMenu("user_id", e.params.data.id);
-	}
-
-	/**
-	 * Build user tab menu item template string and append it to user tab menu.
-	 * @param {object} data The id and text pair (select2 data format).
-	 */
-	function appendUserTabsMenu(data) {
-		var template = atsAdminMenu.templates.userTabMenu;
-
-		template = template.replace(/{user_id}/g, data.id);
-		template = template.replace(/{display_name}/g, data.text);
-
-		elms.userTabsMenu
-			.querySelectorAll(".ats-menu-builder--tab-menu-item")
-			.forEach(function (el) {
-				el.classList.remove("is-active");
-			});
-
-		$(elms.userTabsMenu).append(template);
-	}
-
-	/**
-	 * Build user tab menu item template string and append it to user tab menu.
-	 * @param {object} data The id and text pair (select2 data format).
-	 */
-	function appendUserTabsContent(data) {
-		var template = atsAdminMenu.templates.userTabContent;
-
-		template = template.replace(/{user_id}/g, data.id);
-
-		document
-			.querySelectorAll(
-				".ats-menu-builder--user-tabs > .ats-menu-builder--tab-content > .ats-menu-builder--tab-content-item"
-			)
-			.forEach(function (el) {
-				el.classList.remove("is-active");
-			});
-
-		$(elms.userTabsContent).append(template);
 	}
 
 	/**
 	 * Switch tabs.
+	 *
+	 * Generic - used for the per-item "Settings / Submenu" tabs and the
+	 * "Dashicons / SVG Code" icon-switcher tabs.
 	 */
 	function switchTab(e) {
 		if (e.target.classList.contains("delete-icon")) return;
@@ -513,144 +140,246 @@
 				content.classList.add("is-active");
 			}
 		});
+	}
 
-		if (this.parentNode.classList.contains("ats-menu-builder--role-menu")) {
-			if (loadedRoleMenu.indexOf(this.dataset.role) === -1) {
-				getMenu("role", this.dataset.role);
-			}
+	/**
+	 * Add new menu item.
+	 * @param {Event} e The event object.
+	 */
+	function addNewMenu(e) {
+		var workspace = this.parentNode.parentNode;
+		var randomId = Math.random().toString(36).substr(2, 10);
+		var menu = {
+			class: "menu-top menu-icon-custom ats-menu-top ats-menu-icon-custom",
+			class_default:
+				"menu-top menu-icon-custom ats-menu-top ats-menu-icon-custom",
+			dashicon: "dashicons-admin-generic",
+			dashicon_default: "dashicons-admin-generic",
+			icon_svg: "",
+			icon_svg_default: "",
+			icon_type: "dashicon",
+			icon_type_default: "dashicon",
+			id: "menu-custom-" + randomId,
+			id_default: "menu-custom-" + randomId,
+			is_hidden: "0",
+			open_new_tab: "",
+			cap: "",
+			role_hide_enabled: "0",
+			role_hide_mode: "selected",
+			role_hide_roles: [],
+			show_for_users: [],
+			submenu: [],
+			title: "Custom Menu",
+			title_default: "Custom Menu",
+			type: "menu",
+			url: "",
+			url_default: "/wp-admin/",
+			was_added: "1",
+		};
+		var template = replaceMenuPlaceholders(menu);
+
+		$(workspace.querySelector(".ats-menu-builder--menu-list")).append(
+			$(template)
+		);
+
+		var menuItem = workspace.querySelector(
+			'[data-default-id="menu-custom-' + randomId + '"]'
+		);
+
+		setupNewMenuItem(menuItem);
+
+		var submenuList = menuItem.querySelectorAll(
+			".ats-menu-builder--submenu-list"
+		);
+
+		if (submenuList.length) {
+			submenuList.forEach(function (submenu) {
+				setupMenuItems(submenu, true);
+			});
 		}
 	}
 
 	/**
-	 * Remove tab.
+	 * Add new separator item.
 	 * @param {Event} e The event object.
 	 */
-	function removeTab(e) {
-		var tabArea = this.parentNode.parentNode.parentNode;
-		var menuItem = this.parentNode;
-		var menuWrapper = tabArea.querySelector(".ats-menu-builder--tab-menu");
-		var contentWrapper = tabArea.querySelector(
-			".ats-menu-builder--tab-content"
+	function addNewSeparator(e) {
+		var workspace = this.parentNode.parentNode;
+		var randomId = Math.random().toString(36).substr(2, 5);
+		var menu = {
+			class: "wp-menu-separator ats-menu-separator",
+			class_default: "wp-menu-separator ats-menu-separator",
+			dashicon: "",
+			dashicon_default: "",
+			icon_svg: "",
+			icon_svg_default: "",
+			icon_type: "",
+			icon_type_default: "dashicon",
+			id: "separator-custom-" + randomId,
+			id_default: "separator-custom-" + randomId,
+			is_hidden: "0",
+			submenu: [],
+			title: "",
+			title_default: "",
+			type: "separator",
+			url: "",
+			url_default: "custom-separator-" + randomId,
+			was_added: "1",
+		};
+		var template = replaceMenuPlaceholders(menu);
+
+		$(workspace.querySelector(".ats-menu-builder--menu-list")).append(
+			$(template)
 		);
 
-		usersData.forEach(function (data, index) {
-			if (data.id == menuItem.dataset.userId) {
-				usersData[index].disabled = false;
-			}
-		});
+		var menuItem = workspace.querySelector(
+			'[data-default-id="separator-custom-' + randomId + '"]'
+		);
 
-		usersSelect2.select2("destroy");
-		usersSelect2.empty();
+		setupNewMenuItem(menuItem);
+	}
 
-		usersSelect2.select2({
-			placeholder: usersSelect2.data("placeholder"),
+	/**
+	 * Add new submenu item.
+	 * @param {Event} e The event object.
+	 */
+	function addNewSubmenu(e) {
+		var randomId = Math.random().toString(36).substr(2, 10);
+		var submenu = {
+			id: "submenu-custom-" + randomId,
+			is_hidden: "0",
+			open_new_tab: "",
+			cap: "",
+			role_hide_enabled: "0",
+			role_hide_mode: "selected",
+			role_hide_roles: [],
+			show_for_users: [],
+			title: "Custom Submenu",
+			title_default: "Custom Submenu",
+			url: "",
+			url_default: "/wp-admin/",
+			was_added: "1",
+		};
+		var template = replaceSubmenuPlaceholders(submenu);
+
+		$(this.parentNode.querySelector(".ats-menu-builder--submenu-list")).append(
+			$(template)
+		);
+
+		var submenuItem = this.parentNode.querySelector(
+			'[data-submenu-id="submenu-custom-' + randomId + '"]'
+		);
+
+		setupNewMenuItem(submenuItem, true);
+	}
+
+	/**
+	 * Remove menu item.
+	 * @param {Event} e The event object.
+	 */
+	function removeMenuItem(e) {
+		var menuItem = this.parentNode.parentNode.parentNode;
+		if (!parseInt(menuItem.dataset.added, 10)) return;
+		var menuList = menuItem.parentNode;
+
+		menuList.removeChild(menuItem);
+	}
+
+	/**
+	 * Load users (used to populate the per-item "Always show for the following
+	 * users" multiselects).
+	 */
+	function loadUsers() {
+		$.ajax({
+			type: "get",
+			url: ajaxurl,
+			cache: false,
+			data: {
+				action: "ats_admin_menu_get_users",
+				nonce: atsAdminMenu.nonces.getUsers,
+			},
+		})
+			.done(function (r) {
+				if (!r.success) return;
+
+				usersData = r.data.filter(function (user) {
+					return user.id !== "";
+				});
+
+				state.usersLoaded = true;
+
+				pendingShowForUsersFields.forEach(initShowForUsersSelect);
+				pendingShowForUsersFields = [];
+			})
+			.fail(function () {
+				console.log("Failed to load users");
+			});
+	}
+
+	/**
+	 * Init (or queue for later init) the select2 multiselect for one item's
+	 * "Always show for the following users" field.
+	 *
+	 * @param {HTMLElement} field The <select multiple> field.
+	 */
+	function initShowForUsersSelect(field) {
+		if (!field || $(field).hasClass("select2-hidden-accessible")) return;
+
+		if (!state.usersLoaded) {
+			pendingShowForUsersFields.push(field);
+			return;
+		}
+
+		var selectedIds = (field.dataset.selectedUsers || "")
+			.split(",")
+			.filter(function (id) {
+				return id !== "";
+			});
+
+		$(field).select2({
+			placeholder: "Select users",
 			data: usersData,
 		});
 
-		menuWrapper.removeChild(this.parentNode);
-		contentWrapper.removeChild(
-			tabArea.querySelector("#" + this.parentNode.dataset.atsTabContent)
-		);
-
-		if (
-			contentWrapper.querySelectorAll(".ats-menu-builder--tab-content-item")
-				.length === 1
-		) {
-			document
-				.querySelector("#ats-menu-builder--user-empty-edit-area")
-				.classList.add("is-active");
+		if (selectedIds.length) {
+			$(field).val(selectedIds).trigger("change");
 		}
 	}
 
 	/**
-	 * Setup reset role button.
-	 * The button text & target should be changed when the role tab is switched.
+	 * Get the (single, Default) menu & submenu list.
 	 */
-	function setupResetRoleButton() {
-		var tabs = document.querySelectorAll(
-			".ats-menu-builder--role-menu > .ats-menu-builder--tab-menu-item"
-		);
-		if (!tabs) return;
-
-		tabs.forEach(function (tab) {
-			tab.addEventListener("click", function () {
-				elms.resetRoleButton.innerHTML =
-					"Reset " + this.querySelector("button").innerHTML + " Menu";
-				elms.resetRoleButton.dataset.role = this.dataset.role;
-			});
-		});
-
-		// User tabs are added dynamically, so this is delegated rather than
-		// bound once at load. Clicking a user tab both retargets the button
-		// and reveals it (it's hidden by default while on the Users header tab,
-		// since there's nothing selected to reset yet).
-		$(document).on(
-			"click",
-			".ats-menu-builder--user-menu > .ats-menu-builder--tab-menu-item",
-			function (e) {
-				if (e.target.classList.contains("delete-icon")) return;
-
-				var button = this.querySelector("button");
-				var name = button ? button.innerHTML : "This User's";
-
-				elms.resetRoleButton.innerHTML = "Reset " + name + " Menu";
-				elms.resetRoleButton.dataset.role = "user_id_" + this.dataset.userId;
-				elms.resetRoleButton.classList.remove("is-hidden");
-			}
-		);
-	}
-
-	/**
-	 * Get menu & submenu either by role or user id.
-	 *
-	 * @param {string} by The identifier, could be "role" or "user_id".
-	 * @param {string} value The specified role or user id.
-	 */
-	function getMenu(by, value) {
-		var data = {};
-
-		data.action = "ats_admin_menu_get_menu";
-		data.nonce = atsAdminMenu.nonces.getMenu;
-		data[by] = value;
-
+	function getMenu() {
 		$.ajax({
 			url: ajaxurl,
 			type: "post",
 			dataType: "json",
-			data: data,
-		})
-			.done(function (r) {
-				if (!r || !r.success) return;
+			data: {
+				action: "ats_admin_menu_get_menu",
+				nonce: atsAdminMenu.nonces.getMenu,
+			},
+		}).done(function (r) {
+			if (!r || !r.success) return;
 
-				if (by === "role" && loadedRoleMenu.indexOf(value) === -1) {
-					loadedRoleMenu.push(value);
-				}
-
-				buildMenu(by, value, r.data);
-			})
-			.always(function () {
-				//
-			});
+			buildMenu(r.data);
+		});
 	}
 
 	/**
 	 * Build menu list.
 	 *
-	 * @param {string} by The identifier, could be "role" or "user_id".
-	 * @param {string} value The specified role or user id.
 	 * @param {array} menuList The menu list returned from ajax response.
 	 */
-	function buildMenu(by, value, menuList) {
-		var identifier = by === "role" ? value : "user-" + value;
+	function buildMenu(menuList) {
 		var editArea = document.querySelector(
-			"#ats-menu-builder--" + identifier + "-edit-area"
+			"#ats-menu-builder--default-edit-area"
 		);
 		if (!editArea) return;
 		var listArea = editArea.querySelector(".ats-menu-builder--menu-list");
 		var builtMenu = "";
 
 		menuList.forEach(function (menu) {
-			builtMenu += replaceMenuPlaceholders(by, value, menu);
+			builtMenu += replaceMenuPlaceholders(menu);
 		});
 
 		listArea.innerHTML = builtMenu;
@@ -694,7 +423,7 @@
 		} else if (value === "2") {
 			meta.icon = "hidden";
 			meta.indicatorClass = "is-hidden-collapsed";
-			meta.label = "Hidden, but collapsed";
+			meta.label = "Hidden, but optional";
 			meta.collapsedSelected = "selected";
 		} else {
 			meta.normalSelected = "selected";
@@ -704,61 +433,69 @@
 	}
 
 	/**
-	 * Build the "inherited from Default" / "customized here" indicator markup.
+	 * Build the role-hide field's meta (checked/hidden attrs, the role checkbox
+	 * grid, the capability note, and the show-for-users ids) for one item.
 	 *
-	 * Only meaningful for role/user tabs - the Default tab has nothing to
-	 * inherit from, so no indicator is shown there (backend also omits the
-	 * `is_overridden` flag in that case). When overridden, the indicator
-	 * doubles as a "revert to Default" button (see revertItemToDefault()).
-	 *
-	 * @param {string} by Either "role" or "user_id".
-	 * @param {string} value The role or user_id value.
-	 * @param {boolean|undefined} isOverridden Whether the item is overridden at this layer.
-	 * @param {string} itemType The top level item's type ("menu" or "separator").
-	 * @param {string} itemKey The top level item's identity (id_default for "menu", url_default for "separator").
-	 * @param {string} [submenuKey] A submenu item's identity (its url_default), when this indicator is for a submenu item.
-	 * @return {string} The indicator markup, or an empty string.
+	 * @param {object} item The menu or submenu item.
+	 * @return {object} The role-hide meta.
 	 */
-	function getOverrideIndicatorHtml(
-		by,
-		value,
-		isOverridden,
-		itemType,
-		itemKey,
-		submenuKey
-	) {
-		if (by === "role" && value === "default") return "";
-		if (typeof isOverridden === "undefined") return "";
+	function getRoleHideMeta(item) {
+		var enabled = String(item.role_hide_enabled || "0") === "1";
+		var mode = item.role_hide_mode || "selected";
+		var hideRoles = Array.isArray(item.role_hide_roles)
+			? item.role_hide_roles
+			: [];
+		var roles = (window.atsAdminMenu && atsAdminMenu.roles) || [];
 
-		if (!isOverridden) {
-			return '<span class="dashicons dashicons-controls-repeat ats-menu-builder--inherit-indicator is-inherited" title="Inherited from Default"></span>';
+		var rolesCheckboxesHtml = roles
+			.map(function (role) {
+				var checked = hideRoles.indexOf(role.key) !== -1 ? "checked" : "";
+				return (
+					'<label class="ats-menu-builder--role-checkbox">' +
+					'<input type="checkbox" data-name="role_hide_roles" data-role-slug="' +
+					role.key +
+					'" ' +
+					checked +
+					"> " +
+					role.name +
+					"</label>"
+				);
+			})
+			.join("");
+
+		var cap = item.cap || "";
+		var capNoteText = "";
+
+		if (cap && cap !== "read") {
+			capNoteText =
+				'This menu item already requires the "' +
+				cap +
+				'" capability - roles without it can\'t reach it regardless of this setting.';
 		}
 
-		var escAttr = function (value) {
-			return String(value || "").replace(/"/g, "&quot;");
-		};
+		var showForUsers = Array.isArray(item.show_for_users)
+			? item.show_for_users
+			: [];
 
-		return (
-			'<span class="dashicons dashicons-star-filled ats-menu-builder--inherit-indicator is-overridden ats-menu-builder--revert-to-default" ' +
-			'title="Customized for this tab - click to revert to Default" ' +
-			'data-item-type="' +
-			escAttr(itemType) +
-			'" data-item-key="' +
-			escAttr(itemKey) +
-			'" data-submenu-key="' +
-			escAttr(submenuKey) +
-			'"></span>'
-		);
+		return {
+			enabledChecked: enabled ? "checked" : "",
+			optionsHiddenClass: enabled ? "" : "is-hidden",
+			modeExceptChecked: "except" === mode ? "checked" : "",
+			modeSelectedChecked: "selected" === mode ? "checked" : "",
+			rolesHiddenClass: "all" === mode ? "is-hidden" : "",
+			rolesCheckboxesHtml: rolesCheckboxesHtml,
+			capNoteHiddenClass: capNoteText ? "" : "is-hidden",
+			capNoteText: capNoteText,
+			showForUsersIds: showForUsers.join(","),
+		};
 	}
 
 	/**
 	 * Replace menu placeholders.
 	 *
-	 * @param {string} by Either by role or user_id.
-	 * @param {string} value The role or user_id value.
 	 * @param {object} menu The menu item.
 	 */
-	function replaceMenuPlaceholders(by, value, menu) {
+	function replaceMenuPlaceholders(menu) {
 		var template;
 		var submenuTemplate;
 		var icon;
@@ -781,16 +518,6 @@
 			template = template.replace(/{menu_was_added}/g, menu.was_added);
 			template = template.replace(/{default_menu_id}/g, menu.id_default);
 			template = template.replace(/{default_menu_url}/g, menu.url_default);
-			template = template.replace(
-				/{override_indicator}/g,
-				getOverrideIndicatorHtml(
-					by,
-					value,
-					menu.is_overridden,
-					"separator",
-					menu.url_default
-				)
-			);
 		} else {
 			template = atsAdminMenu.templates.menuList;
 			template = template.replace(/{menu_title}/g, menu.title);
@@ -853,17 +580,46 @@
 				/{menu_visibility_collapsed_selected}/g,
 				menuVisibilityMeta.collapsedSelected
 			);
-			template = template.replace(
-				/{override_indicator}/g,
-				getOverrideIndicatorHtml(
-					by,
-					value,
-					menu.is_overridden,
-					"menu",
-					menu.id_default
-				)
-			);
 			template = template.replace(/{menu_was_added}/g, menu.was_added);
+
+			var menuRoleHideMeta = getRoleHideMeta(menu);
+
+			template = template.replace(
+				/{menu_role_hide_enabled_checked}/g,
+				menuRoleHideMeta.enabledChecked
+			);
+			template = template.replace(
+				/{menu_role_hide_options_hidden_class}/g,
+				menuRoleHideMeta.optionsHiddenClass
+			);
+			template = template.replace(
+				/{menu_role_hide_mode_except_checked}/g,
+				menuRoleHideMeta.modeExceptChecked
+			);
+			template = template.replace(
+				/{menu_role_hide_mode_selected_checked}/g,
+				menuRoleHideMeta.modeSelectedChecked
+			);
+			template = template.replace(
+				/{menu_role_hide_roles_hidden_class}/g,
+				menuRoleHideMeta.rolesHiddenClass
+			);
+			template = template.replace(
+				/{menu_role_hide_roles_checkboxes}/g,
+				menuRoleHideMeta.rolesCheckboxesHtml
+			);
+			template = template.replace(
+				/{menu_role_hide_cap_note_hidden_class}/g,
+				menuRoleHideMeta.capNoteHiddenClass
+			);
+			template = template.replace(
+				/{menu_role_hide_cap_note}/g,
+				menuRoleHideMeta.capNoteText
+			);
+			template = template.replace(
+				/{menu_show_for_users_ids}/g,
+				menuRoleHideMeta.showForUsersIds
+			);
 
 			var menuIconSuffix =
 				menu.icon_type && menu[menu.icon_type] ? "" : "_default";
@@ -882,19 +638,14 @@
 			template = template.replace(/{menu_icon}/g, icon);
 
 			if (menu.submenu) {
-				submenuTemplate = buildSubmenu(by, value, menu);
+				submenuTemplate = buildSubmenu(menu);
 				template = template.replace(/{submenu_template}/g, submenuTemplate);
 			} else {
 				template = template.replace(/{submenu_template}/g, "");
 			}
 		}
 
-		if (by === "role") {
-			template = template.replace(/{role}/g, value);
-		} else if (by === "user_id") {
-			template = template.replace(/{role}/g, "user-" + value);
-			template = template.replace(/{user_id}/g, value);
-		}
+		template = template.replace(/{role}/g, "default");
 
 		return template;
 	}
@@ -902,17 +653,15 @@
 	/**
 	 * Build submenu list.
 	 *
-	 * @param {string} by The identifier, could be "role" or "user_id".
-	 * @param {string} value The specified role or user id.
 	 * @param {array} menu The menu item which contains the submenu list.
 	 *
 	 * @return {string} template The submenu template.
 	 */
-	function buildSubmenu(by, value, menu) {
+	function buildSubmenu(menu) {
 		var template = "";
 
 		menu.submenu.forEach(function (submenu) {
-			template += replaceSubmenuPlaceholders(by, value, submenu, menu);
+			template += replaceSubmenuPlaceholders(submenu, menu);
 		});
 
 		return template;
@@ -921,20 +670,13 @@
 	/**
 	 * Replace submenu placeholders.
 	 *
-	 * @param {string} by Either by role or user_id.
-	 * @param {string} value The role or user_id value.
 	 * @param {object} submenu The submenu item.
 	 * @param {array} menu The menu item which contains the submenu list.
 	 */
-	function replaceSubmenuPlaceholders(by, value, submenu, menu) {
+	function replaceSubmenuPlaceholders(submenu, menu) {
 		var template = atsAdminMenu.templates.submenuList;
 
-		if (by === "role") {
-			template = template.replace(/{role}/g, value);
-		} else if (by === "user_id") {
-			template = template.replace(/{role}/g, "user-" + value);
-			template = template.replace(/{user_id}/g, value);
-		}
+		template = template.replace(/{role}/g, "default");
 
 		template = template.replace(
 			/{default_menu_id}/g,
@@ -994,16 +736,44 @@
 			submenuVisibilityMeta.collapsedSelected
 		);
 		template = template.replace(/{submenu_was_added}/g, submenu.was_added);
+
+		var submenuRoleHideMeta = getRoleHideMeta(submenu);
+
 		template = template.replace(
-			/{override_indicator}/g,
-			getOverrideIndicatorHtml(
-				by,
-				value,
-				submenu.is_overridden,
-				menu ? menu.type : "menu",
-				menu ? (menu.type === "separator" ? menu.url_default : menu.id_default) : "",
-				submenu.url_default
-			)
+			/{submenu_role_hide_enabled_checked}/g,
+			submenuRoleHideMeta.enabledChecked
+		);
+		template = template.replace(
+			/{submenu_role_hide_options_hidden_class}/g,
+			submenuRoleHideMeta.optionsHiddenClass
+		);
+		template = template.replace(
+			/{submenu_role_hide_mode_except_checked}/g,
+			submenuRoleHideMeta.modeExceptChecked
+		);
+		template = template.replace(
+			/{submenu_role_hide_mode_selected_checked}/g,
+			submenuRoleHideMeta.modeSelectedChecked
+		);
+		template = template.replace(
+			/{submenu_role_hide_roles_hidden_class}/g,
+			submenuRoleHideMeta.rolesHiddenClass
+		);
+		template = template.replace(
+			/{submenu_role_hide_roles_checkboxes}/g,
+			submenuRoleHideMeta.rolesCheckboxesHtml
+		);
+		template = template.replace(
+			/{submenu_role_hide_cap_note_hidden_class}/g,
+			submenuRoleHideMeta.capNoteHiddenClass
+		);
+		template = template.replace(
+			/{submenu_role_hide_cap_note}/g,
+			submenuRoleHideMeta.capNoteText
+		);
+		template = template.replace(
+			/{submenu_show_for_users_ids}/g,
+			submenuRoleHideMeta.showForUsersIds
 		);
 
 		return template;
@@ -1077,7 +847,8 @@
 	}
 
 	/**
-	 * show / hide menu item.
+	 * show / hide menu item (separators only - regular menu/submenu items use
+	 * the Visibility dropdown instead, see setupItemChange()).
 	 *
 	 * @param {Event} listArea The event object.
 	 */
@@ -1180,6 +951,52 @@
 					value;
 			});
 		});
+
+		// "Always hide for user role(s)" - checkbox reveals the mode/role controls.
+		var roleHideField = menuItem.querySelector(
+			".ats-menu-builder--role-hide-field"
+		);
+
+		if (roleHideField) {
+			var roleHideToggle = roleHideField.querySelector(
+				'[data-name="role_hide_enabled"]'
+			);
+			var roleHideOptions = roleHideField.querySelector(
+				".ats-menu-builder--role-hide-options"
+			);
+
+			if (roleHideToggle && roleHideOptions) {
+				roleHideToggle.addEventListener("change", function () {
+					roleHideOptions.classList.toggle("is-hidden", !this.checked);
+				});
+			}
+
+			var roleHideModeRadios = roleHideField.querySelectorAll(
+				'[data-name="role_hide_mode"]'
+			);
+			var roleHideRolesContainer = roleHideField.querySelector(
+				".ats-menu-builder--role-hide-roles"
+			);
+
+			roleHideModeRadios.forEach(function (radio) {
+				radio.addEventListener("change", function () {
+					if (!roleHideRolesContainer) return;
+					roleHideRolesContainer.classList.toggle(
+						"is-hidden",
+						this.value === "all"
+					);
+				});
+			});
+		}
+
+		// "Always show for the following users" multiselect.
+		var showForUsersField = menuItem.querySelector(
+			'[data-name="show_for_users"]'
+		);
+
+		if (showForUsersField) {
+			initShowForUsersSelect(showForUsersField);
+		}
 	}
 
 	loading.start = function (button) {
@@ -1191,6 +1008,47 @@
 	};
 
 	/**
+	 * Read one item's (or submenu item's) role-hide fields, scoped to its own
+	 * ".ats-menu-builder--role-hide-field" wrapper so a parent menu item's read
+	 * never picks up a nested submenu item's fields (they're actually siblings
+	 * in a different tab, but this keeps the lookup explicit either way).
+	 *
+	 * @param {HTMLElement} itemEl The menu or submenu item element.
+	 * @return {object} { role_hide_enabled, role_hide_mode, role_hide_roles, show_for_users }
+	 */
+	function readRoleHideData(itemEl) {
+		var roleHideField = itemEl.querySelector(
+			".ats-menu-builder--role-hide-field"
+		);
+
+		var enabledField = roleHideField
+			? roleHideField.querySelector('[data-name="role_hide_enabled"]')
+			: null;
+		var modeField = roleHideField
+			? roleHideField.querySelector('[data-name="role_hide_mode"]:checked')
+			: null;
+		var roleCheckboxes = roleHideField
+			? roleHideField.querySelectorAll('[data-name="role_hide_roles"]:checked')
+			: [];
+
+		var showForUsersField = itemEl.querySelector('[data-name="show_for_users"]');
+
+		return {
+			role_hide_enabled: enabledField && enabledField.checked ? "1" : "0",
+			role_hide_mode: modeField ? modeField.value : "selected",
+			role_hide_roles: Array.prototype.map.call(
+				roleCheckboxes,
+				function (checkbox) {
+					return checkbox.dataset.roleSlug;
+				}
+			),
+			show_for_users: showForUsersField
+				? $(showForUsersField).val() || []
+				: [],
+		};
+	}
+
+	/**
 	 * Function to execute on form submission.
 	 *
 	 * @param {Event} e The on submit event.
@@ -1198,159 +1056,152 @@
 	function submitForm(e) {
 		e.preventDefault();
 
-		var menuArray = {};
-		var workspaces = this.querySelectorAll(".ats-menu-builder--workspace");
+		var workspace = this.querySelector(".ats-menu-builder--workspace");
+		if (!workspace) return;
 
-		// The "ats-menu-builder--workspace" class is not exists in ats free version 3.1.3 and below.
-		if (!workspaces.length) {
-			workspaces = this.querySelectorAll(".ats-menu-builder--role-workspace");
-		}
+		var menuList = [];
 
-		if (!workspaces.length) return;
+		var menuItems = workspace.querySelectorAll(
+			".ats-menu-builder--menu-list > .ats-menu-builder--menu-item"
+		);
+		menuItems = menuItems.length ? menuItems : [];
 
-		workspaces.forEach(function (workspace) {
-			var menuList = [];
+		menuItems.forEach(function (menuItem) {
+			var menuData = {};
 
-			var menuItems = document.querySelectorAll(
-				"#" +
-					workspace.id +
-					" > .ats-menu-builder--menu-list > .ats-menu-builder--menu-item"
-			);
-			menuItems = menuItems.length ? menuItems : [];
+			menuData.type = menuItem.classList.contains(
+				"ats-menu-builder--separator-item"
+			)
+				? "separator"
+				: "menu";
+			menuData.is_hidden = menuItem.dataset.hidden;
+			menuData.was_added = menuItem.dataset.added;
+			menuData.url = "";
 
-			menuItems.forEach(function (menuItem) {
-				var menuData = {};
+			menuData.id = "";
+			menuData.class = "";
+			menuData.url_default = menuItem.dataset.defaultUrl;
 
-				menuData.type = menuItem.classList.contains(
-					"ats-menu-builder--separator-item"
-				)
-					? "separator"
-					: "menu";
-				menuData.is_hidden = menuItem.dataset.hidden;
-				menuData.was_added = menuItem.dataset.added;
-				menuData.url = "";
+			if (menuData.type === "separator") {
+				menuData.title = "";
+				menuData.dashicon = "";
+				menuData.icon_svg = "";
+				menuData.icon_type = "";
 
-				menuData.id = "";
-				menuData.class = "";
-				menuData.url_default = menuItem.dataset.defaultUrl;
-
-				if (menuData.type === "separator") {
-					menuData.title = "";
-					menuData.dashicon = "";
-					menuData.icon_svg = "";
-					menuData.icon_type = "";
-
-					if (parseInt(menuItem.dataset.added, 10)) {
-						menuData.id_default = menuItem.dataset.defaultId;
-						menuData.url = menuItem.dataset.defaultUrl;
-						menuData.class_default = "wp-menu-separator ats-menu-separator";
-					} else {
-						menuData.id_default = "";
-					}
-				} else {
+				if (parseInt(menuItem.dataset.added, 10)) {
 					menuData.id_default = menuItem.dataset.defaultId;
-					menuData.title = menuItem.querySelector(
-						'[data-name="menu_title"]'
+					menuData.url = menuItem.dataset.defaultUrl;
+					menuData.class_default = "wp-menu-separator ats-menu-separator";
+				} else {
+					menuData.id_default = "";
+				}
+			} else {
+				menuData.id_default = menuItem.dataset.defaultId;
+				menuData.title = menuItem.querySelector(
+					'[data-name="menu_title"]'
+				).value;
+
+				// The menu_url didn't exist in v3.1.3 and below.
+				if (menuItem.querySelector('[data-name="menu_url"]')) {
+					menuData.url = menuItem.querySelector(
+						'[data-name="menu_url"]'
 					).value;
+				}
 
-					// The menu_url didn't exist in v3.1.3 and below.
-					if (menuItem.querySelector('[data-name="menu_url"]')) {
-						menuData.url = menuItem.querySelector(
-							'[data-name="menu_url"]'
-						).value;
-					}
+				menuData.dashicon = menuItem.querySelector(
+					'[data-name="dashicon"]'
+				).value;
+				menuData.icon_svg = menuItem.querySelector(
+					'[data-name="icon_svg"]'
+				).value;
+				menuData.icon_type = "";
 
-					menuData.dashicon = menuItem.querySelector(
-						'[data-name="dashicon"]'
-					).value;
-					menuData.icon_svg = menuItem.querySelector(
-						'[data-name="icon_svg"]'
-					).value;
-					menuData.icon_type = "";
+				var menuOpenNewTabField = menuItem.querySelector(
+					'[data-name="menu_open_new_tab"]'
+				);
+				menuData.open_new_tab =
+					menuOpenNewTabField && menuOpenNewTabField.checked ? "1" : "";
 
-					var menuOpenNewTabField = menuItem.querySelector(
-						'[data-name="menu_open_new_tab"]'
-					);
-					menuData.open_new_tab =
-						menuOpenNewTabField && menuOpenNewTabField.checked ? "1" : "";
+				var iconSvgTab = menuItem.querySelector('[data-tab-name="icon_svg"]');
 
-					var iconSvgTab = menuItem.querySelector('[data-tab-name="icon_svg"]');
+				if (menuData.dashicon || menuData.icon_svg) {
+					menuData.icon_type = "dashicon";
 
-					if (menuData.dashicon || menuData.icon_svg) {
-						menuData.icon_type = "dashicon";
-
-						if (iconSvgTab.classList.contains("is-active")) {
-							if (menuData.icon_svg) {
-								menuData.icon_type = "icon_svg";
-							}
+					if (iconSvgTab.classList.contains("is-active")) {
+						if (menuData.icon_svg) {
+							menuData.icon_type = "icon_svg";
 						}
 					}
-
-					if (parseInt(menuItem.dataset.added, 10)) {
-						menuData.id = menuItem.dataset.defaultId;
-						menuData.class_default =
-							"menu-top menu-icon-custom ats-menu-top ats-menu-icon-custom";
-					}
 				}
 
-				var submenuItems = menuItem.querySelectorAll(
-					".ats-menu-builder--submenu-item"
-				);
-				submenuItems = submenuItems.length ? submenuItems : [];
-				var submenuList = [];
+				if (parseInt(menuItem.dataset.added, 10)) {
+					menuData.id = menuItem.dataset.defaultId;
+					menuData.class_default =
+						"menu-top menu-icon-custom ats-menu-top ats-menu-icon-custom";
+				}
 
-				submenuItems.forEach(function (submenuItem) {
-					var submenuData = {};
+				var menuRoleHideData = readRoleHideData(menuItem);
+				menuData.role_hide_enabled = menuRoleHideData.role_hide_enabled;
+				menuData.role_hide_mode = menuRoleHideData.role_hide_mode;
+				menuData.role_hide_roles = menuRoleHideData.role_hide_roles;
+				menuData.show_for_users = menuRoleHideData.show_for_users;
+			}
 
-					submenuData.is_hidden = submenuItem.dataset.hidden;
-					submenuData.was_added = submenuItem.dataset.added;
-					submenuData.title = submenuItem.querySelector(
-						'[data-name="submenu_title"]'
+			var submenuItems = menuItem.querySelectorAll(
+				".ats-menu-builder--submenu-item"
+			);
+			submenuItems = submenuItems.length ? submenuItems : [];
+			var submenuList = [];
+
+			submenuItems.forEach(function (submenuItem) {
+				var submenuData = {};
+
+				submenuData.is_hidden = submenuItem.dataset.hidden;
+				submenuData.was_added = submenuItem.dataset.added;
+				submenuData.title = submenuItem.querySelector(
+					'[data-name="submenu_title"]'
+				).value;
+				submenuData.url = "";
+
+				// The submenu_url didn't exist in v3.1.3 and below.
+				if (submenuItem.querySelector('[data-name="submenu_url"]')) {
+					submenuData.url = submenuItem.querySelector(
+						'[data-name="submenu_url"]'
 					).value;
-					submenuData.url = "";
+				}
 
-					// The submenu_url didn't exist in v3.1.3 and below.
-					if (submenuItem.querySelector('[data-name="submenu_url"]')) {
-						submenuData.url = submenuItem.querySelector(
-							'[data-name="submenu_url"]'
-						).value;
-					}
+				submenuData.url_default = submenuItem.dataset.defaultUrl;
 
-					submenuData.url_default = submenuItem.dataset.defaultUrl;
+				var submenuOpenNewTabField = submenuItem.querySelector(
+					'[data-name="submenu_open_new_tab"]'
+				);
+				submenuData.open_new_tab =
+					submenuOpenNewTabField && submenuOpenNewTabField.checked
+						? "1"
+						: "";
 
-					var submenuOpenNewTabField = submenuItem.querySelector(
-						'[data-name="submenu_open_new_tab"]'
-					);
-					submenuData.open_new_tab =
-						submenuOpenNewTabField && submenuOpenNewTabField.checked
-							? "1"
-							: "";
+				var submenuRoleHideData = readRoleHideData(submenuItem);
+				submenuData.role_hide_enabled = submenuRoleHideData.role_hide_enabled;
+				submenuData.role_hide_mode = submenuRoleHideData.role_hide_mode;
+				submenuData.role_hide_roles = submenuRoleHideData.role_hide_roles;
+				submenuData.show_for_users = submenuRoleHideData.show_for_users;
 
-					submenuList.push(submenuData);
-				});
-
-				if (submenuList) menuData.submenu = submenuList;
-				menuList.push(menuData);
+				submenuList.push(submenuData);
 			});
 
-			if (menuList.length) {
-				if (workspace.dataset.userId) {
-					menuArray["user_id_" + workspace.dataset.userId] = menuList;
-				} else {
-					menuArray[workspace.dataset.role] = menuList;
-				}
-			}
+			if (submenuList) menuData.submenu = submenuList;
+			menuList.push(menuData);
 		});
 
-		saveMenu(menuArray);
+		saveMenu(menuList);
 	}
 
 	/**
 	 * Send ajax request to save the menu list.
 	 *
-	 * @param {array} menuArray The menu array.
+	 * @param {array} menuList The menu list.
 	 */
-	function saveMenu(menuArray) {
+	function saveMenu(menuList) {
 		if (state.isSaving) return;
 		state.isSaving = true;
 
@@ -1363,7 +1214,7 @@
 			data: {
 				action: "ats_admin_menu_save_menu",
 				nonce: atsAdminMenu.nonces.saveMenu,
-				menu: JSON.stringify(menuArray),
+				menu: JSON.stringify(menuList),
 			},
 		})
 			.done(function (r) {
@@ -1376,19 +1227,14 @@
 	}
 
 	/**
-	 * Send ajax request to reset the menu list.
+	 * Send ajax request to reset the menu back to WordPress defaults.
 	 */
 	function resetMenu() {
 		var button = this;
-		var role = this.dataset.role;
 
 		if (state.isSaving) return;
 
-		var msg = atsAdminMenu.warningMessages.resetMenu.replace(
-			"{role}",
-			role.toUpperCase()
-		);
-		if (!confirm(msg)) return;
+		if (!confirm(atsAdminMenu.warningMessages.resetMenu)) return;
 
 		state.isSaving = true;
 
@@ -1401,7 +1247,6 @@
 			data: {
 				action: "ats_admin_menu_reset_menu",
 				nonce: atsAdminMenu.nonces.resetMenu,
-				role: role,
 			},
 		})
 			.done(function (r) {
@@ -1409,60 +1254,6 @@
 			})
 			.always(function () {
 				loading.stop(button);
-				state.isSaving = false;
-			});
-	}
-
-	/**
-	 * Revert a single overridden item (or one of its submenu items) back to
-	 * its inherited (Default, or Default+Role for a user) value, leaving the
-	 * rest of that role/user's overrides untouched. Bound to a click on the
-	 * "customized" star indicator - see getOverrideIndicatorHtml().
-	 *
-	 * @param {Event} e The click event.
-	 */
-	function revertItemToDefault(e) {
-		e.stopPropagation();
-
-		if (state.isSaving) return;
-
-		var target = this;
-		var workspace = $(target).closest(".ats-menu-builder--workspace")[0];
-		if (!workspace) return;
-
-		var role = workspace.dataset.userId
-			? "user_id_" + workspace.dataset.userId
-			: workspace.dataset.role;
-
-		var itemType = target.dataset.itemType;
-		var itemKey = target.dataset.itemKey;
-		var submenuKey = target.dataset.submenuKey;
-
-		var msg = submenuKey
-			? "Revert this submenu item to the Default menu's value?"
-			: "Revert this item to the Default menu's value?";
-
-		if (!confirm(msg)) return;
-
-		state.isSaving = true;
-
-		$.ajax({
-			url: ajaxurl,
-			type: "post",
-			dataType: "json",
-			data: {
-				action: "ats_admin_menu_reset_menu",
-				nonce: atsAdminMenu.nonces.resetMenu,
-				role: role,
-				item_type: itemType,
-				item_key: itemKey,
-				submenu_key: submenuKey || "",
-			},
-		})
-			.done(function (r) {
-				location.reload();
-			})
-			.always(function () {
 				state.isSaving = false;
 			});
 	}

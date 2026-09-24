@@ -16,26 +16,6 @@ use ATSDash\Helpers\Array_Helper;
  * Class to get menu & submenu.
  */
 class Get_Menu {
-	/**
-	 * Whether to get menu by role or by user_id.
-	 *
-	 * @var string
-	 */
-	public $by = 'role';
-
-	/**
-	 * The role value.
-	 *
-	 * @var string
-	 */
-	public $role = '';
-
-	/**
-	 * The user_id value.
-	 *
-	 * @var int
-	 */
-	public $user_id = 0;
 
 	/**
 	 * The saved recent menu.
@@ -49,10 +29,7 @@ class Get_Menu {
 	 */
 	public function ajax() {
 
-		$nonce         = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
-		$this->role    = isset( $_POST['role'] ) ? sanitize_text_field( wp_unslash( $_POST['role'] ) ) : '';
-		$this->by      = isset( $_POST['by'] ) ? sanitize_text_field( wp_unslash( $_POST['by'] ) ) : '';
-		$this->user_id = isset( $_POST['user_id'] ) ? absint( $_POST['user_id'] ) : 0;
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 
 		if ( ! wp_verify_nonce( $nonce, 'ats_admin_menu_get_menu' ) ) {
 			wp_send_json_error( __( 'Invalid token', 'ats-dashboard' ) );
@@ -62,16 +39,6 @@ class Get_Menu {
 
 		if ( ! current_user_can( $capability ) ) {
 			wp_send_json_error( __( 'You do not have permission to perform this action', 'ats-dashboard' ) );
-		}
-
-		if ( ! $this->role && ! $this->user_id ) {
-			wp_send_json_error( __( 'User role or id must be specified', 'ats-dashboard' ) );
-		}
-
-		if ( $this->user_id ) {
-			$this->by   = 'user_id';
-			$user       = get_userdata( $this->user_id );
-			$this->role = $user->roles[0];
 		}
 
 		/**
@@ -90,7 +57,7 @@ class Get_Menu {
 		 * @see wp-content/plugins/ats-dashboard/modules/ats-core-admin-menu/class-admin-menu-module.php
 		 * @see wp-content/plugins/ats-dashboard/modules/multisite/output/class-ms-admin-menu-output.php
 		 */
-		do_action( 'ats_ajax_get_admin_menu', $this, $this->role );
+		do_action( 'ats_ajax_get_admin_menu', $this, 'default' );
 
 	}
 
@@ -229,52 +196,17 @@ class Get_Menu {
 	 *
 	 * @see wp-content/plugins/ats-dashboard/modules/ats-core-admin-menu/class-admin-menu-module.php
 	 *
-	 * @param string $role The specified role.
 	 * @return array $response The formatted response.
 	 */
-	public function format_response( $role ) {
+	public function format_response() {
 
 		global $menu, $submenu;
 
 		$merged_default_menu = $this->merge_default_menu_submenu( $menu, $submenu );
 		$merged_default_menu = $this->format_merged_default_menu( $merged_default_menu );
 
-		$saved_menu = get_option( 'ats_admin_menu', array() );
-		$saved_menu = ! empty( $saved_menu ) && is_array( $saved_menu ) ? $saved_menu : array();
-
-		/**
-		 * Resolve the menu shown in the builder the same way it's resolved on
-		 * the front-end: Default (Everyone) -> Role overrides -> User overrides.
-		 * This way, editing a role/user tab starts from (and diffs against)
-		 * whatever Default currently looks like.
-		 *
-		 * @see \ATSDash\AdminMenu\Admin_Menu_Output::menu_output()
-		 */
-		$inheritance   = new \ATSDash\AdminMenu\Menu_Inheritance_Helper();
-		$default_items = ! empty( $saved_menu['default'] ) && is_array( $saved_menu['default'] ) ? $saved_menu['default'] : array();
-
-		/**
-		 * The delta belonging to the tab actually being loaded, i.e. this layer's
-		 * own overrides (as opposed to what it inherited). Used further down to
-		 * flag each item as inherited vs overridden for this tab in the builder UI.
-		 * Left empty for the Default tab, where the concept doesn't apply.
-		 */
-		$immediate_delta = array();
-
-		if ( 'default' === $role && 'user_id' !== $this->by ) {
-			$custom_menu = $default_items;
-		} elseif ( 'user_id' === $this->by ) {
-			$role_delta    = ! empty( $saved_menu[ $role ] ) && is_array( $saved_menu[ $role ] ) ? $saved_menu[ $role ] : array();
-			$resolved_role = $inheritance->apply_delta( $default_items, $role_delta );
-
-			$immediate_delta = ! empty( $saved_menu[ 'user_id_' . $this->user_id ] ) && is_array( $saved_menu[ 'user_id_' . $this->user_id ] ) ? $saved_menu[ 'user_id_' . $this->user_id ] : array();
-			$custom_menu     = $inheritance->apply_delta( $resolved_role, $immediate_delta );
-		} else {
-			$immediate_delta = ! empty( $saved_menu[ $role ] ) && is_array( $saved_menu[ $role ] ) ? $saved_menu[ $role ] : array();
-			$custom_menu     = $inheritance->apply_delta( $default_items, $immediate_delta );
-		}
-
-		$custom_menu = is_array( $custom_menu ) ? $custom_menu : [];
+		$custom_menu = get_option( 'ats_admin_menu', array() );
+		$custom_menu = ! empty( $custom_menu ) && is_array( $custom_menu ) ? $custom_menu : array();
 
 		if ( empty( $custom_menu ) ) {
 			$response = $this->parse_response_without_custom_menu( $merged_default_menu );
@@ -283,8 +215,58 @@ class Get_Menu {
 			$response    = $this->parse_response_with_custom_menu( $merged_default_menu, $custom_menu );
 		}
 
-		if ( 'default' !== $role || 'user_id' === $this->by ) {
-			$response = $inheritance->mark_overrides( $response, $immediate_delta );
+		$response = $this->attach_capability_info( $response, $merged_default_menu );
+
+		return $response;
+
+	}
+
+	/**
+	 * Attach each item's live required capability (read-only display info, not part of
+	 * what's saved) - used by the builder to explain why a hide-for-role rule might be
+	 * moot (e.g. a role that can't reach a page's capability anyway).
+	 *
+	 * Looked up fresh from the live WP menu every time (via $formatted_default_menu)
+	 * rather than round-tripped through the save/diff pipeline, since it's not an
+	 * editable field and every item should reflect the current capability regardless
+	 * of what's been customized about it.
+	 *
+	 * @param array $response The resolved response items (as built for the builder UI).
+	 * @param array $formatted_default_menu The well formatted default menu (with their submenu) array.
+	 *
+	 * @return array The response, with a `cap` key added to every item & submenu item.
+	 */
+	public function attach_capability_info( $response, $formatted_default_menu ) {
+
+		$array_helper = new Array_Helper();
+
+		foreach ( $response as $index => $item ) {
+			if ( ! is_array( $item ) || empty( $item ) ) {
+				continue;
+			}
+
+			$search_key    = 'separator' === $item['type'] ? 'url' : 'id';
+			$search_value  = isset( $item[ $search_key . '_default' ] ) ? $item[ $search_key . '_default' ] : '';
+			$matched_index = $array_helper->find_assoc_array_index_by_value( $formatted_default_menu, $search_key, $search_value );
+
+			$response[ $index ]['cap'] = false !== $matched_index && isset( $formatted_default_menu[ $matched_index ]['cap'] ) ? $formatted_default_menu[ $matched_index ]['cap'] : '';
+
+			if ( empty( $item['submenu'] ) || ! is_array( $item['submenu'] ) ) {
+				continue;
+			}
+
+			$default_submenu = false !== $matched_index && ! empty( $formatted_default_menu[ $matched_index ]['submenu'] ) ? $formatted_default_menu[ $matched_index ]['submenu'] : array();
+
+			foreach ( $item['submenu'] as $submenu_index => $submenu_item ) {
+				if ( ! is_array( $submenu_item ) || empty( $submenu_item ) ) {
+					continue;
+				}
+
+				$submenu_search_value  = isset( $submenu_item['url_default'] ) ? $submenu_item['url_default'] : '';
+				$submenu_matched_index = $array_helper->find_assoc_array_index_by_value( $default_submenu, 'url', $submenu_search_value );
+
+				$response[ $index ]['submenu'][ $submenu_index ]['cap'] = false !== $submenu_matched_index && isset( $default_submenu[ $submenu_matched_index ]['cap'] ) ? $default_submenu[ $submenu_matched_index ]['cap'] : '';
+			}
 		}
 
 		return $response;
@@ -378,17 +360,12 @@ class Get_Menu {
 		global $menu;
 
 		$recent_menus = $this->recent_menus;
-		$role         = $this->role;
 
-		if ( empty( $recent_menus ) || ! isset( $recent_menus[ $role ] ) || empty( $recent_menus[ $role ] ) ) {
+		if ( empty( $recent_menus ) || ! isset( $recent_menus['menu'] ) || empty( $recent_menus['menu'] ) ) {
 			return;
 		}
 
-		if ( ! isset( $recent_menus[ $role ]['menu'] ) || empty( $recent_menus[ $role ]['menu'] ) ) {
-			return;
-		}
-
-		$recent_menu = $recent_menus[ $role ]['menu'];
+		$recent_menu = $recent_menus['menu'];
 
 		$array_helper = new Array_Helper();
 
@@ -428,17 +405,12 @@ class Get_Menu {
 		global $submenu;
 
 		$recent_menus = $this->recent_menus;
-		$role         = $this->role;
 
-		if ( empty( $recent_menus ) || ! isset( $recent_menus[ $role ] ) || empty( $recent_menus[ $role ] ) ) {
+		if ( empty( $recent_menus ) || ! isset( $recent_menus['submenu'] ) || empty( $recent_menus['submenu'] ) ) {
 			return;
 		}
 
-		if ( ! isset( $recent_menus[ $role ]['submenu'] ) || empty( $recent_menus[ $role ]['submenu'] ) ) {
-			return;
-		}
-
-		$recent_submenu = $recent_menus[ $role ]['submenu'];
+		$recent_submenu = $recent_menus['submenu'];
 
 		$array_helper = new Array_Helper();
 
@@ -549,6 +521,7 @@ class Get_Menu {
 			$formatted_menu['class']        = $menu_item[4];
 			$formatted_menu['type']         = $menu_type;
 			$formatted_menu['open_new_tab'] = '';
+			$formatted_menu['cap']          = isset( $menu_item[1] ) ? (string) $menu_item[1] : '';
 
 			$formatted_menu['dashicon'] = '';
 			$formatted_menu['icon_svg'] = '';
@@ -576,6 +549,7 @@ class Get_Menu {
 					$formatted_submenu['title']        = $content_helper->strip_tags_content( $submenu_item[0] );
 					$formatted_submenu['url']          = $submenu_item[2];
 					$formatted_submenu['open_new_tab'] = '';
+					$formatted_submenu['cap']          = isset( $submenu_item[1] ) ? (string) $submenu_item[1] : '';
 
 					array_push( $formatted_submenus, $formatted_submenu );
 				}
@@ -622,8 +596,12 @@ class Get_Menu {
 
 		$custom_menu_item = array();
 
-		$custom_menu_item['is_hidden'] = 0;
-		$custom_menu_item['was_added'] = 0;
+		$custom_menu_item['is_hidden']         = 0;
+		$custom_menu_item['was_added']         = 0;
+		$custom_menu_item['role_hide_enabled'] = 0;
+		$custom_menu_item['role_hide_mode']    = '';
+		$custom_menu_item['role_hide_roles']   = array();
+		$custom_menu_item['show_for_users']    = array();
 
 		foreach ( $default_menu_item as $menu_item_key => $menu_item_value ) {
 			if ( 'submenu' !== $menu_item_key ) {
@@ -654,8 +632,12 @@ class Get_Menu {
 
 					$new_submenu_item = array();
 
-					$new_submenu_item['is_hidden'] = 0;
-					$new_submenu_item['was_added'] = 0;
+					$new_submenu_item['is_hidden']         = 0;
+					$new_submenu_item['was_added']         = 0;
+					$new_submenu_item['role_hide_enabled'] = 0;
+					$new_submenu_item['role_hide_mode']    = '';
+					$new_submenu_item['role_hide_roles']   = array();
+					$new_submenu_item['show_for_users']    = array();
 
 					foreach ( $submenu_item as $submenu_item_key => $submenu_item_value ) {
 						$default_submenu_item_key = $submenu_item_key . '_default';
@@ -698,8 +680,12 @@ class Get_Menu {
 
 		$custom_submenu_item = array();
 
-		$custom_submenu_item['is_hidden'] = 0;
-		$custom_submenu_item['was_added'] = 0;
+		$custom_submenu_item['is_hidden']         = 0;
+		$custom_submenu_item['was_added']         = 0;
+		$custom_submenu_item['role_hide_enabled'] = 0;
+		$custom_submenu_item['role_hide_mode']    = '';
+		$custom_submenu_item['role_hide_roles']   = array();
+		$custom_submenu_item['show_for_users']    = array();
 
 		foreach ( $default_submenu_item as $submenu_item_key => $submenu_item_value ) {
 			$default_submenu_item_key = $submenu_item_key . '_default';
@@ -749,7 +735,7 @@ class Get_Menu {
 				if ( 'submenu' !== $custom_menu_item_key ) {
 					$default_menu_item_key = $custom_menu_item_key . '_default';
 
-					if ( 'type' !== $custom_menu_item_key && 'is_hidden' !== $custom_menu_item_key && 'was_added' !== $custom_menu_item_key && 'id_default' !== $custom_menu_item_key && 'url_default' !== $custom_menu_item_key ) {
+					if ( 'type' !== $custom_menu_item_key && 'is_hidden' !== $custom_menu_item_key && 'was_added' !== $custom_menu_item_key && 'id_default' !== $custom_menu_item_key && 'url_default' !== $custom_menu_item_key && 'role_hide_enabled' !== $custom_menu_item_key && 'role_hide_mode' !== $custom_menu_item_key && 'role_hide_roles' !== $custom_menu_item_key && 'show_for_users' !== $custom_menu_item_key ) {
 						if ( isset( $matched_formatted_default_menu_item[ $custom_menu_item_key ] ) ) {
 							$parsed_menu_item[ $default_menu_item_key ] = $matched_formatted_default_menu_item[ $custom_menu_item_key ];
 							$parsed_menu_item[ $custom_menu_item_key ]  = $custom_menu_item_value;
@@ -911,7 +897,7 @@ class Get_Menu {
 						foreach ( $custom_submenu_item as $submenu_item_key => $submenu_item_value ) {
 							$default_submenu_item_key = $submenu_item_key . '_default';
 
-							if ( 'type' !== $submenu_item_key && 'is_hidden' !== $submenu_item_key && 'was_added' !== $submenu_item_key && 'url_default' !== $submenu_item_key ) {
+							if ( 'type' !== $submenu_item_key && 'is_hidden' !== $submenu_item_key && 'was_added' !== $submenu_item_key && 'url_default' !== $submenu_item_key && 'role_hide_enabled' !== $submenu_item_key && 'role_hide_mode' !== $submenu_item_key && 'role_hide_roles' !== $submenu_item_key && 'show_for_users' !== $submenu_item_key ) {
 								if ( isset( $matched_default_submenu[ $submenu_item_key ] ) ) {
 									$new_submenu_item[ $default_submenu_item_key ] = $matched_default_submenu[ $submenu_item_key ];
 									$new_submenu_item[ $submenu_item_key ]         = $submenu_item_value;

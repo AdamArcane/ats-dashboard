@@ -40,10 +40,6 @@
 	border-bottom-width: 0;
 }
 
-.ats-menu-builder-box--header .ats-menu-builder--search-user {
-	width: 250px;
-}
-
 .ats-menu-builder--tab-menu {
 	display: flex;
 	flex-wrap: wrap;
@@ -56,11 +52,6 @@
 	font-weight: 500;
 	border-top: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
-}
-
-.ats-menu-builder--role-menu,
-.ats-menu-builder--user-menu {
-	border-top: 0;
 }
 
 .ats-menu-builder--tab-menu-item {
@@ -82,27 +73,6 @@
 	color: inherit;
 	height: 100%;
 	border-bottom: 2px solid transparent;
-}
-
-.ats-menu-builder--user-menu .ats-menu-builder--tab-menu-item {
-	margin-right: 25px;
-}
-
-.ats-menu-builder--user-menu .delete-icon {
-	position: absolute;
-	margin-top: 1px;
-	right: -15px;
-	font-size: 16px;
-	width: 16px;
-	height: 16px;
-	background-color: #eee;
-	border-radius: 50%;
-	transition: none;
-}
-
-.ats-menu-builder--user-menu .delete-icon:hover {
-	color: #fff;
-	background-color: red;
 }
 
 .ats-menu-builder--tab-menu-item.is-active {
@@ -345,27 +315,6 @@
 	background: #fdf6ec;
 }
 
-.ats-menu-builder--menu-actions .ats-menu-builder--inherit-indicator {
-	position: relative;
-	opacity: 1;
-	visibility: visible;
-	cursor: default;
-	font-size: 15px;
-}
-
-.ats-menu-builder--inherit-indicator.is-inherited {
-	color: #b5bcc2;
-}
-
-.ats-menu-builder--inherit-indicator.is-overridden {
-	color: #2271b1;
-	cursor: pointer;
-}
-
-.ats-menu-builder--inherit-indicator.is-overridden:hover {
-	color: #135e96;
-}
-
 .ats-menu-builder--menu-item.is-expanded
 	> .ats-menu-builder--control-panel
 	.ats-menu-builder--menu-actions
@@ -478,6 +427,58 @@
 	margin-bottom: 15px;
 }
 
+.ats-menu-builder--role-hide-options {
+	margin-top: 10px;
+	padding: 12px 15px;
+	background: #f9f9f9;
+	border: 1px solid #eee;
+	border-radius: 3px;
+}
+
+.ats-menu-builder--role-hide-mode label {
+	display: inline-flex;
+	align-items: center;
+	margin-right: 15px;
+	font-weight: 400;
+}
+
+.ats-menu-builder--role-hide-mode input {
+	margin-right: 5px;
+}
+
+.ats-menu-builder--role-hide-roles {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 20px;
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px solid #e5e5e5;
+}
+
+.ats-menu-builder--role-checkbox {
+	display: inline-flex;
+	align-items: center;
+	font-weight: 400;
+	white-space: nowrap;
+}
+
+.ats-menu-builder--role-checkbox input {
+	margin-right: 5px;
+}
+
+.ats-menu-builder--role-hide-cap-note {
+	margin: 12px 0 0;
+	padding-top: 12px;
+	border-top: 1px solid #e5e5e5;
+	font-size: 12px;
+	font-style: italic;
+	color: #777;
+}
+
+.ats-menu-builder--show-for-users + .select2-container {
+	width: 100% !important;
+}
+
 .ats-menu-builder--fields .field:last-child,
 .ats-menu-builder--fields .fields:last-child {
 	margin-bottom: 0;
@@ -539,49 +540,6 @@
  * Admin Menu Editor
  * ------------------------------------------------------------
  */
-.ats-menu-builder-box--header-tabs {
-	display: flex;
-	flex-wrap: wrap;
-	margin: 0;
-	font-weight: 500;
-	border-radius: 3px;
-	font-size: 13px;
-	list-style: none;
-	overflow: hidden;
-	border: 1px solid #ddd;
-}
-
-.ats-menu-builder-box--header-tabs li:first-child {
-	border-right: 1px solid #ddd;
-}
-
-.ats-menu-builder-box--header-tab {
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-}
-
-.ats-menu-builder-box--header-tab a {
-	display: inline-block;
-	padding-left: 15px;
-	padding-right: 15px;
-	height: 30px;
-	line-height: 30px;
-	color: #888;
-	text-decoration: none;
-	background-color: #fff;
-	box-shadow: none;
-}
-
-.ats-menu-builder-box--header-tab a:hover {
-	color: inherit;
-}
-
-.ats-menu-builder-box--header-tab.is-active a {
-	color: inherit;
-	background-color: #f0f0f1;
-}
-
 .ats-menu-builder--inline-buttons {
 	display: flex;
 	align-items: center;

@@ -6,27 +6,6 @@
  */
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
-
-$wp_roles   = wp_roles();
-$role_names = array( 'default' => __( 'Default (Everyone)', 'ats-dashboard' ) ) + $wp_roles->role_names;
-
-$saved_menu      = get_option( 'ats_admin_menu', array() );
-$saved_user_data = array();
-
-foreach ( $saved_menu as $identifier => $menu_item ) {
-	if ( false !== stripos( $identifier, 'user_id_' ) ) {
-		$user_id   = absint( str_ireplace( 'user_id_', '', $identifier ) );
-		$user_data = get_userdata( $user_id );
-
-		array_push(
-			$saved_user_data,
-			array(
-				'ID'           => $user_id,
-				'display_name' => $user_data->display_name,
-			)
-		);
-	}
-}
 ?>
 
 <div class="wrap atsui-wrap ats-admin-menu ats-menu-builder-editor-page">
@@ -73,103 +52,25 @@ foreach ( $saved_menu as $identifier => $menu_item ) {
 						<h2 class="ats-menu-builder-box--title">
 							<?php esc_html_e( 'Admin Menu Editor', 'ats-dashboard' ); ?>
 						</h2>
-						<div class="ats-menu-builder-box--search-box is-hidden">
-							<select name="ats_admin_menu_user_selector" id="ats_admin_menu_user_selector" class="ats-menu-builder--search-user" data-loading-msg="<?php esc_attr_e( 'Loading Users...', 'ats-dashboard' ); ?>" data-placeholder="<?php esc_attr_e( 'Select a User', 'ats-dashboard' ); ?>" disabled>
-								<option value="">
-									<?php esc_html_e( 'Loading Users...', 'ats-dashboard' ); ?>
-								</option>
-							</select>
-						</div>
-						<ul class="ats-menu-builder-box--header-tabs">
-							<li class="ats-menu-builder-box--header-tab is-active" data-header-tab="roles">
-								<a href="#roles-menu">
-									<?php esc_html_e( 'Roles', 'ats-dashboard' ); ?>
-								</a>
-							</li>
-							<li class="ats-menu-builder-box--header-tab" data-header-tab="users">
-								<a href="#users-menu">
-									<?php esc_html_e( 'Users', 'ats-dashboard' ); ?>
-								</a>
-							</li>
-						</ul>
 					</div>
 
 					<div class="ats-menu-builder--tabs ats-menu-builder--role-tabs">
-						<ul class="ats-menu-builder--tab-menu ats-menu-builder--role-menu">
-							<?php foreach ( $role_names as $role_key => $role_name ) : ?>
-
-								<li class="ats-menu-builder--tab-menu-item<?php echo ( 'default' === $role_key ? ' is-active' : '' ); ?>" data-ats-tab-content="ats-menu-builder--<?php echo esc_html( $role_key ); ?>-edit-area" data-role="<?php echo esc_attr( $role_key ); ?>">
-									<button type="button">
-										<?php echo esc_html( ucwords( $role_name ) ); ?>
-									</button>
-								</li>
-
-							<?php endforeach; ?>
-						</ul>
-
 						<div class="ats-menu-builder--tab-content ats-menu-builder--edit-area">
-							<?php foreach ( $role_names as $role_key => $role_name ) : ?>
+							<div id="ats-menu-builder--default-edit-area" class="ats-menu-builder--tab-content-item ats-menu-builder--workspace ats-menu-builder--role-workspace is-active" data-role="default">
+								<ul class="ats-menu-builder--menu-list ats-menu-builder-sortable">
+									<!-- to be re-written via js -->
+									<li class="loading"></li>
+								</ul>
 
-								<div id="ats-menu-builder--<?php echo esc_attr( $role_key ); ?>-edit-area" class="ats-menu-builder--tab-content-item ats-menu-builder--workspace ats-menu-builder--role-workspace<?php echo ( 'default' === $role_key ? ' is-active' : '' ); ?>" data-role="<?php echo esc_attr( $role_key ); ?>">
-									<ul class="ats-menu-builder--menu-list ats-menu-builder-sortable">
-										<!-- to be re-written via js -->
-										<li class="loading"></li>
-									</ul>
-
-									<div class="ats-menu-builder--inline-buttons">
-										<?php
-										do_action( 'ats_admin_menu_add_menu_button' );
-										do_action( 'ats_admin_menu_add_separator_button' );
-										?>
-									</div>
+								<div class="ats-menu-builder--inline-buttons">
+									<?php
+									do_action( 'ats_admin_menu_add_menu_button' );
+									do_action( 'ats_admin_menu_add_separator_button' );
+									?>
 								</div>
-
-							<?php endforeach; ?>
+							</div>
 						</div><!-- .ats-menu-builder--tab-content -->
 					</div><!-- .ats-menu-builder--role-tabs -->
-
-					<div class="ats-menu-builder--tabs ats-menu-builder--user-tabs is-hidden">
-						<ul class="ats-menu-builder--tab-menu ats-menu-builder--user-menu">
-							<?php foreach ( $saved_user_data as $index => $user_data ) : ?>
-
-								<li class="ats-menu-builder--tab-menu-item <?php echo ( 0 === $index ? ' is-active' : '' ); ?>" data-ats-tab-content="ats-menu-builder--user-<?php echo esc_html( $user_data['ID'] ); ?>-edit-area" data-user-id="<?php echo esc_html( $user_data['ID'] ); ?>">
-									<button type="button">
-										<?php echo esc_html( $user_data['display_name'] ); ?>
-									</button>
-									<i class="dashicons dashicons-no-alt delete-icon ats-menu-builder--remove-tab"></i>
-								</li>
-
-							<?php endforeach; ?>
-
-							<!-- to be managed more via JS -->
-						</ul>
-
-						<div class="ats-menu-builder--tab-content ats-menu-builder--edit-area">
-							<div id="ats-menu-builder--user-empty-edit-area" class="ats-menu-builder--tab-content-item ats-menu-builder--workspace ats-menu-builder--user-workspace <?php echo ( empty( $saved_user_data ) ? ' is-active' : '' ); ?>">
-								<?php esc_html_e( 'No user selected.', 'ats-dashboard' ); ?>
-							</div>
-
-							<?php foreach ( $saved_user_data as $index => $user_data ) : ?>
-
-								<div id="ats-menu-builder--user-<?php echo esc_html( $user_data['ID'] ); ?>-edit-area" class="ats-menu-builder--tab-content-item ats-menu-builder--workspace ats-menu-builder--user-workspace <?php echo ( 0 === $index ? ' is-active' : '' ); ?>" data-user-id="<?php echo esc_html( $user_data['ID'] ); ?>">
-									<ul class="ats-menu-builder--menu-list ats-menu-builder-sortable">
-										<!-- to be re-written via js -->
-										<li class="loading"></li>
-									</ul>
-
-									<div class="ats-menu-builder--inline-buttons">
-										<?php
-										do_action( 'ats_admin_menu_add_menu_button' );
-										do_action( 'ats_admin_menu_add_separator_button' );
-										?>
-									</div>
-								</div>
-
-							<?php endforeach; ?>
-
-							<!-- to be managed more via JS -->
-						</div><!-- .ats-menu-builder--tab-content -->
-					</div><!-- .ats-menu-builder--user-tabs -->
 
 					<div class="atsui-footer">
 						<?php do_action( 'ats_admin_menu_form_footer' ); ?>

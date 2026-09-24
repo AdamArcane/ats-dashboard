@@ -20,7 +20,6 @@ ob_start();
 		</div>
 		<div class="ats-menu-builder--menu-actions">
 			{trash_icon}
-			{override_indicator}
 			<span class="dashicons dashicons-{hidden_icon} ats-menu-builder--visibility-indicator {visibility_indicator_class}" title="{visibility_label}"></span>
 			<span class="dashicons dashicons-arrow-down-alt2 expand-menu"></span>
 		</div>
@@ -90,8 +89,59 @@ ob_start();
 					>
 						<option value="0" {submenu_visibility_normal_selected}><?php esc_html_e( 'Normal', 'ats-dashboard' ); ?></option>
 						<option value="1" {submenu_visibility_hidden_selected}><?php esc_html_e( 'Hidden', 'ats-dashboard' ); ?></option>
-						<option value="2" {submenu_visibility_collapsed_selected}><?php esc_html_e( 'Collapsed', 'ats-dashboard' ); ?></option>
+						<option value="2" {submenu_visibility_collapsed_selected}><?php esc_html_e( 'Optional', 'ats-dashboard' ); ?></option>
 					</select>
+				</div>
+			</div>
+			<div class="field ats-menu-builder--role-hide-field">
+				<label for="submenu_role_hide_enabled_{role}_{default_menu_id}_{submenu_id}" class="label checkbox-label">
+					<?php esc_html_e( 'Always hide for user role(s)', 'ats-dashboard' ); ?>
+					<input
+						type="checkbox"
+						name="submenu_role_hide_enabled_{role}_{default_menu_id}_{submenu_id}"
+						id="submenu_role_hide_enabled_{role}_{default_menu_id}_{submenu_id}"
+						value="1"
+						{submenu_role_hide_enabled_checked}
+						class="ats-menu-builder--checkbox-field ats-menu-builder--role-hide-toggle"
+						data-name="role_hide_enabled"
+					>
+					<div class="indicator"></div>
+				</label>
+
+				<div class="ats-menu-builder--role-hide-options {submenu_role_hide_options_hidden_class}">
+					<div class="control ats-menu-builder--role-hide-mode">
+						<label>
+							<input type="radio" name="submenu_role_hide_mode_{role}_{default_menu_id}_{submenu_id}" value="except" data-name="role_hide_mode" {submenu_role_hide_mode_except_checked}>
+							<?php esc_html_e( 'all roles except', 'ats-dashboard' ); ?>
+						</label>
+						<label>
+							<input type="radio" name="submenu_role_hide_mode_{role}_{default_menu_id}_{submenu_id}" value="selected" data-name="role_hide_mode" {submenu_role_hide_mode_selected_checked}>
+							<?php esc_html_e( 'selected roles', 'ats-dashboard' ); ?>
+						</label>
+					</div>
+
+					<div class="ats-menu-builder--role-hide-roles {submenu_role_hide_roles_hidden_class}">
+						{submenu_role_hide_roles_checkboxes}
+					</div>
+
+					<p class="description ats-menu-builder--role-hide-cap-note {submenu_role_hide_cap_note_hidden_class}">
+						{submenu_role_hide_cap_note}
+					</p>
+				</div>
+			</div>
+			<div class="field">
+				<label for="submenu_show_for_users_{role}_{default_menu_id}_{submenu_id}" class="label ats-menu-builder--label">
+					<?php esc_html_e( 'Always show for the following users', 'ats-dashboard' ); ?>
+				</label>
+				<div class="control">
+					<select
+						name="submenu_show_for_users_{role}_{default_menu_id}_{submenu_id}[]"
+						id="submenu_show_for_users_{role}_{default_menu_id}_{submenu_id}"
+						class="ats-menu-builder--select-field ats-menu-builder--show-for-users"
+						data-name="show_for_users"
+						data-selected-users="{submenu_show_for_users_ids}"
+						multiple
+					></select>
 				</div>
 			</div>
 		</div><!-- .ats-menu-builder--fields -->

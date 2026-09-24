@@ -48,24 +48,15 @@ return function ( $module ) {
 				'saveMenu'  => wp_create_nonce( 'ats_admin_menu_save_menu' ),
 			),
 			'warningMessages' => array(
-				'resetMenu' => __( 'Caution! Are you sure you want to reset the Admin Menu for {role} role(s).', 'ats-dashboard' ),
+				'resetMenu' => __( 'Caution! Are you sure you want to reset the Admin Menu back to WordPress defaults?', 'ats-dashboard' ),
 			),
 			'roles'           => $roles,
 			'templates'       => array(
-				'menuList'       => require ATS_DASHBOARD_PLUGIN_DIR . '/modules/admin-menu/templates/menu-list.php',
-				'submenuList'    => require ATS_DASHBOARD_PLUGIN_DIR . '/modules/admin-menu/templates/submenu-list.php',
-				'menuSeparator'  => require ATS_DASHBOARD_PLUGIN_DIR . '/modules/admin-menu/templates/menu-separator.php',
-
-				'userTabMenu'    => '',
-				'userTabContent' => '',
+				'menuList'      => require ATS_DASHBOARD_PLUGIN_DIR . '/modules/admin-menu/templates/menu-list.php',
+				'submenuList'   => require ATS_DASHBOARD_PLUGIN_DIR . '/modules/admin-menu/templates/submenu-list.php',
+				'menuSeparator' => require ATS_DASHBOARD_PLUGIN_DIR . '/modules/admin-menu/templates/menu-separator.php',
 			),
 		);
-
-		// ATS Dashboard (free version) v3.1.3 and below doesn't have "user-tab-menu.php" and "user-tab-content.php".
-		if ( version_compare( ATS_DASHBOARD_PLUGIN_VERSION, '3.1.3', '>' ) ) {
-			$admin_menu_data['templates']['userTabMenu']    = require ATS_DASHBOARD_PLUGIN_DIR . '/modules/admin-menu/templates/user-tab-menu.php';
-			$admin_menu_data['templates']['userTabContent'] = require ATS_DASHBOARD_PLUGIN_DIR . '/modules/admin-menu/templates/user-tab-content.php';
-		}
 
 		$admin_menu_data = apply_filters( 'ats_admin_menu_js_object', $admin_menu_data );
 

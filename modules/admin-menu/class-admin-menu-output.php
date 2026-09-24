@@ -140,20 +140,9 @@ class Admin_Menu_Output extends Base_Output {
 
 		$ms_helper = new Multisite_Helper();
 
-		$saved_menu = get_option( 'ats_admin_menu', array() );
-		$saved_menu = is_array( $saved_menu ) ? $saved_menu : array();
-		$user       = wp_get_current_user();
-
+		// Super admins always keep WordPress's native, unmodified menu.
 		if ( $ms_helper->multisite_supported() && is_super_admin() ) {
-			/**
-			 * Stop if:
-			 * - multisite is supported
-			 * - AND current user is a super admin
-			 * - AND they don't have custom menu explicitly set in users tab.
-			 */
-			if ( ! isset( $saved_menu[ 'user_id_' . $user->ID ] ) ) {
-				return;
-			}
+			return;
 		}
 
 		// Stop if $roles is empty but needs to switch blog.
@@ -162,6 +151,8 @@ class Admin_Menu_Output extends Base_Output {
 		}
 
 		global $menu, $submenu;
+
+		$user = wp_get_current_user();
 
 		if ( ! $roles ) {
 			$roles = $user->roles;
@@ -179,25 +170,13 @@ class Admin_Menu_Output extends Base_Output {
 		$role = $roles[0];
 
 		/**
-		 * Resolve the effective menu for the current user by layering:
-		 * Default (Everyone) -> Role overrides -> User overrides.
-		 *
-		 * Role & user entries only store what they override (see Menu_Inheritance_Helper),
-		 * so anything they don't touch keeps tracking the Default menu live.
+		 * There's a single saved menu list now (no more per-role/per-user copies to keep
+		 * in sync). Per-viewer differences are expressed as visibility rules on each item
+		 * instead - see resolve_item_visibility().
 		 *
 		 * @var array $role_menu
 		 */
-		$inheritance = new Menu_Inheritance_Helper();
-
-		$default_items = ! empty( $saved_menu['default'] ) && is_array( $saved_menu['default'] ) ? $saved_menu['default'] : array();
-		$role_delta    = ! empty( $saved_menu[ $role ] ) && is_array( $saved_menu[ $role ] ) ? $saved_menu[ $role ] : array();
-
-		$role_menu = $inheritance->apply_delta( $default_items, $role_delta );
-
-		if ( ! empty( $saved_menu[ 'user_id_' . $user->ID ] ) && is_array( $saved_menu[ 'user_id_' . $user->ID ] ) ) {
-			$role_menu = $inheritance->apply_delta( $role_menu, $saved_menu[ 'user_id_' . $user->ID ] );
-		}
-
+		$role_menu = get_option( 'ats_admin_menu', array() );
 		$role_menu = is_array( $role_menu ) ? $role_menu : array();
 
 		if ( empty( $role_menu ) ) {
@@ -254,8 +233,10 @@ class Admin_Menu_Output extends Base_Output {
 				continue;
 			}
 
-			// Only fully "hidden" (1) items are excluded. "Hidden, but collapsed" (2) items still render, just CSS-hidden until toggled.
-			if ( '1' !== (string) $menu_item['is_hidden'] ) {
+			$menu_visibility = $this->resolve_item_visibility( $menu_item, $role, $user->ID );
+
+			// Only "hidden" items are excluded. "Collapsed" items still render, just CSS-hidden until the "Show All" toggle is used.
+			if ( 'hidden' !== $menu_visibility ) {
 				$menu_title = $menu_item['title'] ? $menu_item['title'] : ( isset( $matched_default_menu[0] ) ? $matched_default_menu[0] : '' );
 				$menu_title = (string) $menu_title;
 
@@ -275,7 +256,7 @@ class Admin_Menu_Output extends Base_Output {
 					$menu_class = trim( $menu_class . ' ats-open-new-tab' );
 				}
 
-				if ( '2' === (string) $menu_item['is_hidden'] ) {
+				if ( 'collapsed' === $menu_visibility ) {
 					$menu_class = trim( $menu_class . ' ats-menu-hidden-collapsed' );
 				}
 
@@ -476,8 +457,10 @@ class Admin_Menu_Output extends Base_Output {
 							);
 						}
 
-						// Only fully "hidden" (1) submenu items are excluded. "Hidden, but collapsed" (2) items still render, just CSS-hidden until toggled.
-						if ( '1' !== (string) $submenu_item['is_hidden'] ) {
+						$submenu_visibility = $this->resolve_item_visibility( $submenu_item, $role, $user->ID );
+
+						// Only "hidden" submenu items are excluded. "Collapsed" items still render, just CSS-hidden until the "Show All" toggle is used.
+						if ( 'hidden' !== $submenu_visibility ) {
 							$new_submenu_item = array();
 
 							$submenu_title = $submenu_item['title'] ? $submenu_item['title'] : ( isset( $matched_default_submenu[0] ) ? $matched_default_submenu[0] : '' );
@@ -503,7 +486,7 @@ class Admin_Menu_Output extends Base_Output {
 								$submenu_class = trim( $submenu_class . ' ats-open-new-tab' );
 							}
 
-							if ( '2' === (string) $submenu_item['is_hidden'] ) {
+							if ( 'collapsed' === $submenu_visibility ) {
 								$submenu_class = trim( $submenu_class . ' ats-menu-hidden-collapsed' );
 							}
 
@@ -555,6 +538,68 @@ class Admin_Menu_Output extends Base_Output {
 		// Update the global $menu & $submenu to use our parsing results.
 		$menu    = $new_menu;
 		$submenu = $new_submenu;
+
+	}
+
+	/**
+	 * Resolve whether a menu/submenu item is visible to the current viewer.
+	 *
+	 * Evaluated in this order (first match wins):
+	 * 1. The viewer is individually named in "show_for_users" - always visible,
+	 *    overriding everything else below (the escape hatch for "hidden for
+	 *    everyone except these people").
+	 * 2. The viewer's role is caught by "role_hide_enabled" - hard hidden, with
+	 *    no reveal mechanism (unlike the "collapsed" state below).
+	 * 3. Otherwise, fall back to the item's own Visibility setting (is_hidden):
+	 *    "0" normal, "1" hidden, "2" collapsed (CSS-hidden, revealed via "Show All").
+	 *
+	 * @param array  $item The menu/submenu item, as saved.
+	 * @param string $role The viewer's (first) role.
+	 * @param int    $user_id The viewer's user ID.
+	 *
+	 * @return string "hidden", "collapsed", or "normal".
+	 */
+	public function resolve_item_visibility( $item, $role, $user_id ) {
+
+		$show_for_users = ! empty( $item['show_for_users'] ) && is_array( $item['show_for_users'] ) ? array_map( 'absint', $item['show_for_users'] ) : array();
+
+		if ( in_array( (int) $user_id, $show_for_users, true ) ) {
+			return 'normal';
+		}
+
+		if ( ! empty( $item['role_hide_enabled'] ) ) {
+			$mode         = isset( $item['role_hide_mode'] ) ? $item['role_hide_mode'] : 'selected';
+			$hide_roles   = ! empty( $item['role_hide_roles'] ) && is_array( $item['role_hide_roles'] ) ? $item['role_hide_roles'] : array();
+			$role_in_list = in_array( $role, $hide_roles, true );
+
+			$hidden_for_role = false;
+
+			if ( 'all' === $mode ) {
+				$hidden_for_role = true;
+			} elseif ( 'except' === $mode ) {
+				// "hide_roles" here is the allow-list (roles that still see it).
+				$hidden_for_role = ! $role_in_list;
+			} elseif ( 'selected' === $mode ) {
+				// "hide_roles" here is the roles it's hidden from.
+				$hidden_for_role = $role_in_list;
+			}
+
+			if ( $hidden_for_role ) {
+				return 'hidden';
+			}
+		}
+
+		$is_hidden = isset( $item['is_hidden'] ) ? (string) $item['is_hidden'] : '0';
+
+		if ( '1' === $is_hidden ) {
+			return 'hidden';
+		}
+
+		if ( '2' === $is_hidden ) {
+			return 'collapsed';
+		}
+
+		return 'normal';
 
 	}
 
