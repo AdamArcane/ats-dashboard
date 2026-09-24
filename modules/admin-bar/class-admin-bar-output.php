@@ -122,6 +122,28 @@ class Admin_Bar_Output extends Base_Output {
 		$saved_menu  = get_option( 'ats_admin_bar', array() );
 		$parsed_menu = ! $saved_menu ? $existing_menu : $module->parse_menu( $saved_menu, $existing_menu, 'output' );
 
+		if ( ! is_admin() ) {
+			/**
+			 * The builder shows "site-name" as two rows: the real node (shared with
+			 * wp-admin) and a synthetic "site-name-frontend" row used only to hold
+			 * front-end-only children like Dashboard. Its own visibility toggle is
+			 * what should decide whether "site-name" renders on the front end,
+			 * independently of the real node's admin-side visibility - otherwise
+			 * hiding "site-name" in wp-admin also hides Dashboard on the front end.
+			 */
+			if ( isset( $saved_menu['site-name-frontend']['is_hidden'], $parsed_menu['site-name'] ) ) {
+				$parsed_menu['site-name']['is_hidden'] = $saved_menu['site-name-frontend']['is_hidden'];
+			}
+
+			/**
+			 * Items such as "Dashboard", "Themes", "Widgets" and "Menus" only exist in the real
+			 * admin bar when it's rendered on the front end (see wp_admin_bar_site_menu() in core).
+			 * Since we rebuild the admin bar from scratch in generate_nodes(), they need to be
+			 * merged back in here for front end requests, the same way the builder does it.
+			 */
+			$parsed_menu = $module->parse_frontend_items( $parsed_menu );
+		}
+
 		if ( $switch_blog ) {
 			restore_current_blog();
 		}
@@ -175,6 +197,8 @@ class Admin_Bar_Output extends Base_Output {
 						&& 'was_added' !== $arg_key
 						&& 'icon' !== $arg_key
 						&& 'open_new_tab' !== $arg_key
+						&& 'frontend_only' !== $arg_key
+						&& 'after' !== $arg_key
 						/**
 						 * These conditions are not being used currently.
 						 * But leave it here because in the future, if requested, it would be used for

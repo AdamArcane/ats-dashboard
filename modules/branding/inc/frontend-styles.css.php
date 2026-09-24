@@ -24,7 +24,23 @@ $admin_submenu_bg_color = $colors['admin_submenu_bg_color'];
 $admin_bar_logo = isset( $branding['admin_bar_logo_image'] ) ? $branding['admin_bar_logo_image'] : '';
 $admin_bar_logo = apply_filters( 'ats_admin_bar_logo_image', $admin_bar_logo );
 
-if ( $admin_bar_logo ) {
+$is_modern_layout = isset( $branding['layout'] ) && 'modern' === $branding['layout'];
+
+if ( $is_modern_layout ) {
+
+	/**
+	 * Modern layout replaces the admin bar's WP logo with its own logo in the
+	 * menu column, same as admin-styles-modern.css.php does for wp-admin.
+	 */
+	?>
+
+	#wpadminbar #wp-admin-bar-wp-logo {
+		display: none;
+	}
+
+	<?php
+
+} elseif ( $admin_bar_logo ) {
 
 	?>
 
