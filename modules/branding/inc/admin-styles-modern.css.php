@@ -820,14 +820,22 @@ div#wp-responsive-toggle a:before {
 		align-items: center;
 	}
 
-	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site {
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-buttons {
 		box-sizing: border-box;
 		position: absolute;
-		height: 30px;
 		top: 0;
 		left: 12px;
 		right: 12px;
 		margin-top: 58px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-button {
+		box-sizing: border-box;
+		height: 30px;
+		flex-shrink: 0;
 		border-radius: 6px;
 		border: 1px solid rgba(255, 255, 255, 0.2);
 		color: <?php echo esc_attr( $menu_item_color ); ?>;
@@ -840,14 +848,14 @@ div#wp-responsive-toggle a:before {
 		transition: background-color .15s ease, border-color .15s ease;
 	}
 
-	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site .dashicons {
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-button .dashicons {
 		width: 14px;
 		height: 14px;
 		font-size: 14px;
 	}
 
-	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site:hover,
-	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site:focus {
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-button:hover,
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-button:focus {
 		background-color: <?php echo esc_attr( $accent_color ); ?>;
 		border-color: <?php echo esc_attr( $accent_color ); ?>;
 		color: <?php echo esc_attr( $menu_item_color ); ?>;
@@ -979,14 +987,22 @@ div#wp-responsive-toggle a:before {
 		align-items: center;
 	}
 
-	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site {
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-buttons {
 		box-sizing: border-box;
 		position: absolute;
-		height: 30px;
 		top: 0;
 		left: 12px;
 		right: 12px;
 		margin-top: 58px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-button {
+		box-sizing: border-box;
+		height: 30px;
+		flex-shrink: 0;
 		border-radius: 6px;
 		border: 1px solid rgba(255, 255, 255, 0.2);
 		color: <?php echo esc_attr( $menu_item_color ); ?>;
@@ -999,14 +1015,14 @@ div#wp-responsive-toggle a:before {
 		transition: background-color .15s ease, border-color .15s ease;
 	}
 
-	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site .dashicons {
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-button .dashicons {
 		width: 14px;
 		height: 14px;
 		font-size: 14px;
 	}
 
-	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site:hover,
-	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-visit-site:focus {
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-button:hover,
+	#adminmenu .ats-admin-logo-wrapper .ats-admin-logo-button:focus {
 		background-color: <?php echo esc_attr( $accent_color ); ?>;
 		border-color: <?php echo esc_attr( $accent_color ); ?>;
 		color: <?php echo esc_attr( $menu_item_color ); ?>;

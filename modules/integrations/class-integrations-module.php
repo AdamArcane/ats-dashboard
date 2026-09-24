@@ -63,6 +63,7 @@ class Integrations_Module extends Base_Module {
 		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_scripts' ) );
 		add_action( 'wp_dashboard_setup', array( self::get_instance(), 'dashboard_widget' ) );
 		add_action( 'admin_bar_menu', array( self::get_instance(), 'admin_bar_menu_item' ), 45 );
+		add_action( 'ats_admin_logo_buttons', array( self::get_instance(), 'modern_admin_logo_button' ) );
 
 		// The module output.
 		require_once __DIR__ . '/class-integrations-output.php';
@@ -120,11 +121,23 @@ class Integrations_Module extends Base_Module {
 	 * (next to "Visit Site"), but only for admins and only once MainWP has
 	 * been matched to this site.
 	 *
+	 * In wp-admin with the Modern branding layout, the site-name dropdown isn't
+	 * the "Visit Site" spot anymore - that moved to the sidebar's logo block
+	 * (see modern_admin_logo_button()), so the dropdown entry is skipped there
+	 * to avoid showing the link twice. On the front end there's no such sidebar,
+	 * so the dropdown stays the only place for it regardless of layout.
+	 *
 	 * @param \WP_Admin_Bar $wp_admin_bar The admin bar instance.
 	 */
 	public function admin_bar_menu_item( $wp_admin_bar ) {
 
 		if ( ! current_user_can( apply_filters( 'ats_settings_capability', 'manage_options' ) ) ) {
+			return;
+		}
+
+		$branding = get_option( 'ats_branding' );
+
+		if ( is_admin() && isset( $branding['layout'] ) && 'modern' === $branding['layout'] ) {
 			return;
 		}
 
@@ -146,6 +159,35 @@ class Integrations_Module extends Base_Module {
 				),
 			)
 		);
+
+	}
+
+	/**
+	 * Add a "Manage in MainWP" button to the Modern branding layout's sidebar
+	 * logo block, next to "Visit Site" - hooked onto the generic
+	 * `ats_admin_logo_buttons` action so other integrations can do the same.
+	 *
+	 * Same conditions as admin_bar_menu_item(): admins only, and only once
+	 * MainWP has been matched to this site.
+	 */
+	public function modern_admin_logo_button() {
+
+		if ( ! current_user_can( apply_filters( 'ats_settings_capability', 'manage_options' ) ) ) {
+			return;
+		}
+
+		$manage_url = Integrations_Output::get_instance()->get_mainwp_manage_url();
+
+		if ( ! $manage_url ) {
+			return;
+		}
+		?>
+
+		<a href="<?php echo esc_url( $manage_url ); ?>" class="ats-admin-logo-button" target="_blank" rel="noopener noreferrer">
+			<?php esc_html_e( 'Manage in MainWP', 'ats-dashboard' ); ?>
+		</a>
+
+		<?php
 
 	}
 

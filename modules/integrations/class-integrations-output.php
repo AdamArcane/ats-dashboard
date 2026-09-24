@@ -204,7 +204,7 @@ class Integrations_Output extends Base_Output {
 			return '';
 		}
 
-		return $base_url . '/wp-admin/admin.php?page=managesites&id=' . rawurlencode( $mainwp_site_id['value'] );
+		return $base_url . '/wp-admin/admin.php?page=managesites&dashboard=' . rawurlencode( $mainwp_site_id['value'] );
 
 	}
 

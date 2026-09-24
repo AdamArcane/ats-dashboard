@@ -503,17 +503,51 @@ class Branding_Output extends Base_Output {
 		if ( $inherit_blueprint ) {
 			$classname .= ' ats-inherited-from-blueprint';
 		}
+
+		ob_start();
+
+		/**
+		 * Fires after the built-in "Visit Site" button in the Modern layout's sidebar
+		 * logo block, so integrations can add their own quick-link buttons there
+		 * (e.g. a "Manage in MainWP" link).
+		 *
+		 * Output an `<a class="ats-admin-logo-button">` element (an icon-only
+		 * `<span class="dashicons ...">` may be included inside it) to automatically
+		 * match the built-in button styling and take part in the layout's spacing.
+		 *
+		 * @param string $home_url The site's home URL, for convenience.
+		 */
+		do_action( 'ats_admin_logo_buttons', home_url( '/' ) );
+
+		$extra_buttons       = ob_get_clean();
+		$extra_buttons_count = substr_count( $extra_buttons, 'ats-admin-logo-button' );
 		?>
 
 		<li class="ats-admin-logo-wrapper ats-admin-logo-wrapper-output <?php echo esc_attr( $classname ); ?>">
 			<a href="<?php echo esc_url( $url ); ?>" class="ats-admin-logo-link">
 				<img class="ats-admin-logo" src="<?php echo esc_url( $logo ); ?>" />
 			</a>
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="ats-admin-logo-visit-site" target="_blank" rel="noopener noreferrer">
-				<span class="dashicons dashicons-external"></span>
-				<?php esc_html_e( 'Visit Site', 'ats-dashboard' ); ?>
-			</a>
+			<div class="ats-admin-logo-buttons">
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="ats-admin-logo-button ats-admin-logo-visit-site" rel="noopener noreferrer">
+					<span class="dashicons dashicons-external"></span>
+					<?php esc_html_e( 'Visit Site', 'ats-dashboard' ); ?>
+				</a>
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- trusted markup from hooked ats_admin_logo_buttons callbacks, not user input.
+				echo $extra_buttons;
+				?>
+			</div>
 		</li>
+
+		<?php if ( $extra_buttons_count > 0 ) : ?>
+			<style>
+				@media screen and (min-width: 961px) {
+					.wp-admin:not(.folded) #adminmenuwrap {
+						padding-top: <?php echo (int) ( 100 + $extra_buttons_count * 38 ); ?>px;
+					}
+				}
+			</style>
+		<?php endif; ?>
 
 		<?php
 
@@ -558,10 +592,12 @@ class Branding_Output extends Base_Output {
 			<a href="<?php echo esc_url( $url ); ?>" class="ats-admin-logo-link">
 				<img class="ats-admin-logo" src="<?php echo esc_url( $logo ); ?>" />
 			</a>
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="ats-admin-logo-visit-site" target="_blank" rel="noopener noreferrer">
-				<span class="dashicons dashicons-external"></span>
-				<?php esc_html_e( 'Visit Site', 'ats-dashboard' ); ?>
-			</a>
+			<div class="ats-admin-logo-buttons">
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="ats-admin-logo-button ats-admin-logo-visit-site"  rel="noopener noreferrer">
+					<span class="dashicons dashicons-external"></span>
+					<?php esc_html_e( 'Visit Site', 'ats-dashboard' ); ?>
+				</a>
+			</div>
 		</li>
 
 		<?php
