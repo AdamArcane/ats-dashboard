@@ -17,7 +17,9 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 
 	<?php settings_errors(); ?>
 
-	<?php if ( isset( $_POST['submit'] ) ) { ?>
+	<?php if ( isset( $_POST['submit'] ) && current_user_can( 'manage_network' ) ) { ?>
+
+		<?php check_admin_referer( 'ats-multisite-settings-group-options' ); ?>
 
 		<div class="notice notice-success">
 			<p><?php _e( 'Settings Saved', 'ats-dashboard' ); ?></p>
@@ -46,6 +48,12 @@ defined( 'ABSPATH' ) || die( "Can't access directly" );
 		$multisite_exclude      = sanitize_text_field( $_POST['ats_multisite_exclude'] );
 		$multisite_widget_order = absint( $_POST['ats_multisite_widget_order'] );
 		$multisite_capability   = sanitize_text_field( $_POST['ats_multisite_capability'] );
+
+		// Only ever allow this to be set to another admin-level capability -
+		// it becomes the effective "ats_settings_capability" gate network-wide.
+		if ( ! in_array( $multisite_capability, array( 'manage_network', 'manage_options' ), true ) ) {
+			$multisite_capability = 'manage_network';
+		}
 
 		update_site_option( 'ats_multisite_blueprint', $multisite_blueprint );
 		update_site_option( 'ats_multisite_exclude', $multisite_exclude );

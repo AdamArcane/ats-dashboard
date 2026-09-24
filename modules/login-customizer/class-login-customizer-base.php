@@ -216,8 +216,8 @@ class Login_Customizer_Base_Module extends Base_Module {
 			exit;
 		}
 
-		// Only allow user with 'manage_options' capability.
-		if ( ! current_user_can( 'manage_options' ) ) {
+		// Only allow users with the plugin's settings capability.
+		if ( ! current_user_can( apply_filters( 'ats_settings_capability', 'manage_options' ) ) ) {
 			wp_safe_redirect( home_url() );
 			exit;
 		}
